@@ -3,6 +3,7 @@ package com.example.experimentallogin;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "foo@example.com:hello123", "bar@example.com:world"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -191,13 +192,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-
-        return email.contains("@");
+        return email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 6;//password.matches("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
     }
 
     /**
@@ -333,7 +332,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

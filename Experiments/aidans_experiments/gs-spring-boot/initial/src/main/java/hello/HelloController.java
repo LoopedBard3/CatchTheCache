@@ -17,9 +17,9 @@ public class HelloController {
         return "Greetings " + id;
     }
 	
-	@RequestMapping(value = "/user/{u}")
-    public String index(@PathVariable User u) {
-        return "Greetings!";
-    }
+//	@RequestMapping(value = "/user/{u}")
+//    public String index(@PathVariable User u) {
+//        return "Greetings!";
+//    }
     
 }

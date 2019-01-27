@@ -332,7 +332,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                
+                mPasswordView.setText("");
                 Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
                 startActivity(intent);
             } else {

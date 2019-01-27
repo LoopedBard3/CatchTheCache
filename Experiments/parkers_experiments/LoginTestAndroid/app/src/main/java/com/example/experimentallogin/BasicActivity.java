@@ -24,7 +24,7 @@ public class BasicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final RequestQueue queue = Volley.newRequestQueue(this);
-        final String url ="http://the-overlords-pc.student.iastate.edu:8080/";
+        final String url = "http://the-overlords-pc.student.iastate.edu:8080/";
         Intent intent = getIntent();
 
         setContentView(R.layout.activity_basic);

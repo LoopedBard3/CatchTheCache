@@ -25,7 +25,7 @@ public class BasicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final RequestQueue queue = Volley.newRequestQueue(this);
         final String url ="http://the-overlords-pc.student.iastate.edu:8080/";
-
+        Intent intent = getIntent();
 
         setContentView(R.layout.activity_basic);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -34,6 +34,7 @@ public class BasicActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         Button logoutBtn = findViewById(R.id.logoutButton);
         final TextView mTextView = findViewById(R.id.messageView);
+        mTextView.setText(intent.getExtras().getString("message", "You logged in successfully!"));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

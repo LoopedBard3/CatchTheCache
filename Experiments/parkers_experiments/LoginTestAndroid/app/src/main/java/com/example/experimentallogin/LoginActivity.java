@@ -30,7 +30,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -49,9 +52,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello123", "bar@example.com:world"
-    };
+    private static ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>(
+            Arrays.asList("foo@example.com:hello123",
+                    "bar@example.com:world"));
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String initialLoginMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,7 +327,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            // TODO: register the new account here.
+            //Account doesn't exist, register a new one
+            DUMMY_CREDENTIALS.add(mEmail + ":" + mPassword);
+            initialLoginMessage = "Your account was created";
             return true;
         }
 
@@ -332,7 +339,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                mPasswordView.setText("");
                 Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+                intent.putExtra("message", initialLoginMessage);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

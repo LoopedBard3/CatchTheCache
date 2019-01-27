@@ -20,7 +20,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_basic" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_basic" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -28,13 +30,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="right|center"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <TextView
         android:id="@+id/messageView"
         android:layout_width="282dp"
         android:layout_height="62dp"
-        android:text="messageView"
-        android:layout_gravity="center|center" />
+        android:layout_gravity="center|center"
+        android:text="Message" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="342dp"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|center" />
 
 </android.support.design.widget.CoordinatorLayout>

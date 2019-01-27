@@ -1,12 +1,14 @@
 package com.example.experimentallogin;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,14 +25,16 @@ public class BasicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final RequestQueue queue = Volley.newRequestQueue(this);
         final String url ="http://the-overlords-pc.student.iastate.edu:8080/";
-
+        Intent intent = getIntent();
 
         setContentView(R.layout.activity_basic);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        Button logoutBtn = findViewById(R.id.logoutButton);
         final TextView mTextView = findViewById(R.id.messageView);
+        mTextView.setText(intent.getExtras().getString("message", "You logged in successfully!"));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +61,16 @@ public class BasicActivity extends AppCompatActivity {
                                 queue.add(stringRequest);
                             }
                         }).show();
+            }
+        });
+
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }

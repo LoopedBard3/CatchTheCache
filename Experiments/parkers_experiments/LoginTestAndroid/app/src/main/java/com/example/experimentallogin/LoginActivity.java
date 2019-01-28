@@ -110,6 +110,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mBypassButton = (Button) findViewById(R.id.bypassBtn);
+        mBypassButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initialLoginMessage = "You logged in by bypassing information entering.";
+                Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+                intent.putExtra("message", initialLoginMessage);
+                startActivity(intent);
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -328,7 +338,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(new Gson().toJson(new UserLogin(mEmail, mPassword)));
-                String url = "http://the-overlords-pc.student.iastate.edu:8080/";
+                String url = "http://prometheus.student.iastate.edu:8080/";
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -339,6 +349,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 try {
                                     if (response.getBoolean("success")) {
                                         mPasswordView.setText("");
+                                        //Logic for if the user already existed or not
+
+
                                         Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
                                         intent.putExtra("message", initialLoginMessage);
                                         startActivity(intent);

@@ -1,0 +1,172 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+MERGED from [com.android.support:design:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/7383d6a97c736c511acc56e089898673/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/a50e78beaf756a4069e776426e57ecbd/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/6cf33f74b5de61ed982c1972c14ac813/AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/8c299a1eabec5b07472806894b509bf5/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/97da289f5177a691baab887d87262c35/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-28.0.0.aar/ee075c11a53b6a18955767e57d88b7ee/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/bd74706ff2a8fbca50c69615dda6ca6e/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/09bc4d6394b00984e8bcc8cd1b3a867d/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/a314482e53a0efe234cb5490f9851e2b/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/transition-28.0.0.aar/57d6edb00f8748986c42acb2e756376f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/9b1517cf23753c5957668b0084947a7f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/aca9b9fcd7960ae99b148d9acbc07848/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/45dc39c566e7db2e09a0d58f658611d2/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/d9cfa09727bb55ddd2c9e0970346312f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/17049f69e2ec73f2ede9f13b8415e137/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/4ef87b38ab3aca2be0360aca0e7578ed/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/0c11b17342d44913cdbf1158f69886cb/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/9df9920ce81029c5263e183907d711b9/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/ae513b30bb02c5f8da3d21dfc6f386a9/AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/8074674b10eb1ef96b588e13930c93cb/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/c5c46de736235acfa7a141ebc3f16494/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/4d51ec02b9ea0897557d1a8f5b304243/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/e44003a12e529652dcb2ac41ef10af7f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/233592c4583b4a36cef67d5b7cc434be/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/0b6da9c0e7a845cfe36bdee8d82f4473/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/8e4634b220be71b1680a828e74ccd393/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/27dad9830ef555162ba6082fbb4d87a3/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/6c14e99338ba972489975687de2f0299/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/b253ecf6d3f9885c8ed16f6e7a29537a/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/b46013ff0f6e2d034f592ec6399b41f6/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+	package
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:3:5-35
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:1-24:12
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:5:5-22:19
+MERGED from [com.android.support:design:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/7383d6a97c736c511acc56e089898673/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/7383d6a97c736c511acc56e089898673/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/6cf33f74b5de61ed982c1972c14ac813/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/6cf33f74b5de61ed982c1972c14ac813/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/ae513b30bb02c5f8da3d21dfc6f386a9/AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/ae513b30bb02c5f8da3d21dfc6f386a9/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:22:18-91
+	android:supportsRtl
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:10:9-35
+	android:label
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:8:9-41
+	android:roundIcon
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:9:9-54
+	android:icon
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:7:9-43
+	android:allowBackup
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:6:9-35
+	android:theme
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:11:9-40
+activity#com.example.practice.MainActivity
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:12:9-21:20
+	android:label
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:14:13-45
+	android:theme
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:15:13-56
+	android:name
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:13:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:16:13-20:29
+action#android.intent.action.MAIN
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:17:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:19:17-77
+	android:name
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml:19:27-74
+uses-sdk
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+MERGED from [com.android.support:design:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/7383d6a97c736c511acc56e089898673/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/7383d6a97c736c511acc56e089898673/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/a50e78beaf756a4069e776426e57ecbd/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/a50e78beaf756a4069e776426e57ecbd/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/6cf33f74b5de61ed982c1972c14ac813/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/6cf33f74b5de61ed982c1972c14ac813/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/8c299a1eabec5b07472806894b509bf5/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/8c299a1eabec5b07472806894b509bf5/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/97da289f5177a691baab887d87262c35/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-28.0.0.aar/97da289f5177a691baab887d87262c35/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-28.0.0.aar/ee075c11a53b6a18955767e57d88b7ee/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-28.0.0.aar/ee075c11a53b6a18955767e57d88b7ee/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/bd74706ff2a8fbca50c69615dda6ca6e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-ui-28.0.0.aar/bd74706ff2a8fbca50c69615dda6ca6e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/09bc4d6394b00984e8bcc8cd1b3a867d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-core-utils-28.0.0.aar/09bc4d6394b00984e8bcc8cd1b3a867d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/a314482e53a0efe234cb5490f9851e2b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-28.0.0.aar/a314482e53a0efe234cb5490f9851e2b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/transition-28.0.0.aar/57d6edb00f8748986c42acb2e756376f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/transition-28.0.0.aar/57d6edb00f8748986c42acb2e756376f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/9b1517cf23753c5957668b0084947a7f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/loader-28.0.0.aar/9b1517cf23753c5957668b0084947a7f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/aca9b9fcd7960ae99b148d9acbc07848/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewpager-28.0.0.aar/aca9b9fcd7960ae99b148d9acbc07848/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/45dc39c566e7db2e09a0d58f658611d2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/coordinatorlayout-28.0.0.aar/45dc39c566e7db2e09a0d58f658611d2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/d9cfa09727bb55ddd2c9e0970346312f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/drawerlayout-28.0.0.aar/d9cfa09727bb55ddd2c9e0970346312f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/17049f69e2ec73f2ede9f13b8415e137/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/slidingpanelayout-28.0.0.aar/17049f69e2ec73f2ede9f13b8415e137/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/4ef87b38ab3aca2be0360aca0e7578ed/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/customview-28.0.0.aar/4ef87b38ab3aca2be0360aca0e7578ed/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/0c11b17342d44913cdbf1158f69886cb/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/swiperefreshlayout-28.0.0.aar/0c11b17342d44913cdbf1158f69886cb/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/9df9920ce81029c5263e183907d711b9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/asynclayoutinflater-28.0.0.aar/9df9920ce81029c5263e183907d711b9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/support-compat-28.0.0.aar/32159e9ab813f50f68c2ee181c76ac8a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/ae513b30bb02c5f8da3d21dfc6f386a9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/versionedparcelable-28.0.0.aar/ae513b30bb02c5f8da3d21dfc6f386a9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/8074674b10eb1ef96b588e13930c93cb/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cursoradapter-28.0.0.aar/8074674b10eb1ef96b588e13930c93cb/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/c5c46de736235acfa7a141ebc3f16494/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/c5c46de736235acfa7a141ebc3f16494/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/4d51ec02b9ea0897557d1a8f5b304243/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/4d51ec02b9ea0897557d1a8f5b304243/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/e44003a12e529652dcb2ac41ef10af7f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/e44003a12e529652dcb2ac41ef10af7f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/233592c4583b4a36cef67d5b7cc434be/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/233592c4583b4a36cef67d5b7cc434be/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/0b6da9c0e7a845cfe36bdee8d82f4473/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/0b6da9c0e7a845cfe36bdee8d82f4473/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/8e4634b220be71b1680a828e74ccd393/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/8e4634b220be71b1680a828e74ccd393/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/27dad9830ef555162ba6082fbb4d87a3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/27dad9830ef555162ba6082fbb4d87a3/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/6c14e99338ba972489975687de2f0299/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/6c14e99338ba972489975687de2f0299/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/b253ecf6d3f9885c8ed16f6e7a29537a/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/b253ecf6d3f9885c8ed16f6e7a29537a/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/b46013ff0f6e2d034f592ec6399b41f6/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] /Users/chloegolter/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/b46013ff0f6e2d034f592ec6399b41f6/AndroidManifest.xml:20:5-44
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		ADDED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/chloegolter/Desktop/School/cs309/practice/app/src/main/AndroidManifest.xml

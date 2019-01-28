@@ -30,6 +30,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.experimentallogin.models.UserLogin;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -67,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private String initialLoginMessage;
+    RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
+        queue = Volley.newRequestQueue(getApplicationContext());
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -96,6 +110,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mBypassButton = (Button) findViewById(R.id.bypassBtn);
+        mBypassButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initialLoginMessage = "You logged in by bypassing information entering.";
+                Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+                intent.putExtra("message", initialLoginMessage);
+                startActivity(intent);
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -311,42 +335,64 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            JSONObject jsonData;
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                jsonData = new JSONObject(new Gson().toJson(new UserLogin(mEmail, mPassword)));
+                String url = "http://prometheus.student.iastate.edu:8080/";
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonData,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                mEmailView.setText("String Response : " + response.toString());
+                                mAuthTask = null;
+                                showProgress(false);
+                                try {
+                                    if (response.getBoolean("success")) {
+                                        mPasswordView.setText("");
+                                        //Logic for if the user already existed or not
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
 
-            //Account doesn't exist, register a new one
-            DUMMY_CREDENTIALS.add(mEmail + ":" + mPassword);
-            initialLoginMessage = "Your account was created";
-            return true;
+                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+                                        intent.putExtra("message", initialLoginMessage);
+                                        startActivity(intent);
+                                    } else {
+                                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                                        mPasswordView.requestFocus();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mEmailView.setText("Error getting response");
+                        mEmailView.requestFocus();
+                        showProgress(false);
+                    }
+                });
+                queue.add(jsonObjectRequest);
+
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+
+                //Account doesn't exist, register a new one
+//            DUMMY_CREDENTIALS.add(mEmail + ":" + mPassword);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
-                mPasswordView.setText("");
-                Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
-                intent.putExtra("message", initialLoginMessage);
-                startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override

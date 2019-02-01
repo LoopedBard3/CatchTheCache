@@ -39,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker on gerdin and move the camera
-        LatLng gerdin = new LatLng(42, -93.6);
+        LatLng gerdin = new LatLng(42.025139, -93.644478);
         mMap.addMarker(new MarkerOptions().position(gerdin).title("Marker on Gerdin"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(gerdin));
         /**

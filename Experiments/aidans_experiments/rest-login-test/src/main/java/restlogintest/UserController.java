@@ -28,22 +28,21 @@ class UserController {
 	// Aggregate root
 
 	@GetMapping(value = "/")
-    public String index() {
-        return "Welcome to Prometheus";
-    }
-	
+	public String index() {
+		return "Welcome to Prometheus";
+	}
+
 	// tag::get-aggregate-root[]
 	@GetMapping("/users")
 	Resources<Resource<User>> all() {
 
 		List<Resource<User>> users = repository.findAll().stream()
-			.map(user -> new Resource<>(user,
-				linkTo(methodOn(UserController.class).one(user.getId())).withSelfRel(),
-				linkTo(methodOn(UserController.class).all()).withRel("users")))
-			.collect(Collectors.toList());
-		
-		return new Resources<>(users,
-			linkTo(methodOn(UserController.class).all()).withSelfRel());
+				.map(user -> new Resource<>(user,
+						linkTo(methodOn(UserController.class).one(user.getId())).withSelfRel(),
+						linkTo(methodOn(UserController.class).all()).withRel("users")))
+				.collect(Collectors.toList());
+
+		return new Resources<>(users, linkTo(methodOn(UserController.class).all()).withSelfRel());
 	}
 	// end::get-aggregate-root[]
 
@@ -57,29 +56,25 @@ class UserController {
 	// tag::get-single-item[]
 	@GetMapping("/users/{id}")
 	Resource<User> one(@PathVariable Long id) {
-		
-		User user = repository.findById(id)
-			.orElseThrow(() -> new UserNotFoundException(id));
-		
-		return new Resource<>(user,
-			linkTo(methodOn(UserController.class).one(id)).withSelfRel(),
-			linkTo(methodOn(UserController.class).all()).withRel("users"));
+
+		User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+
+		return new Resource<>(user, linkTo(methodOn(UserController.class).one(id)).withSelfRel(),
+				linkTo(methodOn(UserController.class).all()).withRel("users"));
 	}
 	// end::get-single-item[]
 
 	@PutMapping("/users/{id}")
 	User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
-		
-		return repository.findById(id)
-			.map(user -> {
-				user.setUsername(newUser.getUsername());
-				user.setPasswd(newUser.getPasswd());
-				return repository.save(user);
-			})
-			.orElseGet(() -> {
-				newUser.setId(id);
-				return repository.save(newUser);
-			});
+
+		return repository.findById(id).map(user -> {
+			user.setUsername(newUser.getUsername());
+			user.setPasswd(newUser.getPasswd());
+			return repository.save(user);
+		}).orElseGet(() -> {
+			newUser.setId(id);
+			return repository.save(newUser);
+		});
 	}
 
 	@DeleteMapping("/users/{id}")

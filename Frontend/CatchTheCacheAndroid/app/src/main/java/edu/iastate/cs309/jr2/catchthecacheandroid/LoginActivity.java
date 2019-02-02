@@ -70,6 +70,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mUsernameView = findViewById(R.id.username);
         populateAutoComplete();
 
+        //TODO: Remove debugText and Text Box
+        final TextView debugText = findViewById(R.id.debugText);
+
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -82,11 +85,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mUsernameSignInButton = (Button) findViewById(R.id.username_sign_in_button);
-        mUsernameSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        final Button mRegisterButton = (Button) findViewById(R.id.register_account_button);
+        mRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                debugText.setText("Register was clicked");
+            }
+        });
+
+        final Button mForgotPasswordButton = (Button) findViewById(R.id.forgot_password_button);
+        mForgotPasswordButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Setup the forgot password control flow
+                debugText.setText("Forgot Password was clicked");
             }
         });
 
@@ -152,6 +172,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
+        //TODO: Setup the proper login control flow
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -192,12 +213,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isUsernameValid(String username) {
         //TODO: Replace this with your own logic
-        return username.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return true;
     }
 
     /**

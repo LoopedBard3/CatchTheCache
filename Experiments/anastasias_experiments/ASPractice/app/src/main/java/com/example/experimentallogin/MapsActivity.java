@@ -46,8 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          * not sure why I want to move the camera yet
          */
         //lets add another marker, testing map and checking lat longs, not moving camera
-        LatLng chloe = new LatLng(42.022215, -93.654911);
-        mMap.addMarker(new MarkerOptions().position(gerdin).title("Marker on Chloe"));
+        //LatLng chloe = new LatLng(42.022215, -93.654911);
+       // mMap.addMarker(new MarkerOptions().position(gerdin).title("Marker on Chloe"));
 
     }
 }

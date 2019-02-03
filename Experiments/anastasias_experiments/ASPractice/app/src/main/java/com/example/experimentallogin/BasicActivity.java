@@ -63,13 +63,25 @@ public class BasicActivity extends AppCompatActivity {
                         }).show();
             }
         });
-
         logoutBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+//FIX ME!!! app crashes, error, Class not defined
+
+        FloatingActionButton mapBtn = findViewById(R.id.mapfab);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //what does this line do?
                 startActivity(intent);
             }
         });

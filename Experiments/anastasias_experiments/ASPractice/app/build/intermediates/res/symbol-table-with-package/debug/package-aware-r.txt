@@ -1211,6 +1211,7 @@ id login_form
 id login_progress
 id logoutButton
 id map
+id mapfab
 id masked
 id media_actions
 id message

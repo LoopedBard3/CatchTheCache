@@ -13,7 +13,7 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.R;
 
 public class MainFragment extends Fragment {
     /**
-     * dummy comment
+     * dummy comment..lets practice commiting on the branch!
      */
 
     private MainViewModel mViewModel;

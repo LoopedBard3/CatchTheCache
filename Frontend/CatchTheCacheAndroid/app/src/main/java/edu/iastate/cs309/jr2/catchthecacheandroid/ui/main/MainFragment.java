@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import edu.iastate.cs309.jr2.catchthecacheandroid.R;
 
 public class MainFragment extends Fragment {
+    /**
+     * dummy comment
+     */
 
     private MainViewModel mViewModel;
 

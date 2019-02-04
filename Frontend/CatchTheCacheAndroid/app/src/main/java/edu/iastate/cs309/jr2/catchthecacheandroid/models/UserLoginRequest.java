@@ -7,4 +7,12 @@ public class UserLoginRequest {
         Username = User;
         Password = Pass;
     }
+
+    public String getUsername() {
+        return Username;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
 }

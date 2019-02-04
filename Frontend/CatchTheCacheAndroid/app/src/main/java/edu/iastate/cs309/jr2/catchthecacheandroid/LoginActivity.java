@@ -3,6 +3,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,8 +30,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginAttemptResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -59,8 +74,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
+    private TextView debugText;
     private View mProgressView;
     private View mLoginFormView;
+    private RequestQueue queue;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +87,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
         populateAutoComplete();
-
+        queue = Volley.newRequestQueue(getApplicationContext());
         //TODO: Remove debugText and Text Box
-        final TextView debugText = findViewById(R.id.debugText);
-
+        debugText = findViewById(R.id.debugText);
+        gson = new Gson();
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -98,7 +116,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptRegister();
-                debugText.setText("Register was clicked");
             }
         });
 
@@ -107,7 +124,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptForgotPassword();
-                debugText.setText("Forgot Password was clicked");
             }
         });
 
@@ -164,6 +180,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void attemptRegister(){
         //TODO: Setup the register control flow
+        String username = mUsernameView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        debugText.setText("Register was clicked");
+        debugText.setText(gson.toJson(new UserLoginRequest(username, password)));
     }
 
 
@@ -173,6 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void attemptForgotPassword(){
         //:TODO setup the forgot password control flow
+        debugText.setText("Forgot Password was clicked");
     }
 
 
@@ -238,8 +259,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isPasswordValid(String password) {
-        //https://www.thepolyglotdeveloper.com/2015/05/use-regex-to-test-password-strength-in-javascript/
-        return password.matches("^(((?=.[a-z])(?=.[A-Z]))|((?=.[a-z])(?=.[0-9]))|((?=.[A-Z])(?=.[0-9])))(?=.{6,})");
+        //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
     }
 
     /**
@@ -349,37 +370,50 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            JSONObject jsonData;
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                jsonData = new JSONObject(gson.toJson(new UserLoginRequest(mUsername, mPassword)));
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                mUsernameView.setText("String Response : " + response.toString());
+                                mAuthTask = null;
+                                showProgress(false);
+                                try {
+                                    UserLoginAttemptResponse respJson = gson.fromJson(response.toString(), UserLoginAttemptResponse.class);
+                                    if (response.getBoolean("success")) {
+                                        mPasswordView.setText("");
+                                        //TODO:Logic for if the user already existed or not and opening next activity
+//                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+//                                        intent.putExtra("message", initialLoginMessage);
+//                                        startActivity(intent);
+                                    } else {
+                                        mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
+                                        mPasswordView.requestFocus();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        debugText.setText("Problem getting response");
+                        debugText.requestFocus();
+                        showProgress(false);
+                    }
+                });
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+                queue.add(jsonObjectRequest);
+            } catch (JSONException e) {
+                debugText.setText(e.toString());
+                return false;
             }
 
             return true;
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
-                mPasswordView.requestFocus();
-            }
-        }
 
         @Override
         protected void onCancelled() {

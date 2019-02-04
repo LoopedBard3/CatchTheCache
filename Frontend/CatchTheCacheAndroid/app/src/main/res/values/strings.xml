@@ -14,6 +14,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="access_url">"prometheous.student.iastate.edu:8080/"</string>
+    <string name="access_url">prometheus.student.iastate.edu:8080/</string>
     <string name="application_title_text">CATCH THE CACHE</string>
 </resources>

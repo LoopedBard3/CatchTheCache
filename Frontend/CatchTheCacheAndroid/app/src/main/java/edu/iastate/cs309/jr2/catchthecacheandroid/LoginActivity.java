@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Setup the register control flow
+                attemptRegister();
                 debugText.setText("Register was clicked");
             }
         });
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mForgotPasswordButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Setup the forgot password control flow
+                attemptForgotPassword();
                 debugText.setText("Forgot Password was clicked");
             }
         });
@@ -156,6 +156,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 populateAutoComplete();
             }
         }
+    }
+
+    /**
+     * Attempts to go through the register control flow
+     * for registering a new user.
+     */
+    private void attemptRegister(){
+        //TODO: Setup the register control flow
+    }
+
+
+    /**
+     * Attempts to go through the forgot password control
+     * flow for users that forgot their password.
+     */
+    private void attemptForgotPassword(){
+        //:TODO setup the forgot password control flow
     }
 
 
@@ -348,7 +365,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            // TODO: register the new account here.
             return true;
         }
 
@@ -360,7 +376,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_invalid_password));
+                mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
                 mPasswordView.requestFocus();
             }
         }

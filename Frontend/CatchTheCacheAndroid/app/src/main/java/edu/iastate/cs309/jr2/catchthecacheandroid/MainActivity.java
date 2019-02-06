@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.dummy.DummyContent;
 import edu.iastate.cs309.jr2.catchthecacheandroid.ui.main.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements chatFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.container, MainFragment.newInstance())
                     .commitNow();
         }
+        //super.onCreate(savedInstanceState);
+        //setContentView(R.layout.main_fragment);
         configureBackButton();
     }
     private void configureBackButton(){
@@ -29,5 +34,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 }

@@ -3,6 +3,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -93,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        configureNextButton();
     }
 
     private void populateAutoComplete() {
@@ -102,7 +104,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         getLoaderManager().initLoader(0, null, this);
     }
-
+    private void configureNextButton(){
+        Button nextbutton = (Button) findViewById(R.id.nextbutton);
+        nextbutton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent (LoginActivity.this, MainActivity.class));
+            }
+        });
+    }
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;

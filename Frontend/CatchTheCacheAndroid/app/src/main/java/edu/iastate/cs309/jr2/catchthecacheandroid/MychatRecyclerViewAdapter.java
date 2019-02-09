@@ -1,15 +1,20 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.chatFragment.OnListFragmentInteractionListener;
 import edu.iastate.cs309.jr2.catchthecacheandroid.dummy.DummyContent.DummyItem;
 
 import java.util.List;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -28,9 +33,11 @@ public class MychatRecyclerViewAdapter extends RecyclerView.Adapter<MychatRecycl
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_chat, parent, false);
         return new ViewHolder(view);
+
     }
 
     @Override
@@ -74,4 +81,7 @@ public class MychatRecyclerViewAdapter extends RecyclerView.Adapter<MychatRecycl
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
+
+
 }

@@ -1,18 +1,10 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models;
 
 public class UserLoginRequest {
-    private String Username, Password;
+    private String username, password;
 
-    public UserLoginRequest(String User, String Pass){
-        Username = User;
-        Password = Pass;
-    }
-
-    public String getUsername() {
-        return Username;
-    }
-
-    public String getPassword() {
-        return Password;
+    public UserLoginRequest(String u, String p){
+        this.username = u;
+        this.password = Pass;
     }
 }

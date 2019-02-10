@@ -1,4 +1,4 @@
-package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
+package edu.iastate.cs309.jr2.catchthecacheandroid.models;
 
 public class UserCreateResponse {
 	private boolean validUsername, validPassword;
@@ -26,7 +26,7 @@ public class UserCreateResponse {
 	public void setMessage(String m) {
 		this.message = m;
 	}
-
+	
 	public boolean getValidUser() {
 		return this.validUsername;
 	}

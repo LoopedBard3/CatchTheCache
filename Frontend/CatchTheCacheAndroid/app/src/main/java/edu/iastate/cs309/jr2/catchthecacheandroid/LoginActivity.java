@@ -134,11 +134,8 @@ public class LoginActivity extends AppCompatActivity {
      * flow for users that forgot their password.
      */
     private void forgotPasswordPressed(){
-        //:TODO setup the forgot password control flow
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-        debugText.setText("Register was clicked");
-        debugText.setText(gson.toJson(new UserLoginRequest(username, password)));
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+        startActivity(intent);
     }
 
 

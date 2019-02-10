@@ -40,7 +40,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
-    private EditText mPasswordViewMatch;
     private TextView debugText;
     private View mProgressView;
     private View mRegisterFormView;
@@ -50,15 +49,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_forgot_password);
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
         queue = Volley.newRequestQueue(getApplicationContext());
         //TODO: Remove debugText and Text Box
         debugText = findViewById(R.id.debugText);
         gson = new Gson();
-        mPasswordView = findViewById(R.id.password);
-        mPasswordViewMatch = findViewById(R.id.passwordMatch);
+        mPasswordView = findViewById(R.id.securityQuestionAnswer);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -70,7 +68,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
 
-        final Button mRegisterButton = (Button) findViewById(R.id.register_account_button);
+        final Button mRegisterButton = (Button) findViewById(R.id.recover_account_button);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,12 +94,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
-        mPasswordViewMatch.setError(null);
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String passwordMatch = mPasswordViewMatch.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -114,10 +110,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }else if (!isPasswordValid(password)){
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
-        }else if(!doPasswordsMatch(password, passwordMatch)){
-            mPasswordViewMatch.setError(getString(R.string.error_password_mismatch));
-            focusView = mPasswordViewMatch;
             cancel = true;
         }
 

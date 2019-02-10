@@ -25,10 +25,6 @@ public class User {
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String username;
 
-	@Column(name = "email")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private String email;
-
 	@Column(name = "password")
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String password;
@@ -53,14 +49,6 @@ public class User {
 		this.username = username;
 	}
 
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	protected String getPassword() {
 		return this.password;
 	}
@@ -82,6 +70,6 @@ public class User {
 		return new ToStringCreator(this)
 
 				.append("id", this.getId()).append("username", this.getUsername())
-				.append("email", this.getEmail()).append("authority", this.getAuthority()).toString();
+				.append("authority", this.getAuthority()).toString();
 	}
 }

@@ -19,13 +19,14 @@ class UserController {
 	UserRepository userRepo;
 
 	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
-	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
+	// public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
+	public String saveUser(@RequestBody User u) {
 		if (u == null) {
 			throw new NullPointerException();
 		}
 		boolean canSave = true;
 		UserCreateResponse response = new UserCreateResponse();
-		if (validateUsername(u.getUsername())) { // if username is not already taken
+		if (validateUsername(u.getUsername())) { // if username is not alreadyF taken and meets requirements
 			response.setValidUser(true);
 		} else
 			canSave = false;
@@ -42,10 +43,10 @@ class UserController {
 
 		response.setMessage(
 				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
-
+		System.out.println("" + u.getUsername() + ":" + u.getPassword());
 		if (canSave)
 			userRepo.save(u);
-		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
+		return response.getMessage();// new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/users")
@@ -74,23 +75,23 @@ class UserController {
 	}
 
 	/**
-	 * Check if desired username is taken
+	 * Check if desired username is taken and meets the other requirements
 	 * 
 	 * @param username Username to check
 	 * @return false if username is already taken, true otherwise
 	 */
 	private boolean validateUsername(String username) {
-		return !userRepo.existsByUsername(username);
+		return !userRepo.existsByUsername(username) && username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
 	}
-
+	
 	/**
-	 * Check if desired password
+	 * Check if desired password meets our specified requirements
 	 * 
-	 * @param password
-	 * @return
+	 * @param password Password to check
+	 * @return true if valid, false otherwise
 	 */
 	private boolean validatePassword(String password) {
-		return password.matches("^(((?=.[a-z])(?=.[A-Z]))|((?=.[a-z])(?=.[0-9]))|((?=.[A-Z])(?=.[0-9])))(?=.{6,})");
+		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
 	}
 
 }

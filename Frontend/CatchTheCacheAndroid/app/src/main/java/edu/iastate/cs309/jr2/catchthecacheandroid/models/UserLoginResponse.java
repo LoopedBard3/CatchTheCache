@@ -8,23 +8,23 @@ public class UserLoginResponse {
 		this.message = m;
 		this.success = s;
 	}
-	
+
 	public UserLoginResponse() {
 		this.success = false;
 	}
-	
+
 	public String getMessage() {
 		return this.message;
 	}
-	
+
 	public void setMessage(String m) {
 		this.message = m;
 	}
-	
+
 	public boolean getSuccess() {
 		return this.success;
 	}
-	
+
 	public void setSuccess(boolean s) {
 		this.success = s;
 	}

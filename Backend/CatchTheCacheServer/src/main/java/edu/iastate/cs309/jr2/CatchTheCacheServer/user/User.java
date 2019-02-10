@@ -41,6 +41,14 @@ public class User {
 	@NotFound(action = NotFoundAction.IGNORE)
 	private String security_answer;
 
+	public void updateUser(UserCreateRequest req) {
+		this.username = req.getUsername();
+		this.password = req.getPassword();
+		this.security_question = req.getQuestion();
+		this.security_answer = req.getAnswer();
+		this.authority = req.getAuthority();
+	}
+
 	public Integer getId() {
 		return id;
 	}

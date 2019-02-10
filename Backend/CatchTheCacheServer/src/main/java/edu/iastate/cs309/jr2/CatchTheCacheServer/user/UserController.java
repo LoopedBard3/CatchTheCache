@@ -1,5 +1,6 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,16 @@ class UserController {
 	@Autowired
 	UserRepository userRepo;
 
+	/**
+	 * Create new user in our UserRepository based on information in
+	 * UserCreateRequest
+	 * 
+	 * @param u UserCreateRequest object to use for account creation attempt
+	 * @return UserCreateResponse object with success, validUser, and validPass
+	 *         booleans, and message String
+	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
-	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
+	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody UserCreateRequest u) {
 		if (u == null) {
 			throw new NullPointerException();
 		}
@@ -28,7 +37,7 @@ class UserController {
 
 		UserCreateResponse response = new UserCreateResponse();
 
-		if (validateUsername(u.getUsername())) { // if username is not alreadyF taken and meets requirements
+		if (validateUsername(u.getUsername())) { // if username is not already taken and meets requirements
 			response.setValidUser(true);
 		} else
 			canSave = false;
@@ -38,21 +47,25 @@ class UserController {
 		} else
 			canSave = false;
 
-		int authority = u.getAuthority();
-
-		if (!(authority == 1 || authority == 2)) { // assign user authority level
-			u.setAuthority(0);
-		}
-
 		response.setMessage(
 				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
-		if (canSave)
-			userRepo.save(u);
+		if (canSave) {
+			response.setSuccess(true);
+			User toSave = new User(); // create new user from request and save it to our UserRepository
+			toSave.updateUser(u);
+			userRepo.save(toSave);
+		}
 		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
 	}
 
+	/**
+	 * Query UserRepository and attempt login with given credentials
+	 * 
+	 * @param u UserLoginRequest object to use for login attempt
+	 * @return UserLoginResponse object with success boolean and message String
+	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody User u) {
+	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody UserLoginRequest u) {
 		if (u == null) {
 			throw new NullPointerException();
 		}
@@ -70,29 +83,62 @@ class UserController {
 		return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
 	}
 
+	/**
+	 * Get list of all accounts
+	 * 
+	 * @return List of all usernames in the database
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users")
-	public List<User> getAllUsers() {
-		List<User> results = userRepo.findAll();
+	public List<String> getAllUsers() {
+		List<User> users = userRepo.findAll();
+		List<String> results = new ArrayList<String>();
+		for (User u : users) {
+			results.add(u.getUsername());
+		}
 		return results;
 	}
 
+	/**
+	 * Get list of accounts with administrator permissions (authority == 2)
+	 * 
+	 * @return List of Strings of usernames with authority == 2
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users/admins")
-	public List<User> getAllAdmins() {
-		List<User> results = userRepo.findAllByAuthority(2);
+	public List<String> getAllAdmins() {
+		List<User> users = userRepo.findAllByAuthority(2);
+		List<String> results = new ArrayList<String>();
+		for (User u : users) {
+			results.add(u.getUsername());
+		}
 		return results;
 	}
 
+	/**
+	 * Get list of accounts with moderation permissions (authority > 0)
+	 * 
+	 * @return List of Strings of usernames with authority > 0
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users/moderators")
-	public List<User> getAllModerators() {
-		List<User> results = userRepo.findAllByAuthority(1);
+	public List<String> getAllModerators() {
+		List<User> users = userRepo.findAllByAuthority(1);
+		List<String> results = new ArrayList<String>();
+		for (User u : users) {
+			results.add(u.getUsername());
+		}
 		results.addAll(getAllAdmins());
 		return results;
 	}
 
+	/**
+	 * Poll UserRepository for user with specified ID
+	 * 
+	 * @param id the ID of the user to find
+	 * @return available information about the polled ID
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users/{userId}")
-	public Optional<User> findOwnerById(@PathVariable("userId") int id) {
+	public String findUserById(@PathVariable("userId") int id) {
 		Optional<User> results = userRepo.findById(id);
-		return results;
+		return results.get().toString();
 	}
 
 	/**

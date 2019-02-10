@@ -1,4 +1,4 @@
-package edu.iastate.cs309.jr2.catchthecacheandroid.models;
+package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
 
 public class UserCreateRequest {
 	private String username, password, security_question, security_answer;

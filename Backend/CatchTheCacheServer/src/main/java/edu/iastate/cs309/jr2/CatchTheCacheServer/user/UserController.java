@@ -23,36 +23,25 @@ class UserController {
 	 * Create new user in our UserRepository based on information in
 	 * UserCreateRequest
 	 * 
-	 * @param u UserCreateRequest object to use for account creation attempt
+	 * @param request UserCreateRequest object to use for account creation attempt
 	 * @return UserCreateResponse object with success, validUser, and validPass
 	 *         booleans, and message String
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
-	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody UserCreateRequest u) {
-		if (u == null) {
+	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody UserCreateRequest request) {
+		if (request == null) {
 			throw new NullPointerException();
 		}
 
-		boolean canSave = true;
-
 		UserCreateResponse response = new UserCreateResponse();
 
-		if (validateUsername(u.getUsername())) { // if username is not already taken and meets requirements
-			response.setValidUser(true);
-		} else
-			canSave = false;
-
-		if (validatePassword(u.getPassword())) { // if password meets requirements
-			response.setValidPass(true);
-		} else
-			canSave = false;
-
+		response.setValidUser(validateUsername(request.getUsername()));
+		response.setValidPass(validatePassword(request.getPassword()));
 		response.setMessage(
 				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
-		if (canSave) {
-			response.setSuccess(true);
-			User toSave = new User(); // create new user from request and save it to our UserRepository
-			toSave.updateUser(u);
+		if (response.getSuccess()) {
+			User toSave = new User();
+			toSave.updateUser(request);
 			userRepo.save(toSave);
 		}
 		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
@@ -61,18 +50,18 @@ class UserController {
 	/**
 	 * Query UserRepository and attempt login with given credentials
 	 * 
-	 * @param u UserLoginRequest object to use for login attempt
+	 * @param request UserLoginRequest object to use for login attempt
 	 * @return UserLoginResponse object with success boolean and message String
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody UserLoginRequest u) {
-		if (u == null) {
+	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody UserLoginRequest request) {
+		if (request == null) {
 			throw new NullPointerException();
 		}
 
 		UserLoginResponse response = new UserLoginResponse();
 
-		if (validateLogin(u.getUsername(), u.getPassword())) {
+		if (validateLogin(request.getUsername(), request.getPassword())) {
 			response.setSuccess(true);
 			response.setMessage("Login Success");
 		} else {
@@ -81,6 +70,52 @@ class UserController {
 		}
 
 		return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Request security question for user
+	 * 
+	 * @param request UserQuestionRequest object to use
+	 * @return UserQuestionResponse object with security question
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/login/forgot")
+	public ResponseEntity<UserQuestionResponse> getQuestion(@RequestBody UserQuestionRequest request) {
+		if (request == null) {
+			throw new NullPointerException();
+		}
+
+		User u = userRepo.findByUsername(request.getUsername());
+		UserQuestionResponse response = new UserQuestionResponse(u.getSecurityQuestion());
+
+		return new ResponseEntity<UserQuestionResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Attempt to update user password if they have the correct answer to the
+	 * security question
+	 * 
+	 * @param request UserResetPassRequest object to use
+	 * @return UserResetPassResponse object with success boolean and message String
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/login/reset")
+	public ResponseEntity<UserResetPassResponse> resetPassword(@RequestBody UserResetPassRequest request) {
+		if (request == null) {
+			throw new NullPointerException();
+		}
+
+		User u = userRepo.findByUsername(request.getUsername());
+		UserResetPassResponse response = new UserResetPassResponse();
+
+		response.setValidAnswer(request.getAnswer().equals(u.getSecurityAnswer()));
+		response.setValidPassword(validatePassword(request.getNewPassword()));
+		response.setMessage(
+				"Answer Valid: " + response.getValidAnswer() + "; Password Valid: " + response.getValidPass());
+
+		if (response.getSuccess()) {
+			u.setPassword(request.getNewPassword());
+		}
+
+		return new ResponseEntity<UserResetPassResponse>(response, HttpStatus.OK);
 	}
 
 	/**

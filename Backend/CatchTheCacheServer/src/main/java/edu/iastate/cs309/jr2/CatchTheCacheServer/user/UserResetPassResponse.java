@@ -1,19 +1,19 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
 
-public class UserCreateResponse {
-	private boolean validUsername, validPassword;
+public class UserResetPassResponse {
+	private boolean validAnswer, validPassword;
 	private String message;
 
-	public UserCreateResponse() {
-		this.validUsername = false;
+	public UserResetPassResponse() {
+		this.validAnswer = false;
 		this.validPassword = false;
 	}
 
-	public void setValidUser(boolean b) {
-		this.validUsername = b;
+	public void setValidAnswer(boolean b) {
+		this.validAnswer = b;
 	}
 
-	public void setValidPass(boolean b) {
+	public void setValidPassword(boolean b) {
 		this.validPassword = b;
 	}
 
@@ -21,8 +21,8 @@ public class UserCreateResponse {
 		this.message = m;
 	}
 
-	public boolean getValidUser() {
-		return this.validUsername;
+	public boolean getValidAnswer() {
+		return this.validAnswer;
 	}
 
 	public boolean getValidPass() {
@@ -34,6 +34,6 @@ public class UserCreateResponse {
 	}
 
 	public boolean getSuccess() {
-		return this.validUsername && this.validPassword;
+		return this.validAnswer && this.validPassword;
 	}
 }

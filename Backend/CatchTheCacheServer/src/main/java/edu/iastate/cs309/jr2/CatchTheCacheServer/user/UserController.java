@@ -19,8 +19,8 @@ class UserController {
 	UserRepository userRepo;
 
 	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
-	// public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
-	public String saveUser(@RequestBody User u) {
+	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
+	//public String saveUser(@RequestBody User u) {
 		if (u == null) {
 			throw new NullPointerException();
 		}
@@ -46,7 +46,7 @@ class UserController {
 		System.out.println("" + u.getUsername() + ":" + u.getPassword());
 		if (canSave)
 			userRepo.save(u);
-		return response.getMessage();// new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
+		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/users")

@@ -15,27 +15,27 @@ public class UserCreateResponse {
 		this.validPassword = false;
 	}
 
-	protected void setValidUser(boolean b) {
+	public void setValidUser(boolean b) {
 		this.validUsername = b;
 	}
 
-	protected void setValidPass(boolean b) {
+	public void setValidPass(boolean b) {
 		this.validPassword = b;
 	}
 
-	protected void setMessage(String m) {
+	public void setMessage(String m) {
 		this.message = m;
 	}
 	
-	protected boolean getValidUser() {
+	public boolean getValidUser() {
 		return this.validUsername;
 	}
 
-	protected boolean getValidPass() {
+	public boolean getValidPass() {
 		return this.validPassword;
 	}
 
-	protected String getMessage() {
+	public String getMessage() {
 		return this.message;
 	}
 }

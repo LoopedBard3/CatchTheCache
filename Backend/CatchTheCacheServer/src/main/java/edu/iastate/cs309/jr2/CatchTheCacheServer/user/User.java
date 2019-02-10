@@ -33,6 +33,14 @@ public class User {
 	@NotFound(action = NotFoundAction.IGNORE)
 	private int authority;
 	
+	@Column(name = "security_question")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private String security_question;
+	
+	@Column(name = "security_answer")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private String security_answer;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -63,6 +71,22 @@ public class User {
 
 	public void setAuthority(int authority) {
 		this.authority = authority;
+	}
+	
+	public String getSecurityQuestion() {
+		return this.security_question;
+	}
+
+	public void setSecurityQuestion(String question) {
+		this.security_question = question;
+	}
+	
+	public String getSecurityAnswer() {
+		return this.security_answer;
+	}
+
+	public void setSecurityAnswer(String answer) {
+		this.security_answer = answer;
 	}
 
 	@Override

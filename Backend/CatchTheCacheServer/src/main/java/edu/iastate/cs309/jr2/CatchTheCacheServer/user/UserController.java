@@ -20,12 +20,14 @@ class UserController {
 
 	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
 	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody User u) {
-	//public String saveUser(@RequestBody User u) {
 		if (u == null) {
 			throw new NullPointerException();
 		}
+		
 		boolean canSave = true;
+		
 		UserCreateResponse response = new UserCreateResponse();
+		
 		if (validateUsername(u.getUsername())) { // if username is not alreadyF taken and meets requirements
 			response.setValidUser(true);
 		} else
@@ -37,16 +39,35 @@ class UserController {
 			canSave = false;
 
 		int authority = u.getAuthority();
+		
 		if (!(authority == 1 || authority == 2)) { // assign user authority level
 			u.setAuthority(0);
 		}
 
 		response.setMessage(
 				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
-		System.out.println("" + u.getUsername() + ":" + u.getPassword());
 		if (canSave)
 			userRepo.save(u);
 		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/login")
+	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody User u) {
+		if (u == null) {
+			throw new NullPointerException();
+		}
+		
+		UserLoginResponse response = new UserLoginResponse();
+		
+		if (validateLogin(u.getUsername(), u.getPassword())) {
+			response.setSuccess(true);
+			response.setMessage("Login Success");
+		} else {
+			response.setSuccess(false);
+			response.setMessage("Invalid username or password");
+		}
+		
+		return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/users")
@@ -92,6 +113,21 @@ class UserController {
 	 */
 	private boolean validatePassword(String password) {
 		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
+	}
+	
+	/**
+	 * Validate login credentials
+	 * @param username Username for account
+	 * @param password Password for account
+	 * @return true if the username exists and the password is correct, false otherwise
+	 */
+	private boolean validateLogin(String username, String password) {
+		if(!(userRepo.existsByUsername(username) && username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$") && validatePassword(password))){
+			return false;
+		}
+		if(userRepo.findByUsername(username).getPassword().equals(password))
+			return true;
+		else return false;
 	}
 
 }

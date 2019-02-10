@@ -47,17 +47,11 @@ import java.util.List;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginAttemptResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
 
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -86,7 +80,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
-        populateAutoComplete();
         queue = Volley.newRequestQueue(getApplicationContext());
         //TODO: Remove debugText and Text Box
         debugText = findViewById(R.id.debugText);
@@ -131,48 +124,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
 
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
 
     /**
      * Attempts to go through the register control flow
@@ -383,7 +335,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 try {
                                     UserLoginAttemptResponse respJson = gson.fromJson(response.toString(), UserLoginAttemptResponse.class);
                                     if (response.getBoolean("success")) {
-                                        mPasswordView.setText("");
+                                        mPasswordView.setText("Successfully got response");
                                         //TODO:Logic for if the user already existed or not and opening next activity
 //                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
 //                                        intent.putExtra("message", initialLoginMessage);

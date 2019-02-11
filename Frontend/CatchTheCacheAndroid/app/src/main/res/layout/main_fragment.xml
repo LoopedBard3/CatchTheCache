@@ -26,6 +26,78 @@
         android:scrollbars="vertical"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/plant_item_title"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+
+    <TextView
+        android:id="@+id/example2"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 2"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+    <TextView
+        android:id="@+id/example3"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="78dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 3"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+
+    <TextView
+        android:id="@+id/example4"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 4"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+
+    <TextView
+        android:id="@+id/example5"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="138dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 5"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
 
 </android.support.constraint.ConstraintLayout>

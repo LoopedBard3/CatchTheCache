@@ -34,11 +34,11 @@ public class User {
 	private int authority;
 
 	@Column(name = "security_question")
-	@NotFound(action = NotFoundAction.IGNORE)
+	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String security_question;
 
 	@Column(name = "security_answer")
-	@NotFound(action = NotFoundAction.IGNORE)
+	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String security_answer;
 
 	public void updateUser(UserCreateRequest req) {

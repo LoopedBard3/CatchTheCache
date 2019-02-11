@@ -39,11 +39,14 @@ class UserController {
 		response.setValidPass(validatePassword(request.getPassword()));
 		response.setMessage(
 				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
+		response.setSuccess(response.getValidUser() && response.getValidPass());
+
 		if (response.getSuccess()) {
-			User toSave = new User();
-			toSave.updateUser(request);
-			userRepo.save(toSave);
+			User u = new User();
+			u.updateUser(request);
+			userRepo.save(u);
 		}
+
 		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
 	}
 

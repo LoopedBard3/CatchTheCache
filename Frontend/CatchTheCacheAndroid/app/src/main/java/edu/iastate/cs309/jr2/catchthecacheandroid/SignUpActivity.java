@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,7 +28,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.CreateUserRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserCreateRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserCreateResponse;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -41,7 +43,9 @@ public class SignUpActivity extends AppCompatActivity {
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private EditText mPasswordViewMatch;
-    private TextView debugText;
+    private EditText mSecurityQuestion;
+    private EditText mSecurityAnswerMain;
+    private EditText mSecurityAnswerMatch;
     private View mProgressView;
     private View mRegisterFormView;
     private RequestQueue queue;
@@ -54,12 +58,13 @@ public class SignUpActivity extends AppCompatActivity {
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
         queue = Volley.newRequestQueue(getApplicationContext());
-        //TODO: Remove debugText and Text Box
-        debugText = findViewById(R.id.debugText);
         gson = new Gson();
         mPasswordView = findViewById(R.id.password);
         mPasswordViewMatch = findViewById(R.id.passwordMatch);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSecurityQuestion = findViewById(R.id.securityQuestion);
+        mSecurityAnswerMain = findViewById(R.id.securityAnswer);
+        mSecurityAnswerMatch = findViewById(R.id.securityAnswerCheck);
+        mSecurityAnswerMatch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -97,11 +102,19 @@ public class SignUpActivity extends AppCompatActivity {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
         mPasswordViewMatch.setError(null);
+        mSecurityQuestion.setError(null);
+        mSecurityAnswerMain.setError(null);
+        mSecurityAnswerMatch.setError(null);
+
+
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
         String passwordMatch = mPasswordViewMatch.getText().toString();
+        String securityQuestion = mSecurityQuestion.getText().toString();
+        String securityAnswer = mSecurityAnswerMain.getText().toString();
+        String securityAnswerMatch = mSecurityAnswerMatch.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -132,6 +145,18 @@ public class SignUpActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        //Check for security question and answer
+        if(TextUtils.isEmpty(securityQuestion)){
+            mSecurityQuestion.setError("Security Question Required");
+            focusView = mSecurityQuestion;
+            cancel = true;
+        } else if(!securityAnswer.equals(securityAnswerMatch)){
+            mSecurityAnswerMain.setError("Security Question Answer Don\'t Match");
+            focusView = mSecurityAnswerMain;
+            cancel = true;
+        }
+
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -140,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new SignUpActivity.UserRegisterTask(username, password, passwordMatch);
+            mAuthTask = new SignUpActivity.UserRegisterTask(username, password, securityQuestion, securityAnswer);
             mAuthTask.execute((Void) null);
         }
     }
@@ -203,58 +228,63 @@ public class SignUpActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
-        private final String mPasswordMatch;
+        private final String mSecQuestion;
+        private final String mSecAnswer;
 
-        UserRegisterTask(String username, String passwordMain, String passwordMatch) {
+        UserRegisterTask(String username, String passwordMain, String securityQuestion, String securityAnswer) {
             mUsername = username;
             mPassword = passwordMain;
-            mPasswordMatch = passwordMatch;
+            mSecQuestion = securityQuestion;
+            mSecAnswer = securityAnswer;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication and registration against a network service.
-            JSONObject jsonData;
+            final JSONObject jsonData;
             try {
-                jsonData = new JSONObject(gson.toJson(new CreateUserRequest(mUsername, mPassword)));
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
+                UserCreateRequest req = new UserCreateRequest();
+                req.updateRequest(mUsername, mPassword, mSecQuestion, mSecAnswer);
+                jsonData = new JSONObject(gson.toJson(req));
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "users/new", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                mUsernameView.setText("String Response : " + response.toString());
                                 mAuthTask = null;
                                 showProgress(false);
-                                try {
-                                    CreateUserRequest respJson = gson.fromJson(response.toString(), CreateUserRequest.class);
-                                    if (response.getBoolean("success")) {
-                                        mPasswordView.setText("Successfully got response");
-                                        //TODO:Logic for if the user already existed or not and opening next activity
+                                UserCreateResponse respJson = gson.fromJson(response.toString(), UserCreateResponse.class);
+                                Log.d("RESPONSE", String.valueOf(response.toString()));
+                                if (respJson.getSuccess()) {
+                                    mUsernameView.setText(String.format("Successfully registered %s", mUsername));
+                                    mUsernameView.requestFocus();
+                                    //TODO:Logic for if the user already existed or not and opening next activity
 //                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
 //                                        intent.putExtra("message", initialLoginMessage);
 //                                        startActivity(intent);
-                                    } else {
-                                        mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
-                                        mPasswordView.requestFocus();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                } else if(!respJson.getValidPass()){
+                                    mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
+                                    mPasswordView.requestFocus();
+                                } else if(!respJson.getValidUser()){
+                                    mUsernameView.setError("Username is already taken!");
+                                    mUsernameView.requestFocus();
+                                }else {
+                                    mUsernameView.setError("Something went wrong, please try again.");
                                 }
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        debugText.setText("Problem getting response");
-                        debugText.requestFocus();
+                        Log.d("GSON", jsonData.toString());
+                        Log.d("ERROR", "onErrorResponse: " + error.toString());
+                        mUsernameView.setError("Problem getting response");
+                        mUsernameView.requestFocus();
                         showProgress(false);
                     }
                 });
 
                 queue.add(jsonObjectRequest);
             } catch (JSONException e) {
-                debugText.setText(e.toString());
                 return false;
             }
-
             return true;
         }
 

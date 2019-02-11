@@ -4,19 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,8 +30,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginAttemptResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginResponse;
 
 
 /**
@@ -46,13 +39,6 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -261,27 +247,22 @@ public class LoginActivity extends AppCompatActivity {
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(gson.toJson(new UserLoginRequest(mUsername, mPassword)));
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                mUsernameView.setText("String Response : " + response.toString());
                                 mAuthTask = null;
                                 showProgress(false);
-                                try {
-                                    UserLoginAttemptResponse respJson = gson.fromJson(response.toString(), UserLoginAttemptResponse.class);
-                                    if (response.getBoolean("success")) {
-                                        mPasswordView.setText("Successfully got response");
-                                        //TODO:Logic for if the user already existed or not and opening next activity
+                                UserLoginResponse respJson = gson.fromJson(response.toString(), UserLoginResponse.class);
+                                if (respJson.getSuccess()) {
+                                    debugText.setText(String.format("Successfully Logged in %s", mUsername));
+                                    //TODO:Logic for if the user already existed or not and opening next activity
 //                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
 //                                        intent.putExtra("message", initialLoginMessage);
 //                                        startActivity(intent);
-                                    } else {
-                                        mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
-                                        mPasswordView.requestFocus();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                } else {
+                                    mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
+                                    mPasswordView.requestFocus();
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -289,6 +270,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         debugText.setText("Problem getting response");
                         debugText.requestFocus();
+                        Log.d("ERROR", "onErrorResponse: " + error.toString());
                         showProgress(false);
                     }
                 });

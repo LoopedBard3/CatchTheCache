@@ -27,8 +27,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginAttemptResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserResetPassResponse;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     /**
@@ -214,13 +215,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                mUsernameView.setText("String Response : " + response.toString());
+                                mUsernameView.setText(String.format("String Response : %s", response.toString()));
                                 mAuthTask = null;
                                 showProgress(false);
-                                try {
-                                    UserLoginAttemptResponse respJson = gson.fromJson(response.toString(), UserLoginAttemptResponse.class);
-                                    if (response.getBoolean("success")) {
-                                        mPasswordView.setText("Successfully got response");
+                                    UserResetPassResponse respJson = gson.fromJson(response.toString(), UserResetPassResponse.class);
+                                    if (respJson.getSuccess()) {
+                                        mPasswordView.setText(respJson.getMessage());
                                         //TODO:Logic for if the user already existed or not and opening next activity
 //                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
 //                                        intent.putExtra("message", initialLoginMessage);
@@ -229,9 +229,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                         mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
                                         mPasswordView.requestFocus();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
                             }
                         }, new Response.ErrorListener() {
                     @Override

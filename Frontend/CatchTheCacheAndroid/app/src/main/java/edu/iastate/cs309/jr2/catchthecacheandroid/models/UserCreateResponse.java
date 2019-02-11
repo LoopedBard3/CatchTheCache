@@ -1,12 +1,16 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models;
 
 public class UserCreateResponse {
-	private boolean validUsername, validPassword;
+	private boolean success, validUsername, validPassword;
 	private String message;
 
 	public UserCreateResponse() {
 		this.validUsername = false;
 		this.validPassword = false;
+	}
+
+	public void setSuccess(boolean b) {
+		this.success = b;
 	}
 
 	public void setValidUser(boolean b) {
@@ -34,6 +38,6 @@ public class UserCreateResponse {
 	}
 
 	public boolean getSuccess() {
-		return this.validUsername && this.validPassword;
+		return this.success;
 	}
 }

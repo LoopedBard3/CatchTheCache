@@ -1,7 +1,0 @@
-DROP TABLE IF EXISTS `chat`;
-CREATE TABLE `chat` (
-  `chatid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`chatid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

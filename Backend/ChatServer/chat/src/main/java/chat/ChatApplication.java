@@ -2,7 +2,7 @@ package chat;
 
 import java.util.List;
 
-import org.apache.tomcat.util.http.parser.MediaType;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.http.HttpStatus;
@@ -23,22 +23,6 @@ public class ChatApplication {
 		
 		
 	}
-	@RestController
-	@RequestMapping("/api")
-	public class ApiController {
-		
-		@Autowired
-		private ChatRepository chatRepository;
-		
-		 @ResponseStatus(HttpStatus.OK)
-		    @GetMapping(value = "/v1/chat", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-		    public List<Chat> getAll() {
-		        return chatRepository.findAll();
-		    }
-		@GetMapping("/greeting")
-		public String GetGreeting() {
-			return "Hello World from the API";
-		}
-	}
+	
 	
 }

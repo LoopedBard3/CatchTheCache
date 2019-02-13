@@ -16,12 +16,6 @@ public class ChatController {
 
 	    @Autowired
 	    private ChatRepository chatRepository;
-
-	    @ResponseStatus(HttpStatus.OK)
-	    @GetMapping(value = "/v1/chat", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	    public List<Chat> getAll() {
-	        return chatRepository.findAll();
-	    }
 	    
 	    @RequestMapping(value="/")
 	    public ResponseEntity<Chat> get(){

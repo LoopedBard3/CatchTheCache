@@ -1,8 +1,6 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,211 +11,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
+
 @RestController
 class UserController {
 
 	@Autowired
-	UserRepository userRepo;
+	UserService userService;
 
-	/**
-	 * Create new user in our UserRepository based on information in
-	 * UserCreateRequest
-	 * 
-	 * @param request UserCreateRequest object to use for account creation attempt
-	 * @return UserCreateResponse object with success, validUser, and validPass
-	 *         booleans, and message String
-	 */
-	@RequestMapping(method = RequestMethod.POST, path = "/users/new")
-	public ResponseEntity<UserCreateResponse> saveUser(@RequestBody UserCreateRequest request) {
-		if (request == null) {
-			throw new NullPointerException();
-		}
-
-		UserCreateResponse response = new UserCreateResponse();
-
-		response.setValidUser(validateUsername(request.getUsername()));
-		response.setValidPass(validatePassword(request.getPassword()));
-		response.setMessage(
-				"Username Valid: " + response.getValidUser() + "; Password Valid: " + response.getValidPass());
-		response.setSuccess(response.getValidUser() && response.getValidPass());
-
-		if (response.getSuccess()) {
-			User u = new User();
-			u.updateUser(request);
-			userRepo.save(u);
-		}
-
-		return new ResponseEntity<UserCreateResponse>(response, HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.POST, path = "/users")
+	public ResponseEntity<UserCreateResponse> post(@RequestBody UserCreateRequest request) {
+		return userService.create(request);
 	}
 
-	/**
-	 * Query UserRepository and attempt login with given credentials
-	 * 
-	 * @param request UserLoginRequest object to use for login attempt
-	 * @return UserLoginResponse object with success boolean and message String
-	 */
-	@RequestMapping(method = RequestMethod.POST, path = "/login")
-	public ResponseEntity<UserLoginResponse> loginUser(@RequestBody UserLoginRequest request) {
-		if (request == null) {
-			throw new NullPointerException();
-		}
-
-		UserLoginResponse response = new UserLoginResponse();
-
-		if (validateLogin(request.getUsername(), request.getPassword())) {
-			response.setSuccess(true);
-			response.setMessage("Login Success");
-		} else {
-			response.setSuccess(false);
-			response.setMessage("Invalid username or password");
-		}
-
-		return new ResponseEntity<UserLoginResponse>(response, HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.GET, path = "/login")
+	public ResponseEntity<UserLoginResponse> post(@RequestBody UserLoginRequest request) {
+		return userService.loginUser(request);
 	}
 
-	/**
-	 * Request security question for user
-	 * 
-	 * @param request UserQuestionRequest object to use
-	 * @return UserQuestionResponse object with security question
-	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/login/forgot")
-	public ResponseEntity<UserQuestionResponse> getQuestion(@RequestBody UserQuestionRequest request) {
-		if (request == null) {
-			throw new NullPointerException();
-		}
-
-		User u = userRepo.findByUsername(request.getUsername());
-		UserQuestionResponse response = new UserQuestionResponse(u.getSecurityQuestion());
-
-		return new ResponseEntity<UserQuestionResponse>(response, HttpStatus.OK);
+	public ResponseEntity<UserQuestionResponse> post(@RequestBody UserQuestionRequest request) {
+		return userService.getQuestion(request);
 	}
 
-	/**
-	 * Attempt to update user password if they have the correct answer to the
-	 * security question
-	 * 
-	 * @param request UserResetPassRequest object to use
-	 * @return UserResetPassResponse object with success boolean and message String
-	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/login/reset")
-	public ResponseEntity<UserResetPassResponse> resetPassword(@RequestBody UserResetPassRequest request) {
-		if (request == null) {
-			throw new NullPointerException();
-		}
-
-		User u = userRepo.findByUsername(request.getUsername());
-		UserResetPassResponse response = new UserResetPassResponse();
-
-		response.setValidAnswer(request.getAnswer().equals(u.getSecurityAnswer()));
-		response.setValidPassword(validatePassword(request.getNewPassword()));
-		response.setMessage(
-				"Answer Valid: " + response.getValidAnswer() + "; Password Valid: " + response.getValidPass());
-
-		if (response.getSuccess()) {
-			u.setPassword(request.getNewPassword());
-		}
-
-		return new ResponseEntity<UserResetPassResponse>(response, HttpStatus.OK);
+	public ResponseEntity<UserResetPassResponse> post(@RequestBody UserResetPassRequest request) {
+		return userService.resetPassword(request);
 	}
 
-	/**
-	 * Get list of all accounts
-	 * 
-	 * @return List of all usernames in the database
-	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users")
-	public List<String> getAllUsers() {
-		List<User> users = userRepo.findAll();
-		List<String> results = new ArrayList<String>();
-		for (User u : users) {
-			results.add(u.getUsername());
-		}
-		return results;
+	public List<String> getAll() {
+		return userService.getAllUsers();
 	}
 
-	/**
-	 * Get list of accounts with administrator permissions (authority == 2)
-	 * 
-	 * @return List of Strings of usernames with authority == 2
-	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/users/authority/{auth}")
+	public List<String> getAuthority(@RequestBody int auth) {
+		return userService.getByAuthority(auth);
+	}
+
 	@RequestMapping(method = RequestMethod.GET, path = "/users/admins")
-	public List<String> getAllAdmins() {
-		List<User> users = userRepo.findAllByAuthority(2);
-		List<String> results = new ArrayList<String>();
-		for (User u : users) {
-			results.add(u.getUsername());
-		}
-		return results;
+	public List<String> getAdmins() {
+		return userService.getAllAdmins();
 	}
 
-	/**
-	 * Get list of accounts with moderation permissions (authority > 0)
-	 * 
-	 * @return List of Strings of usernames with authority > 0
-	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users/moderators")
-	public List<String> getAllModerators() {
-		List<User> users = userRepo.findAllByAuthority(1);
-		List<String> results = new ArrayList<String>();
-		for (User u : users) {
-			results.add(u.getUsername());
-		}
-		results.addAll(getAllAdmins());
-		return results;
+	public List<String> getModerators() {
+		return userService.getAllModerators();
 	}
 
-	/**
-	 * Poll UserRepository for user with specified ID
-	 * 
-	 * @param id the ID of the user to find
-	 * @return available information about the polled ID
-	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/users/{userId}")
-	public String findUserById(@PathVariable("userId") int id) {
-		Optional<User> results = userRepo.findById(id);
-		return results.get().toString();
-	}
-
-	/**
-	 * Check if desired username is taken and meets the other requirements
-	 * 
-	 * @param username Username to check
-	 * @return false if username is already taken, true otherwise
-	 */
-	private boolean validateUsername(String username) {
-		return !userRepo.existsByUsername(username)
-				&& username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
-	}
-
-	/**
-	 * Check if desired password meets our specified requirements
-	 * 
-	 * @param password Password to check
-	 * @return true if valid, false otherwise
-	 */
-	private boolean validatePassword(String password) {
-		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
-	}
-
-	/**
-	 * Validate login credentials
-	 * 
-	 * @param username Username for account
-	 * @param password Password for account
-	 * @return true if the username exists and the password is correct, false
-	 *         otherwise
-	 */
-	private boolean validateLogin(String username, String password) {
-		if (!(userRepo.existsByUsername(username)
-				&& username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")
-				&& validatePassword(password))) {
-			return false;
-		}
-		if (userRepo.findByUsername(username).getPassword().equals(password))
-			return true;
-		else
-			return false;
+	public String getById(@PathVariable("userId") int id) {
+		return userService.findUserById(id);
 	}
 
 }

@@ -11,6 +11,8 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.core.style.ToStringCreator;
 
+import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
+
 @Entity
 @Table(name = "users")
 public class User {

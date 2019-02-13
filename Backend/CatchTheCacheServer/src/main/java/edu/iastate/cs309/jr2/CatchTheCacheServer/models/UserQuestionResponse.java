@@ -1,4 +1,4 @@
-package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
+package edu.iastate.cs309.jr2.CatchTheCacheServer.models;
 
 public class UserQuestionResponse {
 	private String security_question;

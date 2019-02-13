@@ -1,4 +1,4 @@
-package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
+package edu.iastate.cs309.jr2.CatchTheCacheServer.models;
 
 public class UserResetPassRequest {
 	private String username, new_password, security_answer;

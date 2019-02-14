@@ -25,6 +25,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ChatRepository extends CrudRepository<Chat, Long>  {
-
+public interface ChatRepository extends JpaRepository<Chat, Integer>  {
+	
+	List<Chat> findAll();
 }

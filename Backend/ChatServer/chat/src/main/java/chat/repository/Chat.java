@@ -17,6 +17,9 @@ public class Chat {
     private Integer chatid;
     private String user;
     private String cacheID;
+    public Chat () {
+    	
+    }
     public Chat (Integer id, String user, String cacheID) {
     	this.chatid=id;
     	this.user=user;

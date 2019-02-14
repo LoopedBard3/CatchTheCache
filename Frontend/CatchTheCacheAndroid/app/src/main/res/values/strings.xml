@@ -22,4 +22,6 @@
     </string>
     <string name="access_url">http://prometheus.student.iastate.edu:8080/</string>
     <string name="application_title_text">CATCH THE CACHE</string>
+    <string name="title_activity_cache_list">cacheListActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

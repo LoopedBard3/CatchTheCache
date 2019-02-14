@@ -102,6 +102,35 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Example1" />
 
+    <TextView
+        android:id="@+id/ex6"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 6"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+    <TextView
+        android:id="@+id/ex7"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="Example 7"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Example1" />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="395dp"

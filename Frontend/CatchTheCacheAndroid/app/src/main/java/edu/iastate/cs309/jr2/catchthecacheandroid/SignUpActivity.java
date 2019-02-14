@@ -28,8 +28,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserCreateRequest;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserCreateResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserCreateRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserCreateResponse;
 
 public class SignUpActivity extends AppCompatActivity {
 

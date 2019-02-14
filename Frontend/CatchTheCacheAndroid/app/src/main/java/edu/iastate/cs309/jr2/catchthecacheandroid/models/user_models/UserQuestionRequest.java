@@ -1,4 +1,4 @@
-package edu.iastate.cs309.jr2.catchthecacheandroid.models;
+package edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models;
 
 public class UserQuestionRequest {
 	private String username;

@@ -27,9 +27,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginRequest;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserLoginResponse;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.UserResetPassResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserResetPassResponse;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     /**

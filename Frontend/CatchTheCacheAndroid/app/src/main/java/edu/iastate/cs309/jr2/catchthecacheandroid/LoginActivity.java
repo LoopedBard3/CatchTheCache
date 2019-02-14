@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheIndividual;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
 
@@ -120,7 +121,9 @@ public class LoginActivity extends AppCompatActivity {
      * flow for users that forgot their password.
      */
     private void forgotPasswordPressed(){
-        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+        //TODO: Change back to regular forgotPasswordFlow
+        Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
+        intent.putExtra("ThroughServer", false);
         startActivity(intent);
     }
 
@@ -257,9 +260,9 @@ public class LoginActivity extends AppCompatActivity {
                                 if (respJson.getSuccess()) {
                                     debugText.setText(String.format("Successfully Logged in %s", mUsername));
                                     //TODO:Logic for if the user already existed or not and opening next activity
-//                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
-//                                        intent.putExtra("message", initialLoginMessage);
-//                                        startActivity(intent);
+                                        Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
+                                        intent.putExtra("ThroughServer", true);
+                                        startActivity(intent);
                                 } else {
                                     mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
                                     mPasswordView.requestFocus();

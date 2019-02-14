@@ -4,6 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/cachesTitleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Caches"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/colorAccent"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/rvCacheList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvCacheList"
         android:layout_width="0dp"
@@ -11,6 +27,59 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/cachesTitleView" >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--tools:layout_editor_absoluteY="49dp">-->
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/cache_add_title"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="cache name"-->
+                <!--android:inputType="text" />-->
+
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/cache_add_lat"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Lat"-->
+                <!--android:inputType="text" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/cache_add_long"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Long"-->
+                <!--android:inputType="text" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/addCacheBtn"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Add Cache" />-->
+    <!--</LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>

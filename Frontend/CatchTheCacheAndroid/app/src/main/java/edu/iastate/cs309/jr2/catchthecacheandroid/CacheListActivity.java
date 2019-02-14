@@ -2,6 +2,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -14,13 +15,19 @@ public class CacheListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<CacheIndividual> caches;
+    private ArrayList<CacheIndividual> caches = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cache_list);
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
+        //TODO: Get caches from server instead
+        if(!getIntent().getExtras().getBoolean("ThroughServer")){
+            addTestCaches();
+        }else{
+
+        }
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -33,5 +40,27 @@ public class CacheListActivity extends AppCompatActivity {
         // specify an adapter (see also next example)
         mAdapter = new CacheListAdapter(caches);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void addTestCaches(){
+        caches.add(new CacheIndividual("test1", 123.124, 1241.124));
+        caches.add(new CacheIndividual("test2", 123.125, 1241.125));
+        caches.add(new CacheIndividual("test3", 123.126, 1241.126));
+        caches.add(new CacheIndividual("test4", 123.127, 1241.1278));
+        caches.add(new CacheIndividual("test5", 123.128, 1241.128));
+        caches.add(new CacheIndividual("test6", 123.129, 1241.129));
+        caches.add(new CacheIndividual("test7", 123.1, 1241.12));
+        caches.add(new CacheIndividual("test8", 123.16, 1241.13));
+        caches.add(new CacheIndividual("test9", 123.17, 1241.14));
+        caches.add(new CacheIndividual("test11", 123.124, 1241.124));
+        caches.add(new CacheIndividual("test12", 123.125, 1241.125));
+        caches.add(new CacheIndividual("test13", 123.126, 1241.126));
+        caches.add(new CacheIndividual("test14", 123.127, 1241.1278));
+        caches.add(new CacheIndividual("test15", 123.128, 1241.128));
+        caches.add(new CacheIndividual("test16", 123.129, 1241.129));
+        caches.add(new CacheIndividual("test17", 123.1, 1241.12));
+        caches.add(new CacheIndividual("test18", 123.16, 1241.13));
+        caches.add(new CacheIndividual("test19", 123.17, 1241.14));
+
     }
 }

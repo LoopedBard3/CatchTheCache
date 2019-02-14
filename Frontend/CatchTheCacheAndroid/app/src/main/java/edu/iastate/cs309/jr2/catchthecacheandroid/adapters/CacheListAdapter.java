@@ -3,6 +3,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
     // you provide access to all the views for a data item in a view holder
     public static class CacheListViewHolder extends RecyclerView.ViewHolder {
         public TextView cache_name, cache_location;
-        public CacheListViewHolder(TextView v) {
+        public CacheListViewHolder(View v) {
             super(v);
             cache_name = v.findViewById(R.id.cache_name);
             cache_location = v.findViewById(R.id.cache_location);
@@ -36,7 +37,7 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
     public CacheListViewHolder onCreateViewHolder(ViewGroup parent,
                                                   int viewType) {
         // create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        View v = (View) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cache_view_list, parent, false);
         CacheListViewHolder vh = new CacheListViewHolder(v);
         return vh;
@@ -45,6 +46,11 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
     @Override
     public void onBindViewHolder(@NonNull CacheListViewHolder cacheListViewHolder, int i) {
         CacheIndividual cache = mCaches.get(i);
+        TextView name = cacheListViewHolder.cache_name;
+        name.setText(cache.getName());
+
+        TextView location = cacheListViewHolder.cache_location;
+        location.setText("Lat: " + cache.getLatitude() + "  Long: " + cache.getLongitude());
     }
 
 

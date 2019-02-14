@@ -24,7 +24,7 @@ class UserController {
 		return userService.create(request);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, path = "/login")
+	@RequestMapping(method = RequestMethod.POST, path = "/login")
 	public ResponseEntity<UserLoginResponse> post(@RequestBody UserLoginRequest request) {
 		return userService.loginUser(request);
 	}

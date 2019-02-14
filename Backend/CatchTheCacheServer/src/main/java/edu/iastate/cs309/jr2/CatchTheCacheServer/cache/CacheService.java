@@ -22,7 +22,7 @@ public class CacheService {
 
 	@Autowired
 	CacheRepository cacheRepo;
-	UserRepository userRepo;
+	// UserRepository userRepo;
 
 	/**
 	 * Create new cache in our CacheRepository based on information in
@@ -41,13 +41,37 @@ public class CacheService {
 		// Check location
 		boolean locationAvailable = !cacheRepo.existsByLocation(request.getLatitude(), request.getLongitude());
 		// Check creator authorization
-		// TODO: VERIFY THIS IS LEGAL
-		boolean authorized = userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
+		// TODO: Fix userRepo function for final product
+		boolean authorized = true;// userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
 
 		response.setAuthorized(authorized);
 		response.setSuccess(nameAvailable && locationAvailable);
 
+		Cache c = new Cache(request.getName(), request.getLatitude(), request.getLongitude());
+		cacheRepo.save(c);
+
 		return new ResponseEntity<CacheAddResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Create new cache in our CacheRepository based on information in
+	 * CacheAddRequest
+	 * 
+	 * @param request CacheAddRequest object to use for cache creation attempt
+	 * @return CacheAddResponse object with success and authorized booleans
+	 */
+	public ResponseEntity<CacheListResponse> list(CacheListRequest request) {
+		if (request == null) {
+			throw new NullPointerException();
+		}
+
+		ArrayList<Cache> list = new ArrayList<>();
+
+		list.addAll(cacheRepo.findAll());
+
+		CacheListResponse response = new CacheListResponse(list);
+
+		return new ResponseEntity<CacheListResponse>(response, HttpStatus.OK);
 	}
 
 }

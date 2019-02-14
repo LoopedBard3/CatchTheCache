@@ -23,5 +23,10 @@ class CacheController {
 	public ResponseEntity<CacheAddResponse> post(@RequestBody CacheAddRequest request) {
 		return cacheService.create(request);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "/caches")
+	public ResponseEntity<CacheListResponse> get(@RequestBody CacheListRequest request) {
+		return cacheService.list(request);
+	}
 
 }

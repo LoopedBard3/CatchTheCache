@@ -29,20 +29,36 @@ public class ChatController {
 	    }
 	  		
 	    @GetMapping("/chats")
-		List<Chat> get() {
+	    public ResponseEntity<ChatCreateResponse> post(@RequestBody ChatCreateRequest request) {
+			return chatService.create(request);
+		}
+
+		public List<Chat> get() {
 		    return chatService.getAll();
 		}
 		
 		@GetMapping("/chats/{id}")
-		Chat get(@PathVariable int id) {
+		public Chat get(@PathVariable int id) {
 		    return chatService.getById(id);
+		}
+		@PostMapping("/request")
+		public ResponseEntity postController(
+		  @RequestBody Chat chat) {
+		    return ResponseEntity.ok(HttpStatus.OK);
 		}
 
 		@PostMapping("/users")
-		Chat post(@RequestBody Chat user) {
+		public Chat post(@RequestBody Chat user) {
 		    return chatService.create(user);
 		}
 	    
+		@PostMapping("/response")
+	    @ResponseBody
+	    public ResponseTransfer postResponseController(
+	      @RequestBody Chat loginForm) {
+	        return new ResponseTransfer("Thanks For Posting!!!");
+	     }
+		
 	    @RequestMapping(value = "/", method = RequestMethod.POST)
 	    public ResponseEntity<Chat> update(@RequestBody Chat chat) {
 

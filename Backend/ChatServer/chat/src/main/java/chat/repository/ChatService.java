@@ -36,16 +36,11 @@ public class ChatService {
 			}
 
 			ChatCreateResponse response = new ChatCreateResponse();
-
-			response.setValidID(validateChatname(request.getChat()));
-			response.setValidPass(validatePassword(request.getPassword()));
-			response.setMessage(
-					"Chatname Valid: " + response.getValidChat() + "; Password Valid: " + response.getValidPass());
-			response.setSuccess(response.getValidChat() && response.getValidPass());
+			response.setMessage("Successfully added chat");
+			
 
 			if (response.getSuccess()) {
 				Chat u = new Chat();
-				u.updateChat(request);
 				chatRepository.save(u);
 			}
 

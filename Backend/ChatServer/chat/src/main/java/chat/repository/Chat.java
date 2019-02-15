@@ -1,6 +1,7 @@
 package chat.repository;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,9 @@ public class Chat {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer chatid;
+	@Column(name = "user")
     private String user;
+	@Column(name = "cacheID")
     private String cacheID;
     public Chat () {
     	

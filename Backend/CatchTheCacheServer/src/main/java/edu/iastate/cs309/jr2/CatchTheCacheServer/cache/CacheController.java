@@ -19,11 +19,23 @@ class CacheController {
 	@Autowired
 	CacheService cacheService;
 
+	/**
+	 * POST request on path /caches used to create a new cache
+	 * 
+	 * @param request CacheAddRequest object used in cache creation attempt
+	 * @return CacheAddResponse object with status on creation attempt
+	 */
 	@RequestMapping(method = RequestMethod.POST, path = "/caches")
 	public ResponseEntity<CacheAddResponse> post(@RequestBody CacheAddRequest request) {
 		return cacheService.create(request);
 	}
 
+	/**
+	 * GET request on path /caches to return a list of all caches in the database
+	 * 
+	 * @return CacheListResponse object containing a list of all caches in the
+	 *         database
+	 */
 	@RequestMapping(method = RequestMethod.GET, path = "/caches")
 	public ResponseEntity<CacheListResponse> get() {
 		return cacheService.list();

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import edu.iastate.cs309.jr2.catchthecacheandroid.adapters.CacheListAdapter;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListResponse;
 
 public class CacheListActivity extends AppCompatActivity {
@@ -52,7 +55,11 @@ public class CacheListActivity extends AppCompatActivity {
         if(!getIntent().getExtras().getBoolean("ThroughServer")){
             addTestCaches();
         }else {
-            getCacheList();
+            try {
+                getCacheList();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -86,13 +93,16 @@ public class CacheListActivity extends AppCompatActivity {
         }
         JSONObject cacheToSend;
         cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()))));
-        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches",cacheToSend,
+        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        CacheListResponse cachesList = gson.fromJson(response.toString(), CacheListResponse.class);
-                        caches.clear();
-                        caches.addAll(cachesList.getCacheList());
+                        CacheAddResponse respJson = gson.fromJson(response.toString(), CacheAddResponse.class);
+                        try {
+                            getCacheList();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -100,13 +110,15 @@ public class CacheListActivity extends AppCompatActivity {
                 return;
             }
         });
+        queue.add(requestObject);
         return true;
     }
 
-    private void getCacheList(){
+    private void getCacheList() throws JSONException {
         //TODO: Get caches from server instead
-
-            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches",null,
+            JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
+            Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches", null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -119,6 +131,8 @@ public class CacheListActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                 }
             });
+
+            queue.add(requestObject);
         }
 
     private void addTestCaches(){

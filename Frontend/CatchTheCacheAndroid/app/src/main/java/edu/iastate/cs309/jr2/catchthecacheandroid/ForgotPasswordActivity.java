@@ -3,16 +3,13 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -31,108 +28,65 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserResetPassResponse;
 
-
-/**
- * A login screen that offers login via username/password.
- */
-public class LoginActivity extends AppCompatActivity {
-
+public class ForgotPasswordActivity extends AppCompatActivity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+
+    private SignUpActivity.UserRegisterTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private TextView debugText;
     private View mProgressView;
-    private View mLoginFormView;
+    private View mRegisterFormView;
     private RequestQueue queue;
     private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_forgot_password);
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
         queue = Volley.newRequestQueue(getApplicationContext());
         //TODO: Remove debugText and Text Box
         debugText = findViewById(R.id.debugText);
         gson = new Gson();
-        mPasswordView = findViewById(R.id.password);
+        mPasswordView = findViewById(R.id.securityQuestionAnswer);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegister();
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new OnClickListener() {
+        final Button mRegisterButton = (Button) findViewById(R.id.recover_account_button);
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegister();
             }
         });
 
-        final Button mRegisterButton = (Button) findViewById(R.id.register_account_button);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerBtnPressed();
-            }
-        });
 
-        final Button mForgotPasswordButton = (Button) findViewById(R.id.forgot_password_button);
-        mForgotPasswordButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                forgotPasswordPressed();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.register_progress);
     }
-
-
-
-    /**
-     * Attempts to go through the register control flow
-     * for registering a new user.
-     */
-    private void registerBtnPressed(){
-        Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-        startActivity(intent);
-    }
-
-
-    /**
-     * Attempts to go through the forgot password control
-     * flow for users that forgot their password.
-     */
-    private void forgotPasswordPressed(){
-        //TODO: Change back to regular forgotPasswordFlow
-        Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
-        intent.putExtra("ThroughServer", false);
-        startActivity(intent);
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegister() {
         if (mAuthTask != null) {
             return;
         }
@@ -178,7 +132,8 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
+            //TODO: Fix the actual task to do
+            //mAuthTask = new ForgotPasswordActivity.UserRegisterTask(username, password, passwordMatch);
             mAuthTask.execute((Void) null);
         }
     }
@@ -193,6 +148,10 @@ public class LoginActivity extends AppCompatActivity {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
     }
 
+    private boolean doPasswordsMatch(String passwordMain, String passwordMatch){
+        return passwordMain.equals(passwordMatch);
+    }
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -204,12 +163,12 @@ public class LoginActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -225,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -233,46 +192,48 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
         private final String mPassword;
+        private final String mPasswordMatch;
 
-        UserLoginTask(String username, String password) {
+        UserRegisterTask(String username, String passwordMain, String passwordMatch) {
             mUsername = username;
-            mPassword = password;
+            mPassword = passwordMain;
+            mPasswordMatch = passwordMatch;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // TODO: attempt authentication and registration against a network service.
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(gson.toJson(new UserLoginRequest(mUsername, mPassword)));
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login", jsonData,
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                mUsernameView.setText(String.format("String Response : %s", response.toString()));
                                 mAuthTask = null;
                                 showProgress(false);
-                                UserLoginResponse respJson = gson.fromJson(response.toString(), UserLoginResponse.class);
-                                if (respJson.getSuccess()) {
-                                    debugText.setText(String.format("Successfully Logged in %s", mUsername));
-                                    //TODO:Logic for if the user already existed or not and opening next activity
-                                        Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
-                                        intent.putExtra("ThroughServer", true);
-                                        startActivity(intent);
-                                } else {
-                                    mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
-                                    mPasswordView.requestFocus();
-                                }
+                                    UserResetPassResponse respJson = gson.fromJson(response.toString(), UserResetPassResponse.class);
+                                    if (respJson.getSuccess()) {
+                                        mPasswordView.setText(respJson.getMessage());
+                                        //TODO:Logic for if the user already existed or not and opening next activity
+//                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
+//                                        intent.putExtra("message", initialLoginMessage);
+//                                        startActivity(intent);
+                                    } else {
+                                        mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
+                                        mPasswordView.requestFocus();
+                                    }
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         debugText.setText("Problem getting response");
                         debugText.requestFocus();
-                        Log.d("ERROR", "onErrorResponse: " + error.toString());
                         showProgress(false);
                     }
                 });
@@ -294,4 +255,3 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 }
-

@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+
 import edu.iastate.cs309.jr2.catchthecacheandroid.dummy.DummyContent;
 import edu.iastate.cs309.jr2.catchthecacheandroid.dummy.DummyContent.DummyItem;
 

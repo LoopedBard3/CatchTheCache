@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         //setContentView(R.layout.main_fragment);
         configureBackButton();
         //configureRecyleButton();
+        //configureCacheToggle();
     }
     private void configureBackButton(){
         Button nextbutton = (Button) findViewById(R.id.back);

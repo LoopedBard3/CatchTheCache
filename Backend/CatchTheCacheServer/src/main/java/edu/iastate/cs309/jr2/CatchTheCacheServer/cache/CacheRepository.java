@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface CacheRepository extends JpaRepository<Cache, Integer> {
 
 	boolean existsByName(String name);
+	
+	Cache findByName(String name);
 
-	boolean existsByLocation(double latitude, double longitude);
+	//boolean existsByLocation(double latitude, double longitude);
 
 }

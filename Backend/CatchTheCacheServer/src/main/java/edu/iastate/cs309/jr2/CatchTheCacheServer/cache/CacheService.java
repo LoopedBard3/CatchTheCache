@@ -39,7 +39,7 @@ public class CacheService {
 		// Check name
 		boolean nameAvailable = !cacheRepo.existsByName(request.getName());
 		// Check location
-		boolean locationAvailable = !cacheRepo.existsByLocation(request.getLatitude(), request.getLongitude());
+		boolean locationAvailable = true;//!cacheRepo.existsByLocation(request.getLatitude(), request.getLongitude());
 		// Check creator authorization
 		// TODO: Fix userRepo function for final product
 		boolean authorized = true;// userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
@@ -47,7 +47,8 @@ public class CacheService {
 		response.setAuthorized(authorized);
 		response.setSuccess(nameAvailable && locationAvailable);
 
-		Cache c = new Cache(request.getName(), request.getLatitude(), request.getLongitude());
+		Cache c = new Cache();
+		c.updateCache(request);
 		cacheRepo.save(c);
 
 		return new ResponseEntity<CacheAddResponse>(response, HttpStatus.OK);
@@ -60,10 +61,10 @@ public class CacheService {
 	 * @param request CacheAddRequest object to use for cache creation attempt
 	 * @return CacheAddResponse object with success and authorized booleans
 	 */
-	public ResponseEntity<CacheListResponse> list(CacheListRequest request) {
-		if (request == null) {
+	public ResponseEntity<CacheListResponse> list() {
+		/*if (request == null) {
 			throw new NullPointerException();
-		}
+		}*/
 
 		ArrayList<Cache> list = new ArrayList<>();
 

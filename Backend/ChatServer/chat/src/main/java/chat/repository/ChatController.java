@@ -21,24 +21,23 @@ public class ChatController {
 	    @Autowired
 	    ChatService chatService;
 	    private ChatRepository chatRepository;
+	    public ChatController(ChatRepository repo) {
+	    	this.chatRepository=repo;
+	    }
 	    
 	    @GetMapping("/")
 	    @ResponseBody
-	    public Chat sayHello(@RequestParam(name="name", required=false, defaultValue="Stranger") String name) {
+	    public Chat sayHello(String name) {
 	        return new Chat(1, "new Chat",null);
 	    }
 	  		
 	    @GetMapping("/chats")
-	    public ResponseEntity<ChatCreateResponse> post(@RequestBody ChatCreateRequest request) {
-			return chatService.create(request);
-		}
-
 		public List<Chat> get() {
-		    return chatService.getAll();
+		    return chatRepository.findAll();
 		}
 		
 		@GetMapping("/chats/{id}")
-		public Chat get(@PathVariable int id) {
+		public Chat get(@PathVariable Long id) {
 		    return chatService.getById(id);
 		}
 		@PostMapping("/request")
@@ -55,9 +54,15 @@ public class ChatController {
 		@PostMapping("/response")
 	    @ResponseBody
 	    public ResponseTransfer postResponseController(
-	      @RequestBody Chat loginForm) {
+	      @RequestBody Chat chat) {
 	        return new ResponseTransfer("Thanks For Posting!!!");
 	     }
+		
+		@RequestMapping(value= "/post", method = RequestMethod.POST)
+		 public ResponseTransfer create(@RequestBody Chat chat) {
+			chatRepository.save(chat);
+			return new ResponseTransfer("Thanks For Posting!!!");
+		 }
 		
 	    @RequestMapping(value = "/", method = RequestMethod.POST)
 	    public ResponseEntity<Chat> update(@RequestBody Chat chat) {

@@ -25,7 +25,7 @@ public class ChatService {
 			return chatRepository.findAll();
 		}
 		
-		public Chat getById(int ID)
+		public Chat getById(Long ID)
 		{
 			return chatRepository.getOne(ID);
 		}
@@ -47,7 +47,7 @@ public class ChatService {
 			return new ResponseEntity<ChatCreateResponse>(response, HttpStatus.OK);
 		}
 
-		private boolean validateID(int id)
+		private boolean validateID(Long id)
 		{
 			return !chatRepository.exists(id);
 		}

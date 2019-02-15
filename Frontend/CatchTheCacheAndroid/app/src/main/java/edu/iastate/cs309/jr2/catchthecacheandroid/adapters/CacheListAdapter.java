@@ -10,10 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.R;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheIndividual;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 
 public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.CacheListViewHolder> {
-    private ArrayList<CacheIndividual> mCaches;
+    private ArrayList<Cache> mCaches;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -28,7 +28,7 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CacheListAdapter(ArrayList<CacheIndividual> myDataset) {
+    public CacheListAdapter(ArrayList<Cache> myDataset) {
         mCaches = myDataset;
     }
 
@@ -45,7 +45,7 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
 
     @Override
     public void onBindViewHolder(@NonNull CacheListViewHolder cacheListViewHolder, int i) {
-        CacheIndividual cache = mCaches.get(i);
+        Cache cache = mCaches.get(i);
         TextView name = cacheListViewHolder.cache_name;
         name.setText(cache.getName());
 

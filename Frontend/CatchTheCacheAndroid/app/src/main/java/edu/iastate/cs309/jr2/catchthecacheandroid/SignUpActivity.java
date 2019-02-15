@@ -245,7 +245,7 @@ public class SignUpActivity extends AppCompatActivity {
                 UserCreateRequest req = new UserCreateRequest();
                 req.updateRequest(mUsername, mPassword, mSecQuestion, mSecAnswer);
                 jsonData = new JSONObject(gson.toJson(req));
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "users/new", jsonData,
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "users", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {

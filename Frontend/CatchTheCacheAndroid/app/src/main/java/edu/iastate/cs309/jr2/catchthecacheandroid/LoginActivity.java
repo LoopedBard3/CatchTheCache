@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheIndividual;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
 

@@ -13,19 +13,13 @@ public class ChatService {
 	
 		@Autowired
 		ChatRepository chatRepository;
-
-		public Chat create(Chat newChat) {
-			// validate model
-			// authenticate Chat, etc
-			return chatRepository.save(newChat);
-		}
-
+		
 		public List<Chat> getAll() {
 			
 			return chatRepository.findAll();
 		}
 		
-		public Chat getById(Long ID)
+		public Chat getById(Integer ID)
 		{
 			return chatRepository.getOne(ID);
 		}
@@ -47,7 +41,7 @@ public class ChatService {
 			return new ResponseEntity<ChatCreateResponse>(response, HttpStatus.OK);
 		}
 
-		private boolean validateID(Long id)
+		private boolean validateID(Integer id)
 		{
 			return !chatRepository.exists(id);
 		}

@@ -37,25 +37,21 @@ public class ChatController {
 		}
 		
 		@GetMapping("/chats/{id}")
-		public Chat get(@PathVariable Long id) {
+		public Chat get(@PathVariable Integer id) {
 		    return chatService.getById(id);
 		}
-		@PostMapping("/request")
+		
+		@RequestMapping(method = RequestMethod.POST, path = "/chats")
 		public ResponseEntity postController(
-		  @RequestBody Chat chat) {
-		    return ResponseEntity.ok(HttpStatus.OK);
-		}
-
-		@PostMapping("/users")
-		public Chat post(@RequestBody Chat user) {
-		    return chatService.create(user);
+		  @RequestBody ChatCreateRequest request) {
+		    return chatService.create(request);
 		}
 	    
-		@PostMapping("/response")
-	    @ResponseBody
-	    public ResponseTransfer postResponseController(
-	      @RequestBody Chat chat) {
-	        return new ResponseTransfer("Thanks For Posting!!!");
+		@RequestMapping(path = "/response", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, 
+		        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	    public @ResponseBody ResponseEntity postResponseController(
+	    		ChatCreateRequest request) {
+	        return chatService.create(request);
 	     }
 		
 		@RequestMapping(value= "/post", method = RequestMethod.POST)

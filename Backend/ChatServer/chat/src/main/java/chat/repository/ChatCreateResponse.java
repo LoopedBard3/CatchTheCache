@@ -1,11 +1,11 @@
 package chat.repository;
 
 public class ChatCreateResponse {
-	private boolean success, validId, validCacheId;
+	private boolean success, validChatId, validCacheId;
 	private String message;
 
 	public ChatCreateResponse() {
-		this.validId = false;
+		this.validChatId = false;
 		this.validCacheId = false;
 	}
 
@@ -13,24 +13,32 @@ public class ChatCreateResponse {
 		this.success = b;
 	}
 
-	public boolean isValidId() {
-		return validId;
+	public boolean isValidChatId() {
+		return validChatId;
 	}
 
-	public void setValidId(boolean validId) {
-		this.validId = validId;
+	public void setValidChatId(boolean validChatId) {
+		this.validChatId = validChatId;
 	}
 
 	public boolean isValidCacheId() {
 		return validCacheId;
 	}
-
+	
 	public void setValidCacheId(boolean validCacheId) {
 		this.validCacheId = validCacheId;
 	}
 
 	public void setMessage(String m) {
 		this.message = m;
+	}
+
+	public boolean getValidChatId() {
+		return this.validChatId;
+	}
+
+	public boolean getValidCacheId() {
+		return this.validCacheId;
 	}
 
 	public String getMessage() {

@@ -2,10 +2,10 @@ package chat.repository;
 
 public class ChatCreateRequest {
 	private String user, cacheId;
-	private int id;
+	private int chatId;
 
-	public void updateRequest(int id, String user, String cacheId) {
-		this.id = id;
+	public void updateRequest(int chatId, String user, String cacheId) {
+		this.chatId = chatId;
 		this.user = user;
 		this.cacheId = cacheId;
 	}
@@ -26,12 +26,12 @@ public class ChatCreateRequest {
 		this.cacheId = cacheId;
 	}
 
-	public int getId() {
-		return id;
+	public int getChatId() {
+		return chatId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int chatId) {
+		this.chatId = chatId;
 	}
 
 }

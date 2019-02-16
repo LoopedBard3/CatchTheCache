@@ -43,8 +43,8 @@ public class MychatRecyclerViewAdapter extends RecyclerView.Adapter<MychatRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).user);
+        holder.mContentView.setText(mValues.get(position).cacheId);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
 
 
     }
+
    /* public void configureRecyleButton(){
         Button recyclebutton = (Button) findViewById(R.id.recbtn);
         recyclebutton.setOnClickListener(new View.OnClickListener() {

@@ -15,52 +15,59 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 @RestController
 public class ChatController {
 
 	    @Autowired
 	    ChatService chatService;
-	    private ChatRepository chatRepository;
-	    public ChatController(ChatRepository repo) {
-	    	this.chatRepository=repo;
+	    @Autowired
+	    ChatRepository chatRepository;
+	    
+	    @RequestMapping(method = RequestMethod.POST, path = "/chats/new")
+	    public String saveChat(Chat chat) {
+	        chatRepository.save(chat);
+	        return "New Chat "+ chat.getChatId() + " Saved";
 	    }
 	    
-	    @GetMapping("/")
+	    @RequestMapping(method = RequestMethod.GET, path = "/chats")
+	    public List<Chat> getAllChats() {   
+	        List<Chat> results = chatRepository.findAll();
+	        return results;
+	    }
+
+	    @RequestMapping(method = RequestMethod.GET, path = "/chats/{chatId}")
+	    public Chat findChatById(@PathVariable("chatId") int chatId) {
+	       
+	        Chat results = chatRepository.findByChatId(chatId);
+	        return results;
+	    }
+	    
+	    @RequestMapping(path = "/", method = RequestMethod.GET)
 	    @ResponseBody
-	    public Chat sayHello(String name) {
+	    public Chat defaultCreate(String name) {
 	        return new Chat(1, "new Chat",null);
 	    }
 	  		
-	    @GetMapping("/chats")
-		public List<Chat> get() {
-		    return chatRepository.findAll();
-		}
+//	    @RequestMapping(path = "/chats", method= RequestMethod.GET)
+//		public List<Chat> get() {
+//		    return chatService.getAll();
+//		}
 		
-		@GetMapping("/chats/{id}")
-		public Chat get(@PathVariable Integer id) {
-		    return chatService.getById(id);
-		}
+//		@RequestMapping(path="/chats/{chatId}",method=RequestMethod.GET)
+//		public Chat getById(@PathVariable ("chatId")Integer chatId) {
+//		    return chatService.getById(chatId);
+//		}
 		
-		@RequestMapping(method = RequestMethod.POST, path = "/chats")
-		public ResponseEntity postController(
-		  @RequestBody ChatCreateRequest request) {
-		    return chatService.create(request);
-		}
 	    
-		@RequestMapping(path = "/response", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, 
-		        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-	    public @ResponseBody ResponseEntity postResponseController(
+		@RequestMapping(path = "/response", method = RequestMethod.POST)
+	    public @ResponseBody ResponseEntity<ChatCreateResponse> postResponseController(
 	    		ChatCreateRequest request) {
 	        return chatService.create(request);
 	     }
 		
-		@RequestMapping(value= "/post", method = RequestMethod.POST)
-		 public ResponseTransfer create(@RequestBody Chat chat) {
-			chatRepository.save(chat);
-			return new ResponseTransfer("Thanks For Posting!!!");
-		 }
 		
-	    @RequestMapping(value = "/", method = RequestMethod.POST)
+	    @RequestMapping(path = "/", method = RequestMethod.POST)
 	    public ResponseEntity<Chat> update(@RequestBody Chat chat) {
 
 	        if (chat != null) {

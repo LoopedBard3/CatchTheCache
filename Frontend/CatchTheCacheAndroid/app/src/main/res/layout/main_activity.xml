@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context=".MainActivity"
+    android:paddingBottom ="16dp"
+    >
+
 
     <Button
         android:id="@+id/back"
@@ -12,6 +17,9 @@
         android:layout_height="wrap_content"
         android:text="back"
         android:layout_gravity="center_horizontal|bottom"/>
+
+
+
     <Button
         android:id="@+id/cache"
         android:layout_width="wrap_content"
@@ -21,6 +29,63 @@
 
 
 
+    <LinearLayout
+        android:id="@+id/linearLayoutMain"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:hint="Enter Your Info Below"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutDecisions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:inputType="number"
+                android:gravity="center"
+                android:hint="id" />
+
+            <EditText
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:inputType="text"
+                android:hint="user" />
+
+            <EditText
+                android:id="@+id/cacheId"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:hint="cache id" />
+        </LinearLayout>
 
 
-</FrameLayout>
+        <Button
+            android:id="@+id/btnSend"
+            android:text="Send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="send"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

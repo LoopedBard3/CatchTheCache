@@ -76,7 +76,6 @@
                 android:hint="cache id" />
         </LinearLayout>
 
-
         <Button
             android:id="@+id/btnSend"
             android:text="Send"
@@ -84,6 +83,28 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:onClick="send"/>
+        <TextView
+            android:id="@+id/tvIsConnected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#FF0000"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+            android:padding="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="is connected? " />
+
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:padding="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="" />
 
 
     </LinearLayout>

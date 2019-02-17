@@ -1,6 +1,7 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.app.Notification;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -18,7 +19,19 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
 import android.widget.EditText;
+import android.widget.Toast;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -38,6 +51,22 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
     private EditText mIdView;
 
 
+    // json object response url
+    private String urlJsonObj = "https://api.androidhive.info/volley/person_object.json";
+
+    // json array response url
+    private Button btnMakeObjectRequest, btnMakeArrayRequest;
+    private RequestQueue queue;
+
+    TextView tvIsConnected;
+
+    // Progress dialog
+    private ProgressDialog pDialog;
+    TextView tvResult;
+    private TextView txtResponse;
+    private Gson gson;
+    // temporary string to show the parsed response
+    private String jsonResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +77,21 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
                     .replace(R.id.container, MainFragment.newInstance())
                     .commitNow();
         }
+      //  tvIsConnected = (TextView) findViewById(R.id.tvIsConnected);
+      //  tvResult = (TextView) findViewById(R.id.tvResult);
         //super.onCreate(savedInstanceState);
         //setContentView(R.layout.main_fragment);
         configureBackButton();
         //configureRecyleButton();
         //configureCacheToggle();
-        checkNetworkConnection();
+
         mUserView = findViewById(R.id.user);
         mCacheIdView = findViewById(R.id.cacheId);
         mIdView = findViewById(R.id.id);
+
+        checkNetworkConnection();
+
+
 
 
     }
@@ -68,16 +103,22 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         boolean isConnected = false;
         if (networkInfo != null && (isConnected = networkInfo.isConnected())) {
             // show "Connected" & type of network "WIFI or MOBILE"
-
+          //  tvIsConnected.setText("Connected "+networkInfo.getTypeName());
+            // change background color to red
+           // tvIsConnected.setBackgroundColor(0xFF7CCC26);
 
 
         } else {
             // show "Not Connected"
-
+         //   tvIsConnected.setText("Not Connected");
+            // change background color to green
+         //   tvIsConnected.setBackgroundColor(0xFFFF0000);
         }
 
         return isConnected;
     }
+
+
     private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -112,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
         // 2. build JSON object
-        JSONObject jsonObject = buidJsonObject();
+        JSONObject jsonObject = buildJsonObject();
 
         // 3. add JSON content to POST request body
         setPostRequestContent(conn, jsonObject);
@@ -124,13 +165,15 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         return conn.getResponseMessage()+"";
 
     }
+
+
     //TODO change to fit our Stuff
-    private JSONObject buidJsonObject() throws JSONException {
+    private JSONObject buildJsonObject() throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.accumulate("cacheId", mCacheIdView.getText().toString());
-        jsonObject.accumulate("id",  mIdView.getText().toString());
-        jsonObject.accumulate("user",  mUserView.getText().toString());
+        jsonObject.accumulate("user", mUserView.getText().toString());
+        jsonObject.accumulate("cacheId",  mCacheIdView.getText().toString());
+        jsonObject.accumulate("ID",  mIdView.getText().toString());
 
         return jsonObject;
     }
@@ -148,9 +191,15 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
     }
 
 
+    public void send(View view) {
+        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+        // perform HTTP POST request
+        if(checkNetworkConnection())
+            new HTTPAsyncTask().execute("htttp://localhost:8080");
+        else
+            Toast.makeText(this, "Not Connected!", Toast.LENGTH_SHORT).show();
 
-
-
+    }
 
 
 
@@ -164,20 +213,9 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         });
     }
 
+
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
-
     }
-
-   /* public void configureRecyleButton(){
-        Button recyclebutton = (Button) findViewById(R.id.recbtn);
-        recyclebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MychatRecyclerViewAdapter.class));
-            }
-        });
-    }
-    */
 }

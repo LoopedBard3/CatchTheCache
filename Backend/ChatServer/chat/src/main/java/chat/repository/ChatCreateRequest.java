@@ -1,11 +1,12 @@
 package chat.repository;
 
+import org.springframework.core.style.ToStringCreator;
+
 public class ChatCreateRequest {
 	private String user, cacheId;
-	private int chatId;
 
-	public void updateRequest(int chatId, String user, String cacheId) {
-		this.chatId = chatId;
+	public void updateRequest(String user, String cacheId) {
+
 		this.user = user;
 		this.cacheId = cacheId;
 	}
@@ -25,13 +26,13 @@ public class ChatCreateRequest {
 	public void setCacheId(String cacheId) {
 		this.cacheId = cacheId;
 	}
+	
+	@Override
+	public String toString() {
+		return new ToStringCreator(this)
 
-	public int getChatId() {
-		return chatId;
-	}
-
-	public void setId(int chatId) {
-		this.chatId = chatId;
+				.append("user", this.getUser())
+				.append("cacheId", this.getCacheId()).toString();
 	}
 
 }

@@ -45,12 +45,10 @@ public class ChatService {
 			response.setMessage(
 					"ChatId Valid: " + response.getValidChatId() + "; CacheId Valid: " + response.getValidCacheId());
 			response.setSuccess(true);
-
-			
-			
-				Chat u = new Chat(request.getChatId(),request.getUser(),request.getCacheId());
+				Chat u = new Chat();
+				u.setUser(request.getUser());
+				u.setCacheID(request.getCacheId());
 				chatRepository.save(u);
-			
 
 			return new ResponseEntity<ChatCreateResponse>(response, HttpStatus.OK);
 		}

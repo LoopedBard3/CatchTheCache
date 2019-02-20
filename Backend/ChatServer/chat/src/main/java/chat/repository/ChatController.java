@@ -26,8 +26,9 @@ public class ChatController {
 	    
 	    @RequestMapping(method = RequestMethod.POST, path = "/chats/new")
 	    public String saveChat(Chat chat) {
+	    	System.out.println(chat.toString());
 	        chatRepository.save(chat);
-	        return "New Chat "+ chat.getChatId() + " Saved";
+	        return chat.toString() ;
 	    }
 	    
 	    @RequestMapping(method = RequestMethod.GET, path = "/chats")
@@ -63,6 +64,7 @@ public class ChatController {
 		@RequestMapping(path = "/response", method = RequestMethod.POST)
 	    public @ResponseBody ResponseEntity<ChatCreateResponse> postResponseController(
 	    		ChatCreateRequest request) {
+			System.out.println(request.toString());
 	        return chatService.create(request);
 	     }
 		

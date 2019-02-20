@@ -1,104 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    tools:context=".MainActivity"
-    android:paddingBottom ="16dp"
-    >
+    android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/bottomViewSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        android:layout_gravity="center_horizontal|bottom"/>
-
-
-
-    <Button
-        android:id="@+id/cache"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="cache"
-        android:layout_gravity="right|bottom"/>
-
-
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:orientation="vertical"
-            >
+            android:layout_height="match_parent"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:descendantFocusability="blocksDescendants"
+            android:src="@drawable/ic_action_message" />
+
+
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:text="back" />
+    </FrameLayout>
 
 
 
-            <TextView
-                android:id="@+id/tvIsConnected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#FF0000"
-                android:textColor="#FFF"
-                android:textSize="18dp"
-                android:padding="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="is connected? " />
-
-
-            <EditText
-                android:id="@+id/id"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="id..."/>
-
-
-
-            <EditText
-                android:id="@+id/user"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="user..."/>
-
-
-
-
-            <EditText
-                android:id="@+id/cacheId"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="cacheid..."/>
-
-
-            <Button
-                android:id="@+id/btnSend"
-                android:text="Send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="send"/>
-
-            <TextView
-                android:id="@+id/tvResult"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#000"
-                android:textSize="18dp"
-                android:padding="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="" />
-        </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

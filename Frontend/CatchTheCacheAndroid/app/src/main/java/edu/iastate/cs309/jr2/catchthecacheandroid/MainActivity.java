@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
     private EditText mUserView;
     private EditText mCacheIdView;
     private EditText mIdView;
+//work on implementing more responses
+    //work on responsive buttons
+    //create individual chat pages
 
 
     // json object response url
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         mCacheIdView = findViewById(R.id.cacheId);
         mIdView = findViewById(R.id.id);
 
-        checkNetworkConnection();
+      //  checkNetworkConnection();
 
 
 
@@ -103,16 +106,16 @@ public class MainActivity extends AppCompatActivity implements chatFragment.OnLi
         boolean isConnected = false;
         if (networkInfo != null && (isConnected = networkInfo.isConnected())) {
             // show "Connected" & type of network "WIFI or MOBILE"
-          //  tvIsConnected.setText("Connected "+networkInfo.getTypeName());
+            tvIsConnected.setText("Connected "+networkInfo.getTypeName());
             // change background color to red
-           // tvIsConnected.setBackgroundColor(0xFF7CCC26);
+           tvIsConnected.setBackgroundColor(0xFF7CCC26);
 
 
         } else {
             // show "Not Connected"
-         //   tvIsConnected.setText("Not Connected");
+            tvIsConnected.setText("Not Connected");
             // change background color to green
-         //   tvIsConnected.setBackgroundColor(0xFFFF0000);
+           tvIsConnected.setBackgroundColor(0xFFFF0000);
         }
 
         return isConnected;

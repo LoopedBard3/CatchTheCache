@@ -34,7 +34,7 @@ public class Chat extends AppCompatActivity {
 
     ListView listView;
     ChatAdapter adapter;
-    LoadSms loadsmsTask;
+    LoadChat loadsmsTask;
     String name;
     String address;
     EditText new_message;
@@ -60,7 +60,7 @@ public class Chat extends AppCompatActivity {
         new_message = (EditText) findViewById(R.id.new_message);
         send_message = (ImageButton) findViewById(R.id.send_message);
 
-        startLoadingSms();
+        startLoadingChat();
 
 
         send_message.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,7 @@ public class Chat extends AppCompatActivity {
 
 
 
-    class LoadSms extends AsyncTask<String, Void, String> {
+    class LoadChat extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -169,12 +169,12 @@ public class Chat extends AppCompatActivity {
 
 
 
-    public void startLoadingSms()
+    public void startLoadingChat()
     {
         final Runnable r = new Runnable() {
             public void run() {
 
-                loadsmsTask = new LoadSms();
+                loadsmsTask = new LoadChat();
                 loadsmsTask.execute();
 
                 handler.postDelayed(this, 5000);

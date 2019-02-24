@@ -19,7 +19,6 @@ import org.springframework.core.style.ToStringCreator;
 public class Chat {
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-	
 	@Column(name = "chatId")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Integer chatId;
@@ -59,7 +58,6 @@ public class Chat {
 		this.cacheId = cacheId;
 	}
 	public void updateChat(ChatCreateRequest req) {
-			this.chatId = req.getChatId();
 			this.user = req.getUser();
 			this.cacheId = req.getCacheId();
 	}

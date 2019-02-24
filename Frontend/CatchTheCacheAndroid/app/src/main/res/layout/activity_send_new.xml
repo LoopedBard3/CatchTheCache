@@ -8,8 +8,8 @@
         android:id="@+id/address"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="Phone Number"
-        android:inputType="phone"
+        android:hint="chatID"
+        android:inputType="number"
         />
 
 

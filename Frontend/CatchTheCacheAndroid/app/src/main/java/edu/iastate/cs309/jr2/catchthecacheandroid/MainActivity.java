@@ -96,19 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, NewSmsActivity.class));
             }
         });
-        //  tvIsConnected = (TextView) findViewById(R.id.tvIsConnected);
-        //  tvResult = (TextView) findViewById(R.id.tvResult);
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main_fragment);
+
              configureBackButton(); //TODO bring back the back button
-        //configureRecyleButton();
-        //configureCacheToggle();
 
-        // mUserView = findViewById(R.id.user);
-        //  mCacheIdView = findViewById(R.id.cacheId);
-        //mIdView = findViewById(R.id.id);
-
-        //  checkNetworkConnection();
 
 
     }

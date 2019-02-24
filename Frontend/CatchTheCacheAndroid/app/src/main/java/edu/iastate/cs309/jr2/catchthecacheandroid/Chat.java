@@ -139,7 +139,6 @@ public class Chat extends AppCompatActivity {
                 c.close();
 
             }catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             Collections.sort(tmpList, new MapComparator(Function.KEY_TIMESTAMP, "asc"));

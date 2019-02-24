@@ -100,7 +100,7 @@ public class Function {
     }
 
 
-
+//TODO change from SMS to chat ID
 
     public static boolean sendSMS(String toPhoneNumber, String smsMessage) {
         try {
@@ -143,11 +143,13 @@ public class Function {
     }
 
 
-
-
-
-
-
+    /**
+     * WORK ON JSON here //TODO JSON
+     * @param context
+     * @param key
+     * @param dataList
+     * @throws IOException
+     */
 
 
 
@@ -163,6 +165,7 @@ public class Function {
         FileInputStream fis = context.openFileInput (key);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object object = ois.readObject ();
+
         return object;
     }
 }

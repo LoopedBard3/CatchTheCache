@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_PERMISSION_KEY = 1;
     ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
+    ArrayList<String> urls = new ArrayList<>();
+
     private EditText mUserView;
     private EditText mCacheIdView;
     private EditText mIdView;
@@ -91,13 +93,14 @@ public class MainActivity extends AppCompatActivity {
         loader = (ProgressBar) findViewById(R.id.loader);
         fab_new = (FloatingActionButton) findViewById(R.id.fab_new);
         listView.setEmptyView(loader);
+        urls.add("");//TODO URL HERERERERERER
         fab_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, NewSmsActivity.class));
             }
         });
 
-             configureBackButton(); //TODO bring back the back button
+             configureBackButton();
 
 
 
@@ -132,8 +135,63 @@ public class MainActivity extends AppCompatActivity {
             smsList.clear();
         }
 
+        private JSONObject buildJsonObject() throws JSONException {
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("user", mUserView.getText().toString());
+            jsonObject.accumulate("cacheId",  mCacheIdView.getText().toString());
+            jsonObject.accumulate("ID",  mIdView.getText().toString());
+
+            return jsonObject;
+        }
+        //TODO work on JSON here
+        private String HttpPost(String myUrl) throws IOException, JSONException {
+            String result = "";
+
+            URL url = new URL(myUrl);
+
+            // 1. create HttpURLConnection
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+            // 2. build JSON object
+            JSONObject jsonObject = buildJsonObject();
+
+            // 3. add JSON content to POST request body
+            setPostRequestContent(conn, jsonObject);
+
+            // 4. make POST request to the given URL
+            conn.connect();
+
+            // 5. return response message
+            return conn.getResponseMessage()+"";
+
+        }
+
+        private void setPostRequestContent(HttpURLConnection conn,
+                                           JSONObject jsonObject) throws IOException {
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(jsonObject.toString());
+            Log.i(MainActivity.class.toString(), jsonObject.toString());
+            writer.flush();
+            writer.close();
+            os.close();
+        }
+
         protected String doInBackground(String... args) {
             String xml = "";
+            try {
+                return (String) HttpPost(urls.get(0));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return "Error!";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
             try {
                 Uri uriInbox = Uri.parse("content://sms/inbox");
@@ -146,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (c.moveToFirst()) {
                     for (int i = 0; i < c.getCount(); i++) {
-                        String name = null;
+                        String name = "name";
                         String phone = "";
                         String _id = c.getString(c.getColumnIndexOrThrow("_id"));
                         String thread_id = c.getString(c.getColumnIndexOrThrow("thread_id"));
@@ -171,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (IllegalArgumentException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                return "Unable to retrieve web page. URL may be invalid.";
             }
 
             Collections.sort(smsList, new MapComparator(edu.iastate.cs309.jr2.catchthecacheandroid.Function.KEY_TIMESTAMP, "dsc")); // Arranging sms by timestamp decending

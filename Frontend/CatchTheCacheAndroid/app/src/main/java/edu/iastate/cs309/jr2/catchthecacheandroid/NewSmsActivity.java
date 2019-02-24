@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class NewSmsActivity extends AppCompatActivity{
 
-    EditText address, message;
+    EditText address, message, username;
     Button send_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class NewSmsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_send_new);
 
         address = (EditText) findViewById(R.id.address);
+        username = (EditText) findViewById(R.id.username);
         message = (EditText) findViewById(R.id.message);
         send_btn = (Button) findViewById(R.id.send_btn);
 
@@ -34,14 +35,16 @@ public class NewSmsActivity extends AppCompatActivity{
             public void onClick(View v) {
                 String str_addtes = address.getText().toString();
                 String str_message = message.getText().toString();
+                String str_username = message.getText().toString();
 
 
-                if (str_addtes.length() > 0 && str_message.length() > 0) {
+                if (str_addtes.length() > 0 && str_message.length() > 0 && str_username.length() >0) {
 
                     if(Function.sendSMS(str_addtes, str_message))
                     {
                         Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_SHORT).show();
                         finish();
+                        //TODO JSON
                     }
                 }
             }

@@ -181,10 +181,10 @@ public class UserService {
 	}
 
 	/**
-	 * Poll UserRepository for user with specified id
+	 * Poll UserRepository for user with specified ID
 	 * 
-	 * @param id Unique integer id to search for
-	 * @return available information about the polled id
+	 * @param id the ID of the user to find
+	 * @return available information about the polled ID
 	 */
 	public String findUserById(@PathVariable("userId") int id) {
 		Optional<User> results = userRepo.findById(id);

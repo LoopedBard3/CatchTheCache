@@ -1,20 +1,15 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.models;
 
-import java.util.List;
-
-import edu.iastate.cs309.jr2.CatchTheCacheServer.user.User;
-
 public class ChatCreateRequest {
-	private List<User> users;
-	private String  cacheId;
+	private String user, cacheId;
 
-	public void updateRequest(List<User> u, String c) {
-		this.users = u;
+	public void updateRequest(String u, String c) {
+		this.user = u;
 		this.cacheId = c;
 	}
 
-	public List<User> getUsers() {
-		return this.users;
+	public String getUser() {
+		return this.user;
 	}
 
 	public String getCacheId() {

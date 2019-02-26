@@ -12,15 +12,15 @@
     <string name="action_forgot_password">Forgot Password?</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_recover_account">Recover Account</string>
-    <string name="error_invalid_username">This username is invalid</string>
-    <string name="error_invalid_password">This password is invalid</string>
+    <string name="error_invalid_username">This username is in use.</string>
+    <string name="error_invalid_password">Password is incorrect. Must include uppercase and lowercase letters and a number.</string>
     <string name="error_password_mismatch">The passwords don\'t match</string>
     <string name="error_incorrect_sign_in">The username or password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="access_url">http://prometheus.student.iastate.edu:8080/</string>
+    <string name="access_url">http://cs309-jr-2.misc.iastate.edu:8080/</string>
     <string name="application_title_text">CATCH THE CACHE</string>
     <string name="title_activity_cache_list">cacheListActivity</string>
     <string name="action_settings">Settings</string>

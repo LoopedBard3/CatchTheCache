@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -162,7 +163,7 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
             try {
                 jsonData = new JSONObject(gson.toJson(new UserResetPassRequest(username, newPass, ans)));
                 //TODO: Change the request location
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login/reset", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -184,7 +185,7 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
                         showProgress(false);
                     }
                 });
-
+                Log.d("REQUESTJSON", gson.toJson(new UserResetPassRequest(username, newPass, ans)));
                 queue.add(jsonObjectRequest);
             } catch (JSONException e) {
                 return false;

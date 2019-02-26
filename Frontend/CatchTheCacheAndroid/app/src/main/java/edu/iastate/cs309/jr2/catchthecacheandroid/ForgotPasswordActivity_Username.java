@@ -137,7 +137,7 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
             try {
                 jsonData = new JSONObject(gson.toJson(new UserQuestionRequest(username)));
                 //TODO: Change the request location
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url), jsonData,
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login/forgot", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -158,11 +158,11 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         showProgress(false);
                         mUsernameText.setError("An problem arose while getting question");
-                        //Log.d("REQUEST", error.networkResponse.toString());
-                        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Answer.class);
-                        intent.putExtra("Question", "TEST QUESTION");
-                        intent.putExtra("Username", "Test USERNAME");
-                        startActivity(intent);
+                        Log.d("REQUEST", error.networkResponse.toString());
+//                        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Answer.class);
+//                        intent.putExtra("Question", "TEST QUESTION");
+//                        intent.putExtra("Username", "Test USERNAME");
+//                        startActivity(intent);
                     }
                 });
 

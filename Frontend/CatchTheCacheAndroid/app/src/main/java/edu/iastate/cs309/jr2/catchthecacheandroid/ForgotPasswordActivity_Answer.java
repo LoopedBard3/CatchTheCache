@@ -170,7 +170,7 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
                                 showProgress(false);
                                 UserResetPassResponse respJson = gson.fromJson(response.toString(), UserResetPassResponse.class);
                                 Log.d("RESPONSENEWPASS", respJson.getMessage() + respJson.getSuccess() + respJson.getValidPass());
-                                if (respJson.getMessage().contains("Password Valid: true")) {
+                                if (respJson.getMessage().contains("Answer Valid: true; Password Valid: true")) {
                                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                     startActivity(intent);
                                 } else {

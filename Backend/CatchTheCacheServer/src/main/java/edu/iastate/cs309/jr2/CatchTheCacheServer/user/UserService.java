@@ -19,8 +19,7 @@ import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 @Service
 public class UserService {
 
-	@Autowired
-	UserRepository userRepo;
+	@Autowired UserRepository userRepo;
 
 	/**
 	 * Create new user in our UserRepository based on information in
@@ -107,7 +106,7 @@ public class UserService {
 
 		User u = userRepo.findByUsername(request.getUsername());
 		UserResetPassResponse response = new UserResetPassResponse();
-
+		
 		response.setValidAnswer(request.getAnswer().equals(u.getSecurityAnswer()));
 		response.setValidPassword(validatePassword(request.getNewPassword()));
 		response.setMessage(
@@ -115,6 +114,7 @@ public class UserService {
 
 		if (response.getSuccess()) {
 			u.setPassword(request.getNewPassword());
+			userRepo.saveAndFlush(u);
 		}
 
 		return new ResponseEntity<UserResetPassResponse>(response, HttpStatus.OK);
@@ -198,6 +198,9 @@ public class UserService {
 	 * @return false if username is already taken, true otherwise
 	 */
 	private boolean validateUsername(String username) {
+		if(username == null) {
+			throw new NullPointerException();
+		}
 		return !userRepo.existsByUsername(username)
 				&& username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
 	}
@@ -209,6 +212,9 @@ public class UserService {
 	 * @return true if valid, false otherwise
 	 */
 	private boolean validatePassword(String password) {
+		if(password == null) {
+			throw new NullPointerException();
+		}
 		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
 	}
 

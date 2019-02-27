@@ -64,6 +64,9 @@ public class UserService {
 		}
 
 		UserLoginResponse response = new UserLoginResponse();
+		
+		User u = userRepo.findByUsername(request.getUsername());
+		response.setAuthority(u.getAuthority());
 
 		if (validateLogin(request.getUsername(), request.getPassword())) {
 			response.setSuccess(true);

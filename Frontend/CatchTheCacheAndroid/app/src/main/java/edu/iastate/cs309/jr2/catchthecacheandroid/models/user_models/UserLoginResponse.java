@@ -3,10 +3,12 @@ package edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models;
 public class UserLoginResponse {
 	private String message;
 	private boolean success;
+	private int authority;
 
-	public UserLoginResponse(boolean s, String m) {
+	public UserLoginResponse(boolean s, String m, int a) {
 		this.message = m;
 		this.success = s;
+		this.authority = a;
 	}
 
 	public UserLoginResponse() {
@@ -27,5 +29,13 @@ public class UserLoginResponse {
 
 	public void setSuccess(boolean s) {
 		this.success = s;
+	}
+
+	public int getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(int authority) {
+		this.authority = authority;
 	}
 }

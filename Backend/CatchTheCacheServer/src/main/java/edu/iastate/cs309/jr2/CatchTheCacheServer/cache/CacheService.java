@@ -20,9 +20,8 @@ import edu.iastate.cs309.jr2.CatchTheCacheServer.user.*;
 @Service
 public class CacheService {
 
-	@Autowired
-	CacheRepository cacheRepo;
-	// UserRepository userRepo;
+	@Autowired CacheRepository cacheRepo;
+	@Autowired UserRepository userRepo;
 
 	/**
 	 * Create new cache in our CacheRepository based on information in
@@ -41,13 +40,12 @@ public class CacheService {
 		// Check location
 		boolean locationAvailable = true;// !cacheRepo.existsByLocation(request.getLatitude(), request.getLongitude());
 		// Check creator authorization
-		// TODO: Fix userRepo function for final product
-		boolean authorized = true;// userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
+		boolean authorized = userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
 
 		response.setAuthorized(authorized);
-		response.setSuccess(nameAvailable && locationAvailable);
+		response.setSuccess(authorized && nameAvailable && locationAvailable);
 
-		if (response.getSuccess()) {
+		if (response.getAuthorized() && response.getSuccess()) {
 			Cache c = new Cache();
 			c.updateCache(request);
 			cacheRepo.save(c);

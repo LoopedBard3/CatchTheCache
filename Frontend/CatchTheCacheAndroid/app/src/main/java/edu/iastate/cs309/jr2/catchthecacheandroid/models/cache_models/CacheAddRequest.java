@@ -3,34 +3,29 @@ package edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models;
 public class CacheAddRequest {
     private String name;
     private double longitude, latitude;
+    private String creator;
 
-    public String getName() {
-        return name;
+    public CacheAddRequest(String name, double lon, double lat, String creator) {
+        this.name = name;
+        this.longitude = lon;
+        this.latitude = lat;
+        this.creator = creator;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return this.name;
     }
 
     public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        return this.longitude;
     }
 
     public double getLatitude() {
-        return latitude;
+        return this.latitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public String getCreator() {
+        return this.creator;
     }
 
-    public CacheAddRequest(String name, double lon, double lat){
-        this.name = name;
-        longitude = lon;
-        latitude = lat;
-    }
 }

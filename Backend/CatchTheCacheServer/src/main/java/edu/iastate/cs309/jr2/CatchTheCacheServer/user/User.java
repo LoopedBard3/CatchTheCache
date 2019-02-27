@@ -37,22 +37,22 @@ public class User {
 
 	@Column(name = "security_question")
 	@NotFound(action = NotFoundAction.EXCEPTION)
-	private String security_question;
+	private String securityQuestion;
 
 	@Column(name = "security_answer")
 	@NotFound(action = NotFoundAction.EXCEPTION)
-	private String security_answer;
+	private String securityAnswer;
 
 	public void updateUser(UserCreateRequest req) {
 		this.username = req.getUsername();
 		this.password = req.getPassword();
-		this.security_question = req.getQuestion();
-		this.security_answer = req.getAnswer();
+		this.securityQuestion = req.getQuestion();
+		this.securityAnswer = req.getAnswer();
 		this.authority = req.getAuthority();
 	}
 
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(Integer id) {
@@ -84,19 +84,19 @@ public class User {
 	}
 
 	public String getSecurityQuestion() {
-		return this.security_question;
+		return this.securityQuestion;
 	}
 
 	public void setSecurityQuestion(String question) {
-		this.security_question = question;
+		this.securityQuestion = question;
 	}
 
 	public String getSecurityAnswer() {
-		return this.security_answer;
+		return this.securityAnswer;
 	}
 
 	public void setSecurityAnswer(String answer) {
-		this.security_answer = answer;
+		this.securityAnswer = answer;
 	}
 
 	@Override

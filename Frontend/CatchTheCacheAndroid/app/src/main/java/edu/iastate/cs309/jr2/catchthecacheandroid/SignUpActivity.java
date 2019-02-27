@@ -3,6 +3,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -254,14 +255,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 UserCreateResponse respJson = gson.fromJson(response.toString(), UserCreateResponse.class);
                                 Log.d("RESPONSE", String.valueOf(response.toString()));
                                 if (respJson.getSuccess()) {
-                                    mUsernameView.setText(String.format("Successfully registered %s", mUsername));
-                                    mUsernameView.requestFocus();
+                                    //mUsernameView.setText(String.format("Successfully registered %s", mUsername));
+                                    //mUsernameView.requestFocus();
                                     //TODO:Logic for if the user already existed or not and opening next activity
-//                                        Intent intent = new Intent(getApplicationContext(), BasicActivity.class);
-//                                        intent.putExtra("message", initialLoginMessage);
-//                                        startActivity(intent);
+                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        startActivity(intent);
                                 } else if(!respJson.getValidPass()){
-                                    mPasswordView.setError(getString(R.string.error_incorrect_sign_in));
+                                    mPasswordView.setError(getString(R.string.error_invalid_password));
                                     mPasswordView.requestFocus();
                                 } else if(!respJson.getValidUser()){
                                     mUsernameView.setError("Username is already taken!");

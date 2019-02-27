@@ -16,8 +16,7 @@ import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 @RestController
 class UserController {
 
-	@Autowired
-	UserService userService;
+	@Autowired UserService userService;
 
 	/**
 	 * POST request on /users path to attempt creation of a new User

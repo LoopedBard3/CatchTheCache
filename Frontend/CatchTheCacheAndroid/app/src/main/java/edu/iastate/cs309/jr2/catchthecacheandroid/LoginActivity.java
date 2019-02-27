@@ -121,9 +121,7 @@ public class LoginActivity extends AppCompatActivity {
      * flow for users that forgot their password.
      */
     private void forgotPasswordPressed(){
-        //TODO: Change back to regular forgotPasswordFlow
-        Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
-        intent.putExtra("ThroughServer", false);
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Username.class);
         startActivity(intent);
     }
 

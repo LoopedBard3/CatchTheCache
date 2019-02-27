@@ -158,7 +158,7 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         showProgress(false);
                         mUsernameText.setError("An problem arose while getting question");
-                        Log.d("REQUEST", error.networkResponse.toString());
+                        Log.d("REQUESTRESPONSE", error.networkResponse.toString());
 //                        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Answer.class);
 //                        intent.putExtra("Question", "TEST QUESTION");
 //                        intent.putExtra("Username", "Test USERNAME");

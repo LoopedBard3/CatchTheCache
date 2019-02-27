@@ -1,11 +1,11 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models;
 
 public class UserResetPassRequest {
-	private String username, new_password, answer;
+	private String username, newPassword, answer;
 
 	public UserResetPassRequest(String u, String p, String a) {
 		this.username = u;
-		this.new_password = p;
+		this.newPassword = p;
 		this.answer = a;
 	}
 
@@ -18,6 +18,6 @@ public class UserResetPassRequest {
 	}
 
 	public String getNewPassword() {
-		return this.new_password;
+		return this.newPassword;
 	}
 }

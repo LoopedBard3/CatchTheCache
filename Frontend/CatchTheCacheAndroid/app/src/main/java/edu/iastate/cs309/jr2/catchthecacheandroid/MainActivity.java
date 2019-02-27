@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         loader = (ProgressBar) findViewById(R.id.loader);
         fab_new = (FloatingActionButton) findViewById(R.id.fab_new);
         listView.setEmptyView(loader);
-        urls.add("");//TODO URL HERERERERERER
+        urls.add("anniede-mbp.student.iastate.edu.");//TODO URL HERERERERERER
         fab_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, NewSmsActivity.class));

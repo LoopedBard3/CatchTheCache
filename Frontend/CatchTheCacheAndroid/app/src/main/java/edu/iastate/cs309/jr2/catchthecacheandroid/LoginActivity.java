@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
 
@@ -261,6 +262,10 @@ public class LoginActivity extends AppCompatActivity {
                                     //TODO:Logic for if the user already existed or not and opening next activity
                                         Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
                                         intent.putExtra("ThroughServer", true);
+                                        intent.putExtra("Name", mUsername);
+                                        intent.putExtra("Auth", respJson.getAuthority());
+                                        //User us = new User(respJson.get); //Get the userinformation
+                                        //intent.putExtra("User", );
                                         startActivity(intent);
                                 } else {
                                     mPasswordView.setError(getString(R.string.error_incorrect_sign_in));

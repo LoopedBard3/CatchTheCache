@@ -1,11 +1,13 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,6 +30,7 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRe
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class CacheListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -40,10 +43,12 @@ public class CacheListActivity extends AppCompatActivity {
     private EditText mCacheLong;
     private Button addBtn;
     private Gson gson;
+    private User usr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
         setContentView(R.layout.activity_cache_list);
@@ -52,7 +57,17 @@ public class CacheListActivity extends AppCompatActivity {
         mCacheLong = findViewById(R.id.longInput);
         addBtn  = findViewById(R.id.addCacheBtn);
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
-        if(!getIntent().getExtras().getBoolean("ThroughServer")){
+        usr = new User(extras.getString("Name"), extras.getInt("Auth"));
+        if(usr.getAuthority() < 2) {
+            findViewById(R.id.textInputLayout).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout2).setVisibility(View.INVISIBLE);
+            findViewById(R.id.textInputLayout3).setVisibility(View.INVISIBLE);
+            addBtn.setVisibility(View.INVISIBLE);
+            ((ViewGroup.MarginLayoutParams)findViewById(R.id.listLayout).getLayoutParams()).bottomMargin = 0;
+        }
+
+
+        if(!extras.getBoolean("ThroughServer")){
             addTestCaches();
         }else {
             try {
@@ -92,7 +107,7 @@ public class CacheListActivity extends AppCompatActivity {
             return false;
         }
         JSONObject cacheToSend;
-        cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()))));
+        cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()), usr.getUsername())));
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
                 new Response.Listener<JSONObject>() {
                     @Override

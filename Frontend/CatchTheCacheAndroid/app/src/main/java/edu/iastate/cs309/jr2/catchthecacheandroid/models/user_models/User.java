@@ -1,6 +1,8 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String username;
     private int authority;
 

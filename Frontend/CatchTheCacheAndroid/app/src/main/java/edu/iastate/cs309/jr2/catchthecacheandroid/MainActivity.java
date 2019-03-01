@@ -29,6 +29,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -69,20 +74,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar loader;
     int i;
 
-    // json object response url
-    private String urlJsonObj = "https://api.androidhive.info/volley/person_object.json";
-    // json array response url
-    private Button btnMakeObjectRequest, btnMakeArrayRequest;
-    private RequestQueue queue;
 
-    TextView tvIsConnected;
-    // Progress dialog
-    private ProgressDialog pDialog;
-    TextView tvResult;
-    private TextView txtResponse;
-    private Gson gson;
-    // temporary string to show the parsed response
-    private String jsonResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +115,24 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        } catch (Exception e) {
+        }
+    }
+
+//TODO come back to meee
+    public void Post(String number, String message){
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("your web api url here");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("number", number);
+            jsonObject.accumulate("message", message);
+            StringEntity se = new StringEntity(jsonObject.toString());
+            httpPost.setEntity(se);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+            httpclient.execute(httpPost);
+
         } catch (Exception e) {
         }
     }

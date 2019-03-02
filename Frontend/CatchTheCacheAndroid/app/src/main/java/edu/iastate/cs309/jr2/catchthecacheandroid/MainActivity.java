@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
     ArrayList<String> urls = new ArrayList<>();
 
-    private EditText mUserView;
-    private EditText mCacheIdView;
-    private EditText mIdView;
+    private EditText message;
+    private EditText username;
+    private EditText chatID;
 
     static MainActivity inst;
     LoadSms loadsmsTask;
@@ -148,9 +148,9 @@ public class MainActivity extends AppCompatActivity {
         private JSONObject buildJsonObject() throws JSONException {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("user", mUserView.getText().toString());
-            jsonObject.accumulate("cacheId",  mCacheIdView.getText().toString());
-            jsonObject.accumulate("ID",  mIdView.getText().toString());
+            jsonObject.accumulate("user", username.getText().toString());
+            jsonObject.accumulate("cacheId",  chatID.getText().toString());
+            jsonObject.accumulate("ID",  message.getText().toString());
 
             return jsonObject;
         }

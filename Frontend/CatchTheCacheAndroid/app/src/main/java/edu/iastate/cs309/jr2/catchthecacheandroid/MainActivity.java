@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
     ArrayList<String> urls = new ArrayList<>();
+    private String TAG = MainActivity.class.getSimpleName();
+    private ListView lv;
 
     private EditText message;
     private EditText username;
@@ -119,16 +121,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//TODO come back to meee
     public void Post(String number, String message){
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("your web api url here");
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("number", number);
-            jsonObject.accumulate("message", message);
-            StringEntity se = new StringEntity(jsonObject.toString());
-            httpPost.setEntity(se);
+            HttpPost httpPost = new HttpPost("anniede-mbp.student.iastate.edu."); //URL for server
+            JSONObject jsonObject = new JSONObject(); //create new JSON object
+            jsonObject.accumulate("chatID", chatID); //JSON object with ChatID
+            jsonObject.accumulate("message", message); //add mesage
+            StringEntity se = new StringEntity(jsonObject.toString()); //convert to string
+            httpPost.setEntity(se); //post
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
             httpclient.execute(httpPost);
@@ -136,6 +137,50 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
+    private String HttpPost(String myUrl) throws IOException, JSONException {
+        String result = "";
+
+        URL url = new URL(myUrl);
+
+        // 1. create HttpURLConnection
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+        // 2. build JSON object
+        JSONObject jsonObject = buildJsonObject();
+
+        // 3. add JSON content to POST request body
+        setPostRequestContent(conn, jsonObject);
+
+        // 4. make POST request to the given URL
+        conn.connect();
+
+        // 5. return response message
+        return conn.getResponseMessage()+"";
+
+    }
+    private JSONObject buildJsonObject() throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.accumulate("user", username.getText().toString());
+        jsonObject.accumulate("cacheId",  chatID.getText().toString());
+        jsonObject.accumulate("ID",  message.getText().toString());
+
+        return jsonObject;
+    }
+    private void setPostRequestContent(HttpURLConnection conn,
+                                       JSONObject jsonObject) throws IOException {
+
+        OutputStream os = conn.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+        writer.write(jsonObject.toString());
+        Log.i(MainActivity.class.toString(), jsonObject.toString());
+        writer.flush();
+        writer.close();
+        os.close();
+    }
+
 
 
     class LoadSms extends AsyncTask<String, Void, String> {
@@ -145,56 +190,13 @@ public class MainActivity extends AppCompatActivity {
             smsList.clear();
         }
 
-        private JSONObject buildJsonObject() throws JSONException {
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("user", username.getText().toString());
-            jsonObject.accumulate("cacheId",  chatID.getText().toString());
-            jsonObject.accumulate("ID",  message.getText().toString());
 
-            return jsonObject;
-        }
-        //TODO work on JSON here
-        private String HttpPost(String myUrl) throws IOException, JSONException {
-            String result = "";
-
-            URL url = new URL(myUrl);
-
-            // 1. create HttpURLConnection
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-
-            // 2. build JSON object
-            JSONObject jsonObject = buildJsonObject();
-
-            // 3. add JSON content to POST request body
-            setPostRequestContent(conn, jsonObject);
-
-            // 4. make POST request to the given URL
-            conn.connect();
-
-            // 5. return response message
-            return conn.getResponseMessage()+"";
-
-        }
-
-        private void setPostRequestContent(HttpURLConnection conn,
-                                           JSONObject jsonObject) throws IOException {
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(jsonObject.toString());
-            Log.i(MainActivity.class.toString(), jsonObject.toString());
-            writer.flush();
-            writer.close();
-            os.close();
-        }
 
         protected String doInBackground(String... args) {
             String xml = "";
             try {
-                return (String) HttpPost(urls.get(0));
+                return HttpPost(urls.get(0));
             } catch (JSONException e) {
                 e.printStackTrace();
                 return "Error!";
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
             return xml;
         }
+
 
         @Override
         protected void onPostExecute(String xml) {

@@ -5,15 +5,15 @@ import java.util.List;
 import edu.iastate.cs309.jr2.CatchTheCacheServer.user.User;
 
 public class ChatCreateRequest {
-	private List<User> users;
+	private String users;
 	private String  cacheId;
 
-	public void updateRequest(List<User> u, String c) {
+	public void updateRequest(String u, String c) {
 		this.users = u;
 		this.cacheId = c;
 	}
 
-	public List<User> getUsers() {
+	public String getUsers() {
 		return this.users;
 	}
 

@@ -1,15 +1,20 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.chat;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 
@@ -51,5 +56,19 @@ class ChatController {
 	public String getById(@PathVariable("chatId") int id) {
 		return chatService.findChatById(id);
 	}
+	
+	@MessageMapping("/chat")
+	@SendTo("/topic/messages")
+	public OutputMessage send(Message message) throws Exception {
+	    String time = new SimpleDateFormat("HH:mm").format(new Date());
+	    return new OutputMessage(message.getFrom(), message.getText(), time);
+	}
+	
+	@MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Greeting greeting(Message message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getFrom()) + "!");
+    }
 
 }

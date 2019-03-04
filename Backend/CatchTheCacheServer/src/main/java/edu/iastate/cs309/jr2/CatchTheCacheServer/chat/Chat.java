@@ -1,7 +1,5 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.chat;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +12,6 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.core.style.ToStringCreator;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
-import edu.iastate.cs309.jr2.CatchTheCacheServer.user.User;
 
 @Entity
 @Table(name = "chats")
@@ -29,16 +26,8 @@ public class Chat {
 	//List of users participating in this specific chat
 	@Column(name = "users")
 	@NotFound(action = NotFoundAction.IGNORE)
-	private List<User> users;
+	private String users;
 
-	//Implementing permissions as Integer right now, could be changed
-	@Column(name = "permissions")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private List<Integer> permissions;
-	
-	@Column(name = "bannedUsers")
-	@NotFound(action = NotFoundAction.IGNORE)
-	private List<User> bannedUsers;
 	
 	@Column(name = "cacheId")
 	@NotFound(action = NotFoundAction.IGNORE)
@@ -57,33 +46,19 @@ public class Chat {
 		this.id = id;
 	}
 
-	public List<User> getUsers() {
+	public String getUsers() {
 		return this.users;
 	}
 
-	public void setUser(List<User> u) {
+	public void setUser(String u) {
 		this.users = u;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(String users) {
 		this.users = users;
 	}
 
-	public List<Integer> getPermissions() {
-		return permissions;
-	}
-
-	public void setPermissions(List<Integer> permissions) {
-		this.permissions = permissions;
-	}
-
-	public List<User> getBannedUsers() {
-		return bannedUsers;
-	}
-
-	public void setBannedUsers(List<User> bannedUsers) {
-		this.bannedUsers = bannedUsers;
-	}
+	
 
 	public void setCacheId(String id) {
 		this.cacheId = id;
@@ -97,7 +72,7 @@ public class Chat {
 	public String toString() {
 		return new ToStringCreator(this)
 
-				.append("chatId", this.getId()).append(", users", this.getUsers().toString()).append(", permissions",getPermissions()).append(", bannedUsers", getBannedUsers()).append(", cacheId", this.getCacheId())
+				.append("chatId", this.getId()).append(", users", this.getUsers().toString()).append(", cacheId", this.getCacheId())
 				.toString();
 	}
 }

@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 4. make POST request to the given URL
         conn.connect();
+       // Post(chatID, message);
 
         // 5. return response message
         return conn.getResponseMessage()+"";
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        //TODO make this method less scary, condense things
         protected String doInBackground(String... args) {
             String xml = "";
             try {
@@ -320,8 +321,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-
     }
 
     class InboxAdapter extends BaseAdapter {

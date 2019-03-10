@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,14 +63,40 @@ class ChatController {
 	@SendTo("/topic/messages")
 	public OutputMessage send(Message message) throws Exception {
 	    String time = new SimpleDateFormat("HH:mm").format(new Date());
-	    return new OutputMessage(message.getFrom(), message.getText(), time);
+	    return new OutputMessage(message.getSender(), message.getContent(), time);
 	}
 	
 	@MessageMapping("/hello")
     @SendTo("/topic/greetings")
     public Greeting greeting(Message message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getFrom()) + "!");
+        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getSender()) + "!");
+    }
+	
+	/**
+	 * Method that allows users to send message
+	 * @param chatMessage
+	 * @return
+	 */
+	@MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public Message sendMessage(@Payload Message chatMessage) {
+        return chatMessage;
+    }
+	
+	/**
+	 * Method that lets a user join in the chat
+	 * @param chatMessage
+	 * @param headerAccessor
+	 * @return
+	 */
+    @MessageMapping("/chat.addUser")
+    @SendTo("/topic/public")
+    public Message addUser(@Payload Message chatMessage, 
+                               SimpMessageHeaderAccessor headerAccessor) {
+        // Add username in web socket session
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
     }
 
 }

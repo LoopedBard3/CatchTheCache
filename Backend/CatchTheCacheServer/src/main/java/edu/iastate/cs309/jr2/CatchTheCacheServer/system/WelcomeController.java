@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class WelcomeController {
 
-	@GetMapping("/")
+	@GetMapping("/welcome")
 	public String welcome() {
 		return "CONNECTION ESTABLISHED";
 	}

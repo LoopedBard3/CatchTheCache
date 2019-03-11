@@ -29,7 +29,7 @@ public class Chat {
 
 	@Column(name = "cacheId")
 	@NotFound(action = NotFoundAction.IGNORE)
-	private String cacheId;
+	private Integer cacheId;
 
 	public void updateChat(ChatCreateRequest req) {
 		this.cacheId = req.getCacheId();
@@ -40,10 +40,6 @@ public class Chat {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getUser() {
 		return this.user;
 	}
@@ -52,11 +48,11 @@ public class Chat {
 		this.user = u;
 	}
 
-	public void setCacheId(String id) {
+	public void setCacheId(int id) {
 		this.cacheId = id;
 	}
 
-	public String getCacheId() {
+	public Integer getCacheId() {
 		return this.cacheId;
 	}
 

@@ -3,7 +3,6 @@ package edu.iastate.cs309.jr2.CatchTheCacheServer.chat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,14 +41,35 @@ class ChatController {
 	}
 
 	/**
-	 * GET request on /chats path to return a chat by id
+	 * GET request on /chats/{id} path to return a chat by id
 	 * 
 	 * @param id Unique integer id to search for
 	 * @return Chat object with specified id
 	 */
-	@RequestMapping(method = RequestMethod.GET, path = "/chats/{chatId}")
-	public String getById(@PathVariable("chatId") int id) {
+	@RequestMapping(method = RequestMethod.GET, path = "/chats/{id}")
+	public String getById(@PathVariable int id) {
 		return chatService.findChatById(id);
+	}
+
+	/**
+	 * POST request on path /chats/m/{id} used to send a message to the cache chat
+	 * 
+	 * @param request MessageRequest
+	 * @return MessageResponse object with status on message attempt
+	 */
+	@RequestMapping(method = RequestMethod.POST, path = "/chats/m/{id}")
+	public ResponseEntity<MessageResponse> postMessage(@PathVariable int id, @RequestBody MessageRequest request) {
+		return chatService.postMessage(id, request);
+	}
+
+	/**
+	 * GET request on path /chats/m/{id} to return a list of all messages
+	 * 
+	 * @return MessageListResponse object with list of messages for this cache
+	 */
+	@RequestMapping(method = RequestMethod.GET, path = "/chats/m/{id}")
+	public ResponseEntity<MessageListResponse> getMessages(@PathVariable int id) {
+		return chatService.getMessages(id);
 	}
 
 }

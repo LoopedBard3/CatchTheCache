@@ -3,7 +3,6 @@ package edu.iastate.cs309.jr2.CatchTheCacheServer.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,8 @@ import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 @RestController
 class UserController {
 
-	@Autowired UserService userService;
+	@Autowired
+	UserService userService;
 
 	/**
 	 * POST request on /users path to attempt creation of a new User

@@ -75,13 +75,13 @@ public class BasicActivity extends AppCompatActivity {
 
 //FIX ME!!! app crashes, error, Class not defined
 
-        FloatingActionButton mapBtn = findViewById(R.id.mapfab);
-        mapBtn.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton mapfab = findViewById(R.id.mapfab);
+        mapfab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //what does this line do?
+              //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //what does this line do?
                 startActivity(intent);
             }
         });

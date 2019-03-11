@@ -21,8 +21,8 @@
         android:text="@string/application_title_text"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/colorAccent"
-        android:textSize="36sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="37sp"
         android:textStyle="bold" />
 
     <ProgressBar

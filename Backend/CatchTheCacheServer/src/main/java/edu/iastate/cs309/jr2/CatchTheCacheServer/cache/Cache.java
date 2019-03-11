@@ -27,6 +27,14 @@ public class Cache {
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String name;
 
+	@Column(name = "chat_id")
+	@NotFound(action = NotFoundAction.EXCEPTION)
+	private Integer chatId;
+
+	@Column(name = "description")
+	@NotFound(action = NotFoundAction.EXCEPTION)
+	private String description;
+
 	@Column(name = "longitude")
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private double longitude;
@@ -39,18 +47,27 @@ public class Cache {
 		this.name = req.getName();
 		this.longitude = req.getLongitude();
 		this.latitude = req.getLatitude();
+		this.description = req.getDescription();
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return this.name;
+	}
+
+	public Integer getChatId() {
+		return this.chatId;
+	}
+
+	public void setChatId(int chatId) {
+		this.chatId = chatId;
+	}
+
+	public String getDescription() {
+		return this.description;
 	}
 
 	public double getLongitude() {
@@ -66,6 +83,6 @@ public class Cache {
 		return new ToStringCreator(this)
 
 				.append("id", this.getId()).append("name", this.getName()).append("longitude", this.getLongitude())
-				.append("latitude", this.getLatitude()).toString();
+				.append("latitude", this.getLatitude()).append("description", this.getDescription()).toString();
 	}
 }

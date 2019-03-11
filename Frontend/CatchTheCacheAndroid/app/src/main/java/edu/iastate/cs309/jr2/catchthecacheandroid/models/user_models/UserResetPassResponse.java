@@ -4,7 +4,10 @@ public class UserResetPassResponse {
 	private boolean validAnswer, validPassword;
 	private String message;
 
-	public UserResetPassResponse() {}
+	public UserResetPassResponse() {
+		this.validAnswer = false;
+		this.validPassword = false;
+	}
 
 	public void setValidAnswer(boolean b) {
 		this.validAnswer = b;

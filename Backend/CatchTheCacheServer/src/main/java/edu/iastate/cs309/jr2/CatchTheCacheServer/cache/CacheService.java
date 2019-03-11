@@ -8,20 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 import edu.iastate.cs309.jr2.CatchTheCacheServer.user.*;
+import edu.iastate.cs309.jr2.CatchTheCacheServer.chat.*;
 
 @Service
 public class CacheService {
 
-	@Autowired CacheRepository cacheRepo;
-	@Autowired UserRepository userRepo;
+	@Autowired
+	CacheRepository cacheRepo;
+	@Autowired
+	MessageRepository messageRepo;
+	@Autowired
+	UserRepository userRepo;
+	@Autowired
+	ChatRepository chatRepo;
+	@Autowired
+	ChatService chatService;
 
 	/**
 	 * Create new cache in our CacheRepository based on information in
@@ -48,7 +52,11 @@ public class CacheService {
 		if (response.getAuthorized() && response.getSuccess()) {
 			Cache c = new Cache();
 			c.updateCache(request);
+			Chat ch = chatService.createChatForCache();
+			c.setChatId(ch.getId());
 			cacheRepo.save(c);
+			ch.setCacheId(c.getId());
+			chatRepo.flush();
 		}
 
 		return new ResponseEntity<CacheAddResponse>(response, HttpStatus.OK);
@@ -70,6 +78,52 @@ public class CacheService {
 		CacheListResponse response = new CacheListResponse(list);
 
 		return new ResponseEntity<CacheListResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Post new message to cache chat room
+	 * 
+	 * @param id      specific cache chat room to use
+	 * @param request MessageRequest object containing sender and message strings
+	 * @return MessageResponse with success boolean
+	 */
+	public ResponseEntity<MessageResponse> postMessage(int id, MessageRequest request) {
+		MessageResponse response = new MessageResponse();
+		Message m = new Message();
+		m.setSender(request.getSender());
+		m.setText(request.getMessage());
+		Cache c = cacheRepo.findById(id).get();
+		m.setChatId(c.getChatId());
+		if (m.getChatId() != null) {
+			response.setSuccess(true);
+			messageRepo.saveAndFlush(m);
+		}
+		return new ResponseEntity<MessageResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Get messages for the cache chat room with id
+	 * 
+	 * @param id cache chat room to get
+	 * @return MessageListResponse with List of Message objects.
+	 */
+	public ResponseEntity<MessageListResponse> getMessages(int id) {
+		List<Message> l;
+		Cache c = cacheRepo.findById(id).get();
+		l = messageRepo.findAllByChatId(c.getChatId());
+		MessageListResponse response = new MessageListResponse(l);
+		return new ResponseEntity<MessageListResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Poll CacheRepository for cache with specified id
+	 * 
+	 * @param id Unique integer id to search for
+	 * @return available information about the polled id
+	 */
+	public String findCacheById(int id) {
+		Optional<Cache> results = cacheRepo.findById(id);
+		return results.get().toString();
 	}
 
 }

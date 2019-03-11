@@ -1,26 +1,31 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models;
 
 public class CacheAddResponse {
-  private boolean authorized, success;
+	private boolean authorized, success;
 
-    public CacheAddResponse(boolean authorized, boolean success) {
-        this.authorized = authorized;
-        this.success = success;
-    }
+	public CacheAddResponse(boolean authorized, boolean success) {
+		this.authorized = authorized;
+		this.success = success;
+	}
 
-    public boolean isAuthorized() {
-        return authorized;
-    }
+	public CacheAddResponse() {
+		this.authorized = false;
+		this.success = false;
+	}
 
-    public void setAuthorized(boolean authorized) {
-        this.authorized = authorized;
-    }
+	public boolean getAuthorized() {
+		return this.authorized;
+	}
 
-    public boolean isSuccess() {
-        return success;
-    }
+	public void setAuthorized(boolean authorized) {
+		this.authorized = authorized;
+	}
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+	public boolean getSuccess() {
+		return this.success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
 }

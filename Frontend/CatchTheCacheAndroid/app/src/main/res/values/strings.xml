@@ -2,7 +2,7 @@
     <string name="app_name">CatchTheCacheAndroid</string>
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">Password</string>-
     <string name="prompt_password_match">Enter password again</string>
     <string name="prompt_security_question">Enter security question</string>
     <string name="prompt_security_answer">Enter security question answer</string>
@@ -24,4 +24,10 @@
     <string name="application_title_text">CATCH THE CACHE</string>
     <string name="title_activity_cache_list">cacheListActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_cache_view">CacheViewActivity</string>
+    <string name="cache_description_testing">Lat: %.3f\nLong: %.3f\nThis cache currently doesn\'t have a description! Please be patient as we are adding descriptions.</string>
+    <string name="btn_start_caching">Start Caching for %s</string>
+    <string name="title_activity_individual_chat">individual_chat</string>
+    <string name="title_activity_cache_chat_room">CacheChatRoom</string>
+
 </resources>

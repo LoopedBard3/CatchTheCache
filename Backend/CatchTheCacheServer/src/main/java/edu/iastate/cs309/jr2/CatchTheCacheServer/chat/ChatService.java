@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
-import edu.iastate.cs309.jr2.CatchTheCacheServer.user.User;
 
 @Service
 public class ChatService {
 
 	@Autowired
 	ChatRepository chatRepo;
+	@Autowired
+	MessageRepository messageRepo;
 
 	/**
 	 * Create new chat in our ChatRepository based on information in
@@ -55,8 +55,53 @@ public class ChatService {
 	 * @param id Unique integer id to search for
 	 * @return available information about the polled id
 	 */
-	public String findChatById(@PathVariable("chatId") int id) {
+	public String findChatById(int id) {
 		Optional<Chat> results = chatRepo.findById(id);
 		return results.get().toString();
+	}
+
+	/**
+	 * Create new chat for a cache and return the chat id associated with the new
+	 * chat
+	 * 
+	 * @return new Chat object
+	 */
+	public Chat createChatForCache() {
+		Chat c = new Chat();
+		chatRepo.save(c);
+		return c;
+	}
+
+	/**
+	 * Post new message to chat room
+	 * 
+	 * @param id      specific chat room to use
+	 * @param request MessageRequest object containing sender and message strings
+	 * @return MessageResponse with success boolean
+	 */
+	public ResponseEntity<MessageResponse> postMessage(int id, MessageRequest request) {
+		MessageResponse response = new MessageResponse();
+		Message m = new Message();
+		m.setSender(request.getSender());
+		m.setText(request.getMessage());
+		m.setChatId(id);
+		if (m.getChatId() != null) {
+			response.setSuccess(true);
+			messageRepo.saveAndFlush(m);
+		}
+		return new ResponseEntity<MessageResponse>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * Get messages for the cache chat room with id
+	 * 
+	 * @param id cache chat room to get
+	 * @return MessageListResponse with List of Message objects.
+	 */
+	public ResponseEntity<MessageListResponse> getMessages(int id) {
+		List<Message> l;
+		l = messageRepo.findAllByChatId(id);
+		MessageListResponse response = new MessageListResponse(l);
+		return new ResponseEntity<MessageListResponse>(response, HttpStatus.OK);
 	}
 }

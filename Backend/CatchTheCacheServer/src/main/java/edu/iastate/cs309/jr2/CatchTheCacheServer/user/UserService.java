@@ -9,17 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 
 @Service
 public class UserService {
 
-	@Autowired UserRepository userRepo;
+	@Autowired
+	UserRepository userRepo;
 
 	/**
 	 * Create new user in our UserRepository based on information in
@@ -63,7 +60,7 @@ public class UserService {
 		}
 
 		UserLoginResponse response = new UserLoginResponse();
-		
+
 		User u = userRepo.findByUsername(request.getUsername());
 		response.setAuthority(u.getAuthority());
 
@@ -109,7 +106,7 @@ public class UserService {
 
 		User u = userRepo.findByUsername(request.getUsername());
 		UserResetPassResponse response = new UserResetPassResponse();
-		
+
 		response.setValidAnswer(request.getAnswer().equals(u.getSecurityAnswer()));
 		response.setValidPassword(validatePassword(request.getNewPassword()));
 		response.setMessage(
@@ -201,7 +198,7 @@ public class UserService {
 	 * @return false if username is already taken, true otherwise
 	 */
 	private boolean validateUsername(String username) {
-		if(username == null) {
+		if (username == null) {
 			throw new NullPointerException();
 		}
 		return !userRepo.existsByUsername(username)
@@ -215,7 +212,7 @@ public class UserService {
 	 * @return true if valid, false otherwise
 	 */
 	private boolean validatePassword(String password) {
-		if(password == null) {
+		if (password == null) {
 			throw new NullPointerException();
 		}
 		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");

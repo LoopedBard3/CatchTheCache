@@ -13,6 +13,15 @@ public class UserLoginResponse {
 
 	public UserLoginResponse() {
 		this.success = false;
+		this.authority = 0;
+	}
+
+	public int getAuthority() {
+		return this.authority;
+	}
+
+	public void setAuthority(int a) {
+		this.authority = a;
 	}
 
 	public String getMessage() {
@@ -29,13 +38,5 @@ public class UserLoginResponse {
 
 	public void setSuccess(boolean s) {
 		this.success = s;
-	}
-
-	public int getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(int authority) {
-		this.authority = authority;
 	}
 }

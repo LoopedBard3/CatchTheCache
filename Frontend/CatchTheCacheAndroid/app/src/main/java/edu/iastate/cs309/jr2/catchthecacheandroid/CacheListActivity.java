@@ -1,15 +1,20 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
-import android.support.design.widget.TextInputLayout;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -44,6 +49,7 @@ public class CacheListActivity extends AppCompatActivity {
     private Button addBtn;
     private Gson gson;
     private User usr;
+    private ProgressBar pbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,9 @@ public class CacheListActivity extends AppCompatActivity {
         mCacheLong = findViewById(R.id.longInput);
         addBtn  = findViewById(R.id.addCacheBtn);
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
-        usr = new User(extras.getString("Name"), extras.getInt("Auth"));
+        usr = (User) extras.getSerializable("UserObject");
+        pbar = findViewById(R.id.cache_retrieve_progress);
+
         if(usr.getAuthority() < 2) {
             findViewById(R.id.textInputLayout).setVisibility(View.INVISIBLE);
             findViewById(R.id.textInputLayout2).setVisibility(View.INVISIBLE);
@@ -67,7 +75,7 @@ public class CacheListActivity extends AppCompatActivity {
         }
 
 
-        if(!extras.getBoolean("ThroughServer")){
+        if(extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
             addTestCaches();
         }else {
             try {
@@ -85,7 +93,7 @@ public class CacheListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CacheListAdapter(caches);
+        mAdapter = new CacheListAdapter(caches, usr);
         recyclerView.setAdapter(mAdapter);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +108,12 @@ public class CacheListActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Caches for you");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private boolean addCache() throws JSONException {
@@ -107,7 +121,8 @@ public class CacheListActivity extends AppCompatActivity {
             return false;
         }
         JSONObject cacheToSend;
-        cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()), usr.getUsername())));
+        //TODO: Add in description adding.
+        cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()), usr.getUsername(), "test desc")));
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -122,7 +137,7 @@ public class CacheListActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                return;
+                Log.d("ERRORRESPONSE", "Error getting responses " + error.toString());
             }
         });
         queue.add(requestObject);
@@ -133,6 +148,7 @@ public class CacheListActivity extends AppCompatActivity {
         //TODO: Get caches from server instead
             JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
             Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
+        pbar.setVisibility(View.VISIBLE);
             JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches", null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -140,13 +156,14 @@ public class CacheListActivity extends AppCompatActivity {
                             CacheListResponse cachesList = gson.fromJson(response.toString(), CacheListResponse.class);
                             caches.clear();
                             caches.addAll(cachesList.getCacheList());
+                            pbar.setVisibility(View.GONE);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    pbar.setVisibility(View.GONE);
                 }
             });
-
             queue.add(requestObject);
         }
 
@@ -169,5 +186,36 @@ public class CacheListActivity extends AppCompatActivity {
         caches.add(new Cache("test17", 123.1, 1241.12));
         caches.add(new Cache("test18", 123.16, 1241.13));
         caches.add(new Cache("test19", 123.17, 1241.14));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_cache, menu);
+        MenuItem to_chat_item = menu.findItem(R.id.action_to_chat);
+        to_chat_item.setVisible(true);
+        to_chat_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+        MenuItem refresh_caches_item = menu.findItem(R.id.action_refresh);
+        refresh_caches_item.setVisible(true);
+        refresh_caches_item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        refresh_caches_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                try {
+                    getCacheList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        });
+        return true;
     }
 }

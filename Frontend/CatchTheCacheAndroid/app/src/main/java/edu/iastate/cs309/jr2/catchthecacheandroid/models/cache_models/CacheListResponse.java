@@ -2,18 +2,20 @@ package edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models;
 
 import java.util.ArrayList;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
+
 public class CacheListResponse {
-    ArrayList<Cache> cacheList;
+	ArrayList<Cache> cacheList;
 
-    public CacheListResponse(ArrayList<Cache> cacheList) {
-        this.cacheList = cacheList;
-    }
+	public CacheListResponse(ArrayList<Cache> cacheList) {
+		this.cacheList = cacheList;
+	}
 
-    public ArrayList<Cache> getCacheList() {
-        return cacheList;
-    }
+	public ArrayList<Cache> getCacheList() {
+		return cacheList;
+	}
 
-    public void setCacheList(ArrayList<Cache> cacheList) {
-        this.cacheList = cacheList;
-    }
+	public void setCacheList(ArrayList<Cache> cacheList) {
+		this.cacheList = cacheList;
+	}
 }

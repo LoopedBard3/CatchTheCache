@@ -4,10 +4,23 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+
+//Added from chat branch
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
+//End added from chat branch
+
+
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,9 +47,13 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
 
+import static android.Manifest.permission.READ_CONTACTS;
+
 
 /**
+
  * A login screen that offers login via username/password.
+
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -102,7 +119,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        //configureNextButton();
     }
+
 
 
 
@@ -114,6 +133,39 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
     }
+
+//    private void configureNextButton(){
+//        Button nextbutton = (Button) findViewById(R.id.nextbutton);
+//        nextbutton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent (LoginActivity.this, MainActivity.class));
+//            }
+//        });
+//    }
+
+
+//    private boolean mayRequestContacts() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            return true;
+//        }
+//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+//            return true;
+//        }
+//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(android.R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        public void onClick(View v) {
+//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//                        }
+//                    });
+//        } else {
+//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//        }
+//        return false;
+//    }
 
 
     /**
@@ -259,11 +311,7 @@ public class LoginActivity extends AppCompatActivity {
                                     debugText.setText(String.format("Successfully Logged in %s", mUsername));
                                     //TODO:Logic for if the user already existed or not and opening next activity
                                         Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
-                                        intent.putExtra("ThroughServer", true);
-                                        intent.putExtra("Name", mUsername);
-                                        intent.putExtra("Auth", respJson.getAuthority());
-                                        //User us = new User(respJson.get); //Get the userinformation
-                                        //intent.putExtra("User", );
+                                        intent.putExtra("UserObject", new User(mUsername, respJson.getAuthority()));
                                         startActivity(intent);
                                 } else {
                                     mPasswordView.setError(getString(R.string.error_incorrect_sign_in));

@@ -59,44 +59,5 @@ class ChatController {
 		return chatService.findChatById(id);
 	}
 	
-	@MessageMapping("/chat")
-	@SendTo("/topic/messages")
-	public OutputMessage send(Message message) throws Exception {
-	    String time = new SimpleDateFormat("HH:mm").format(new Date());
-	    return new OutputMessage(message.getSender(), message.getContent(), time);
-	}
-	
-	@MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Greeting greeting(Message message) throws Exception {
-        Thread.sleep(1000); // simulated delay
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getSender()) + "!");
-    }
-	
-	/**
-	 * Method that allows users to send message
-	 * @param chatMessage
-	 * @return
-	 */
-	@MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public Message sendMessage(@Payload Message chatMessage) {
-        return chatMessage;
-    }
-	
-	/**
-	 * Method that lets a user join in the chat
-	 * @param chatMessage
-	 * @param headerAccessor
-	 * @return
-	 */
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public Message addUser(@Payload Message chatMessage, 
-                               SimpMessageHeaderAccessor headerAccessor) {
-        // Add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        return chatMessage;
-    }
 
 }

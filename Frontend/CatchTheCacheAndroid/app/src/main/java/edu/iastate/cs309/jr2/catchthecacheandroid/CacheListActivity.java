@@ -47,10 +47,10 @@ public class CacheListActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
         setContentView(R.layout.activity_cache_list);
-        mCacheName = findViewById(R.id.nameInput);
-        mCacheLat = findViewById(R.id.latInput);
-        mCacheLong = findViewById(R.id.longInput);
-        addBtn  = findViewById(R.id.addCacheBtn);
+       // mCacheName = findViewById(R.id.nameInput);
+        //mCacheLat = findViewById(R.id.latInput);
+        //mCacheLong = findViewById(R.id.longInput);
+        //addBtn  = findViewById(R.id.addCacheBtn);
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
         if(!getIntent().getExtras().getBoolean("ThroughServer")){
             addTestCaches();

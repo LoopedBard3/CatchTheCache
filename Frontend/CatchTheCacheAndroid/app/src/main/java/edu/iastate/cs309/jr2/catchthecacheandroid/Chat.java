@@ -31,7 +31,7 @@ import java.util.HashMap;
  */
 
 public class Chat extends AppCompatActivity {
-
+//TODO change to be similar to cache chats
     ListView listView;
     ChatAdapter adapter;
     LoadChat loadsmsTask;

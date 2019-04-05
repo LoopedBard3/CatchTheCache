@@ -2,27 +2,23 @@ package edu.iastate.cs309.jr2.CatchTheCacheServer.chat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.HtmlUtils;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
-import io.micrometer.shaded.org.pcollections.HashPMap;
 
 @RestController
 class ChatController {
@@ -30,7 +26,9 @@ class ChatController {
 	
 	private SimpMessagingTemplate template;
 	
+	
 	private Map<String, Object> msgCache = new HashMap<String, Object>();
+	
 	@Autowired
 	ChatService chatService;
 	
@@ -88,14 +86,28 @@ class ChatController {
 		
 		String dest = "/userChat/chat" + chatMessage.getChatId();
 		
-		Object cache = msgCache.get(chatMessage.getChatId());
-			chatMessage.setChatid(URLDecoder.decode(chatMessage.getChatId(),"utf-8"));
-			chatMessage.setUsers(URLDecoder.decode(chatMessage.getUsers(), "utf-8"));
-			chatMessage.setText(URLDecoder.decode(chatMessage.getText(), "utf-8"));
+		LimitQueue<Message> buffer = (LimitQueue<Message>) msgCache.get(chatMessage.getChatId());
+			chatMessage.setChatId(chatMessage.getChatId());
+			chatMessage.setSender(chatMessage.getSender());
+			chatMessage.setText(chatMessage.getText());
 		
 			
 		this.template.convertAndSend(dest, chatMessage);
-                ((LimitQueue<Message>) cache).offer(chatMessage);
+               buffer.offer(chatMessage);
+	}
+
+	@SubscribeMapping("/initChat/{chatId}")
+	public LimitQueue<Message> initChatRoom(@DestinationVariable String chatId) {
+		System.out.print("New User Entering Chat");
+		LimitQueue<Message> chatlist = new LimitQueue<Message>(MAX_CHAT_HISTORY);
+		
+		//If never entered in this chat
+		if (!msgCache.containsKey(chatId)) {
+			msgCache.put(chatId, chatlist);
+		} else {
+			chatlist = (LimitQueue<Message>) msgCache.get(chatId);
+		}
+		return chatlist;
 	}
 
 

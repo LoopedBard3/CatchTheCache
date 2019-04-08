@@ -1,6 +1,8 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,22 +18,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
-public class CacheViewActivity extends AppCompatActivity {
+public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCallback{
     private User usr;
     private Cache cache;
     private TextView desc;
     private Button btn;
-
     private Button btn2;
+    private GoogleMap mMap;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cache_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -53,8 +71,9 @@ public class CacheViewActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "I am currently a placeholder!!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("CacheObject", cache);
+                startActivity(intent);
             }
         });
 
@@ -71,6 +90,10 @@ public class CacheViewActivity extends AppCompatActivity {
         });
         getSupportActionBar().setTitle(cache.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        SupportMapFragment mapFragment =  (SupportMapFragment)  getSupportFragmentManager().findFragmentById(R.id.mapView);
+        mapFragment.getMapAsync(this);
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -107,4 +130,43 @@ public class CacheViewActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        Log.d("MAPS", "Checking Maps");
+        if(servicesOK()) {
+            Log.d("MAPS", "Initializing Maps");
+            // Add a marker on gerdin and move the camera
+            LatLng cacheLocation = new LatLng(cache.getLatitude(), cache.getLongitude());
+            //mMap.addMarker(new MarkerOptions().position(cacheLocation).title("Marker for " + cache.getName()));
+            //Log.d("MAPS", "Maps Marker Added");
+            float zoomLevel = 17.5f;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cacheLocation, zoomLevel));
+            Log.d("MAPS", "Maps Camera Moved");
+            mMap.getUiSettings().setScrollGesturesEnabled(false);
+            mMap.getUiSettings().setZoomGesturesEnabled(false);
+
+            Circle circle = mMap.addCircle(new CircleOptions()
+                    .center(cacheLocation)
+                    .radius(31)             //0.000279 single lat/longitude difference is equivalent to 31 meters
+                    .strokeColor(Color.RED)
+                    .fillColor(Color.BLUE & 0x44ffffff)); //First 2 hex values set the Alpha Channel
+
+
+        }
+    }
+
+    private boolean servicesOK() {
+        int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        if(result == ConnectionResult.SUCCESS){
+            return true;
+        }else if(GoogleApiAvailability.getInstance().isUserResolvableError(result)){
+            Log.d("MAPS", "Error but user is recoverable");
+            Toast.makeText(this, "User is resolvable", Toast.LENGTH_LONG).show();
+        }else{
+            Log.d("MAPS", "Error with unrecoverable user.");
+            Toast.makeText(this, "Error with google play!", Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
 }

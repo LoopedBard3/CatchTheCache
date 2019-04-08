@@ -2,6 +2,7 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,17 +31,23 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.adapters.CacheChatAdapter;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.WebSocketClient;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListRequest;
-import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.Message;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageListResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
+
+//import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
+
 
 public class CacheChatRoom extends AppCompatActivity {
     private User usr;
@@ -51,6 +59,9 @@ public class CacheChatRoom extends AppCompatActivity {
     private RequestQueue queue;
     private ProgressBar pbar;
     private EditText send_text;
+    private WebSocketClient ws;
+
+
 
 
 
@@ -104,6 +115,32 @@ public class CacheChatRoom extends AppCompatActivity {
             }
         });
 
+        try {
+            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "caches/m/" + cache.getId() + "/websocket")) {
+
+                @Override
+                public void onMessage(String message) {
+                    Log.d("WEBSOCKET", "Cache Chat Socket returned: " + message);
+                    if (message.equals("refresh")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        getCacheChatListInvisible();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                    }
+                }
+            };
+
+        }catch (Exception e){
+            Log.d("WEBSOCKET", "Cache Chat Socket Exception: " + e.getMessage());
+        }
+        ws.connect();
+        if(ws.isOpen()) Log.d("WEBSOCKET", "Cache Chat Socket Connected");
     }
 
 
@@ -121,6 +158,9 @@ public class CacheChatRoom extends AppCompatActivity {
     }
 
     private void finish_local(){
+        if(ws != null && !ws.isClosed()){
+            ws.close();
+        }
         finish();
     }
 
@@ -152,28 +192,34 @@ public class CacheChatRoom extends AppCompatActivity {
             send_text.setError("Please enter message between 1 and 50 letters long.");
            return false;
         }
-        JSONObject cacheChatToSend;
-        //TODO: Add in description adding.
-        cacheChatToSend = new JSONObject(gson.toJson(new MessageRequest(usr.getUsername(),  send_text.getText().toString())));
-        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches/m/" + cache.getId(), cacheChatToSend,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        MessageResponse respJson = gson.fromJson(response.toString(), MessageResponse.class);
-                        try {
-                            getCacheChatList();
+
+        if(!ws.broadcast(usr.getUsername() + ":" +send_text.getText().toString())) {
+            JSONObject cacheChatToSend;
+            //TODO: Add in description adding.
+            cacheChatToSend = new JSONObject(gson.toJson(new MessageRequest(usr.getUsername(), send_text.getText().toString())));
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches/m/" + cache.getId(), cacheChatToSend,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            MessageResponse respJson = gson.fromJson(response.toString(), MessageResponse.class);
+                            //try {
+                            //getCacheChatList();
                             send_text.setText("");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            //} catch (JSONException e) {
+                            //    e.printStackTrace();
+                            //}
                         }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ERRORRESPONSE", "Error getting responses " + error.toString());
-            }
-        });
-        queue.add(requestObject);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("ERRORRESPONSE", "Error getting responses " + error.toString());
+                }
+            });
+            queue.add(requestObject);
+            return true;
+        }else{
+            send_text.setText("");
+        }
         return true;
     }
 
@@ -193,21 +239,28 @@ public class CacheChatRoom extends AppCompatActivity {
             }
         });
 
-        MenuItem refresh_caches_item = menu.findItem(R.id.action_refresh);
-        refresh_caches_item.setVisible(true);
-        refresh_caches_item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        refresh_caches_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                try {
-                    getCacheChatList();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
         return true;
     }
 
+
+    private void getCacheChatListInvisible() throws JSONException {
+        //TODO: Get caches from server instead
+        //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
+        // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
+        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches/m/" + cache.getId(), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        MessageListResponse messageList = gson.fromJson(response.toString(), MessageListResponse.class);
+                        messages.clear();
+                        messages.addAll(messageList.getMessageList());
+                        chatRecycleView.getAdapter().notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        queue.add(requestObject);
+    }
 }

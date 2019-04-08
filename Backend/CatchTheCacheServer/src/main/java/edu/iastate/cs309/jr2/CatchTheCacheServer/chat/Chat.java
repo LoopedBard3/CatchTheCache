@@ -30,7 +30,14 @@ public class Chat {
 	@Column(name = "cacheId")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Integer cacheId;
-
+	public Chat() {
+		
+	}
+	public Chat(int id, String user,int cacheId) {
+		this.id=id;
+		this.user=user;
+		this.cacheId=cacheId;
+	}
 	public void updateChat(ChatCreateRequest req) {
 		this.cacheId = req.getCacheId();
 		this.user = req.getUser();

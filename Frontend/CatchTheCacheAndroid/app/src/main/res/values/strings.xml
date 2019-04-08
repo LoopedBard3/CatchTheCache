@@ -20,7 +20,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <!--<string name="access_url">http://prometheus.student.iastate.edu:8080/</string>-->
     <string name="access_url">http://cs309-jr-2.misc.iastate.edu:8080/</string>
+    <!--<string name="access_socket">ws://prometheus.student.iastate.edu:8080/</string>-->
+    <string name="access_socket">ws://cs309-jr-2.misc.iastate.edu:8080/</string>
     <string name="application_title_text">CATCH THE CACHE</string>
     <string name="title_activity_cache_list">cacheListActivity</string>
     <string name="action_settings">Settings</string>
@@ -29,5 +32,6 @@
     <string name="btn_start_caching">Start Caching for %s</string>
     <string name="title_activity_individual_chat">individual_chat</string>
     <string name="title_activity_cache_chat_room">CacheChatRoom</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

@@ -2,5 +2,6 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">cs309-jr-2.misc.iastate.edu</domain>
+        <domain includeSubdomains="true">prometheus.student.iastate.edu</domain>
     </domain-config>
 </network-security-config>

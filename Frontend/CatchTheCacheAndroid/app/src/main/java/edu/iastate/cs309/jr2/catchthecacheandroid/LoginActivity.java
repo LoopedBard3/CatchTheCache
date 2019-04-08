@@ -4,23 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-
-//Added from chat branch
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-//End added from chat branch
-
-
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -47,7 +34,8 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginResponse;
 
-import static android.Manifest.permission.READ_CONTACTS;
+//Added from chat branch
+//End added from chat branch
 
 
 /**
@@ -70,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private RequestQueue queue;
     private Gson gson;
+    private UserChecker userChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +75,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString(), mPasswordView);
                     return true;
                 }
                 return false;
             }
         });
 
+        userChecker = new UserChecker();
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString(), mPasswordView);
             }
         });
 
@@ -119,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        //configureNextButton();
     }
 
 
@@ -178,46 +167,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+    public boolean attemptLogin(String username, String password, TextView view) {
 
         boolean cancel = false;
         View focusView = null;
+        if(userChecker == null) userChecker = new UserChecker();
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            view.setError(getString(R.string.error_field_required));
+            focusView = view;
             cancel = true;
-        }else if (!isPasswordValid(password)){
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+        }else if (!userChecker.isPasswordValid(password)){
+            view.setError(getString(R.string.error_invalid_password));
+            focusView = view;
             cancel = true;
         }
 
         // Check for a valid username address.
         if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+            view.setError(getString(R.string.error_field_required));
+            focusView = view;
             cancel = true;
-        } else if (!isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
-            focusView = mUsernameView;
+        } else if (!userChecker.isUsernameValid(username)) {
+            view.setError(getString(R.string.error_invalid_username));
+            focusView = view;
             cancel = true;
         }
 
@@ -225,30 +205,22 @@ public class LoginActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+            return false;
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
+            return true;
         }
-    }
-
-    private boolean isUsernameValid(String username) {
-        //https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
-        return username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
-        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
     }
 
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

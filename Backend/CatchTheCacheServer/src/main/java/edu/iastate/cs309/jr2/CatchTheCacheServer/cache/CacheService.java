@@ -57,6 +57,11 @@ public class CacheService {
 			cacheRepo.save(c);
 			ch.setCacheId(c.getId());
 			chatRepo.flush();
+			try {
+				CacheListWebSocket.broadcast("refresh");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return new ResponseEntity<CacheAddResponse>(response, HttpStatus.OK);
@@ -97,6 +102,12 @@ public class CacheService {
 		if (m.getChatId() != null) {
 			response.setSuccess(true);
 			messageRepo.saveAndFlush(m);
+			try {
+				CacheWebSocket.broadcast(id, "refresh");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 		return new ResponseEntity<MessageResponse>(response, HttpStatus.OK);
 	}

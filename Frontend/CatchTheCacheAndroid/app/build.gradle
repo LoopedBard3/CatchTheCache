@@ -12,6 +12,9 @@ android {
     }
     android {
         useLibrary 'org.apache.http.legacy'
+        testOptions {
+            unitTests.returnDefaultValues = true
+        }
     }
     buildTypes {
         release {
@@ -43,7 +46,9 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.lifeofcoding:cacheutilslibrary:1.1.0@aar'
     implementation 'commons-io:commons-io:2.4'
-    implementation 'com.firebase:firebase-client-android:2.5.2+'
     implementation 'com.scaledrone:scaledrone-java:0.6.0'
-
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
+    implementation 'com.google.android.gms:play-services-base:16.1.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation "org.mockito:mockito-core:2.+"
 }

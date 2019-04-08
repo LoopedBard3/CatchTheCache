@@ -104,4 +104,14 @@ public class ChatService {
 		MessageListResponse response = new MessageListResponse(l);
 		return new ResponseEntity<MessageListResponse>(response, HttpStatus.OK);
 	}
+	
+	/**
+	 * Get Chat by chat Id
+	 * @param id Integer number that specifies the id to look for
+	 * @return The chat that is found, or null if the chat does not exist
+	 */
+	public Chat getChatById(int id) {
+		Optional<Chat> results = chatRepo.findById(id);
+		return results.get();
+	}
 }

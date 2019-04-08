@@ -27,14 +27,17 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.adapters.CacheListAdapter;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.WebSocketClient;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageListResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class CacheListActivity extends AppCompatActivity {
@@ -43,13 +46,13 @@ public class CacheListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Cache> caches = new ArrayList<>();
     private RequestQueue queue;
-    private EditText mCacheName;
-    private EditText mCacheLat;
-    private EditText mCacheLong;
-    private Button addBtn;
     private Gson gson;
     private User usr;
     private ProgressBar pbar;
+    private WebSocketClient ws;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +61,10 @@ public class CacheListActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
         setContentView(R.layout.activity_cache_list);
-        mCacheName = findViewById(R.id.nameInput);
-        mCacheLat = findViewById(R.id.latInput);
-        mCacheLong = findViewById(R.id.longInput);
-        addBtn  = findViewById(R.id.addCacheBtn);
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
         usr = (User) extras.getSerializable("UserObject");
         pbar = findViewById(R.id.cache_retrieve_progress);
 
-        if(usr.getAuthority() < 2) {
-            findViewById(R.id.textInputLayout).setVisibility(View.INVISIBLE);
-            findViewById(R.id.textInputLayout2).setVisibility(View.INVISIBLE);
-            findViewById(R.id.textInputLayout3).setVisibility(View.INVISIBLE);
-            addBtn.setVisibility(View.INVISIBLE);
-            ((ViewGroup.MarginLayoutParams)findViewById(R.id.listLayout).getLayoutParams()).bottomMargin = 0;
-        }
 
 
         if(extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
@@ -84,6 +76,7 @@ public class CacheListActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -96,56 +89,42 @@ public class CacheListActivity extends AppCompatActivity {
         mAdapter = new CacheListAdapter(caches, usr);
         recyclerView.setAdapter(mAdapter);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    if(addCache()) {
-                        getCacheList();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("Caches for you");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    }
 
-    private boolean addCache() throws JSONException {
-        if(mCacheLat.getText().length() == 0 || mCacheName.getText().length() == 0 || mCacheLong.getText().length() == 0) {
-            return false;
-        }
-        JSONObject cacheToSend;
-        //TODO: Add in description adding.
-        cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLat.getText().toString()), Double.parseDouble(mCacheLong.getText().toString()), usr.getUsername(), "test desc")));
-        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        CacheAddResponse respJson = gson.fromJson(response.toString(), CacheAddResponse.class);
+        //websocket stuff
+
+        try {
+            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "caches/websocket")) {
+
+                @Override
+                public void onMessage(String message) {
+                    Log.d("WEBSOCKET", "Cache List Socket returned: " + message);
+                    if (message.equals("refresh")) {
                         try {
-                            getCacheList();
+                            getCacheListInvisible();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ERRORRESPONSE", "Error getting responses " + error.toString());
-            }
-        });
-        queue.add(requestObject);
-        return true;
+                }
+            };
+
+        }catch (Exception e){
+            Log.d("WEBSOCKET", "Cache List Socket Exception: " + e.getMessage());
+        }
+        ws.connect();
+        if(ws.isOpen()) Log.d("WEBSOCKET", "Cache List Socket Connected");
     }
 
+
+
     private void getCacheList() throws JSONException {
-        //TODO: Get caches from server instead
             JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
             Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         pbar.setVisibility(View.VISIBLE);
@@ -202,8 +181,9 @@ public class CacheListActivity extends AppCompatActivity {
                 return true;
             }
         });
+
         MenuItem refresh_caches_item = menu.findItem(R.id.action_refresh);
-        refresh_caches_item.setVisible(true);
+        refresh_caches_item.setVisible(false);
         refresh_caches_item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         refresh_caches_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -216,6 +196,77 @@ public class CacheListActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        MenuItem open_admin_add_cache = menu.findItem(R.id.action_admin_add_cache);
+        open_admin_add_cache.setVisible(usr.getAuthority() >= 2);
+        open_admin_add_cache.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(), CacheAddActivity.class);
+                intent.putExtra("UserObject", usr);
+                startActivityForResult(intent, 1);
+                //startActivity(intent);
+                return true;
+            }
+        });
         return true;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Log.d("OPTIONSSELECT", String.valueOf(item.getItemId()));
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish_local();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private void finish_local(){
+        if(ws != null && !ws.isClosed()){
+            ws.close();
+        }
+        finish();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                try {
+                    getCacheList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+    private void getCacheListInvisible() throws JSONException {
+        //TODO: Get caches from server instead
+        //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
+        // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
+        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches" , null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        CacheListResponse cachesList = gson.fromJson(response.toString(), CacheListResponse.class);
+                        caches.clear();
+                        caches.addAll(cachesList.getCacheList());
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        queue.add(requestObject);
+    }
+
+
+
 }

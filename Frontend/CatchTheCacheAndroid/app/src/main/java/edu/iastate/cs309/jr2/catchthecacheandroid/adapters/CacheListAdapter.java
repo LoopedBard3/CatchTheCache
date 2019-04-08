@@ -66,7 +66,15 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
         name.setText(cache.getName());
 
         TextView location = CacheListViewHolder.cache_location;
-        location.setText("Lat: " + cache.getLatitude() + "  Long: " + cache.getLongitude());
+        String lat, lon;
+        int latStop, lonStop;
+        lat = Double.toString(cache.getLatitude());
+        lon = Double.toString(cache.getLongitude());
+        latStop = lat.indexOf(".") + 5;
+        lonStop = lat.indexOf(".") + 5;
+        if(latStop > lat.length()) latStop = lat.length();
+        if(lonStop > lon.length()) lonStop = lon.length();
+        location.setText(String.format("Lat: %s  Long: %s", lat.substring(0, latStop), lon.substring(0, lonStop)));
     }
 
 

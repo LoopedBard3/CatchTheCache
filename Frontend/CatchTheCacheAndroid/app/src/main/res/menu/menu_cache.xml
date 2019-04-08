@@ -17,4 +17,11 @@
         android:orderInCategory="100"
         android:title="Open Caches"
         android:visible="false"/>
+
+    <item
+        android:id="@+id/action_admin_add_cache"
+        android:orderInCategory="100"
+        android:title="Add Cache"
+        android:visible="false"/>
+
 </menu>

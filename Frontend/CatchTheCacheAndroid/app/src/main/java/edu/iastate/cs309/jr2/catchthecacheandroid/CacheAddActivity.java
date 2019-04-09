@@ -58,18 +58,6 @@ public class CacheAddActivity extends AppCompatActivity
         mCacheLat = findViewById(R.id.add_cache_latitude);
         mCacheLong = findViewById(R.id.add_cache_longitude);
         mCacheDesc = findViewById(R.id.add_cache_description);
-        mCacheLatS = mCacheLat.getText().toString();
-        mCacheLongS = mCacheLong.getText().toString();
-        mCacheNameS = mCacheName.getText().toString();
-
-//        getCurrLocationBtn = findViewById(R.id.add_cache_get_current_location);
-//        getCurrLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         addBtn = findViewById(R.id.add_cache_button);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +101,9 @@ public class CacheAddActivity extends AppCompatActivity
     }
 
     public void addCache() throws JSONException {
+        mCacheLatS = mCacheLat.getText().toString();
+        mCacheLongS = mCacheLong.getText().toString();
+        mCacheNameS = mCacheName.getText().toString();
         if (cacheValid(mCacheLatS, mCacheNameS, mCacheLongS)) { //I put the null checkers and stuff up in a different method. I dont think  broke anything
 
 

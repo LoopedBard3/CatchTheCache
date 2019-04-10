@@ -32,6 +32,5 @@
     <string name="btn_start_caching">Start Caching for %s</string>
     <string name="title_activity_individual_chat">individual_chat</string>
     <string name="title_activity_cache_chat_room">CacheChatRoom</string>
-    <string name="title_activity_maps">Map</string>
 
 </resources>

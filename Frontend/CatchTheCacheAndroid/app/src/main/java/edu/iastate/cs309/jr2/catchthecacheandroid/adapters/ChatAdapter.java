@@ -18,6 +18,20 @@ public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ChatViewHolde
     private User user;
 
 
+    public static class ChatViewHolder extends RecyclerView.ViewHolder {
+        public TextView msg_creator, msg;
+        public ChatViewHolder(View v) {
+            super(v);
+            msg_creator = v.findViewById(R.id.msg_creator);
+            msg = v.findViewById(R.id.msg);
+        }
+    }
+
+    public ChatAdapter(ArrayList<Message> myDataset, User usr) {
+        mChats = myDataset;
+        user = usr;
+    }
+
     @Override
     public ChatAdapter.ChatViewHolder onCreateViewHolder(final ViewGroup parent,
                                                                    int viewType) {
@@ -40,23 +54,11 @@ public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ChatViewHolde
     }
 
 
-    public ChatAdapter(ArrayList<Message> myDataset, User usr) {
-        mChats = myDataset;
-        user = usr;
-    }
-
     @Override
     public int getItemCount() {
         return mChats.size();
     }
 
-    public static class ChatViewHolder extends RecyclerView.ViewHolder {
-        public TextView msg_creator, msg;
-        public ChatViewHolder(View v) {
-            super(v);
-            msg_creator = v.findViewById(R.id.msg_creator);
-            msg = v.findViewById(R.id.msg);
-        }
-    }
+
 
 }

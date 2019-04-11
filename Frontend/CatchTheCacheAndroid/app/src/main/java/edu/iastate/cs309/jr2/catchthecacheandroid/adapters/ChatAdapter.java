@@ -23,9 +23,8 @@ public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ChatViewHolde
                                                                    int viewType) {
         // create a new view
         View v = (View) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cache_chat_view_list, parent, false);
+                .inflate(R.layout.chat_view_list, parent, false);
         final ChatAdapter.ChatViewHolder vh = new ChatAdapter.ChatViewHolder(v);
-        //TODO make a chat_view_list
         return vh;
 
     }

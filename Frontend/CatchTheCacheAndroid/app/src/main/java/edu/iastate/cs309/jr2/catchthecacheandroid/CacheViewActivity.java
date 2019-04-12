@@ -1,6 +1,8 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -177,6 +179,9 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 //Ask if the user wants to go to the chat
+                Bundle extras = getIntent().getExtras();
+                usr = (User) extras.getSerializable("UserObject");
+                cache = (Cache) extras.getSerializable("CacheObject");
                 openChatOptionDialog();
             }
             if (resultCode == RESULT_CANCELED) {
@@ -186,11 +191,48 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     public void openChatOptionDialog(){
-        final Dialog dialog = new Dialog(this); // Context, this, etc.
-        dialog.setContentView(R.layout.dialog_successful_find);
-//        Button btnYes = findViewById(R.id.)
-//        Button btnNo
-        dialog.setTitle("You found the Cache!");
-        dialog.show();
+        new AlertDialog.Builder(this)
+                .setTitle("You found the Cache!!")
+                .setMessage("Do you want to leave a message at the Cache?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
+                        intent.putExtra("UserObject", usr);
+                        intent.putExtra("CacheObject", cache);
+                        startActivity(intent);
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
+
+//        final Dialog dialog = new Dialog(this); // Context, this, etc.
+//        dialog.setContentView(R.layout.dialog_successful_find);
+//        Button btnYes = findViewById(R.id.dialog_enter_cache_chat);
+//        Button btnNo = findViewById(R.id.dialog_ignore_cache_chat);
+//        btnYes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
+////                intent.putExtra("UserObject", usr);
+////                intent.putExtra("CacheObject", cache);
+////                startActivity(intent);
+//            }
+//        });
+//
+//        btnNo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.setTitle("You found the Cache!");
+//        dialog.show();
+//    }
 }

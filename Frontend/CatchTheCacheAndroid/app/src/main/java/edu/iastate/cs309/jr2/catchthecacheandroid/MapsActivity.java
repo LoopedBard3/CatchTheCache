@@ -244,6 +244,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         if(insideGoal(location, goal)){
             Intent intent = new Intent();
+            intent.putExtra("UserObject", usr);
+            intent.putExtra("CacheObject", cache);
             setResult(Activity.RESULT_OK, intent);
             finish();
         }

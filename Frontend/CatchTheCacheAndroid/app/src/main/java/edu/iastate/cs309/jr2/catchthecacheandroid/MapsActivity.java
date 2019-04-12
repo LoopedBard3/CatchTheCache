@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -169,7 +171,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
             if(usr.getAuthority() > 1){
-                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.cache_goal)));
+                int height = 75;
+                int width = 75;
+                BitmapDrawable bitmapdraw =(BitmapDrawable)getResources().getDrawable(R.drawable.cache_goal);
+                Bitmap b=bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
             }
             circle = mMap.addCircle(new CircleOptions()
                     .center(cacheLocation)

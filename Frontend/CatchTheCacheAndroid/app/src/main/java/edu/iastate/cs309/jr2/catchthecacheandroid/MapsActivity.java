@@ -47,6 +47,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.Random;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -60,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback mLocationCallback;
     private Location goal;
+    private User usr;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -68,11 +70,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         Bundle extras = getIntent().getExtras();
         cache = (Cache) extras.getSerializable("CacheObject");
+        usr = (User) extras.getSerializable("UserObject");
+        goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -164,6 +168,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             });
+            if(usr.getAuthority() > 1){
+                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location"));
+            }
             circle = mMap.addCircle(new CircleOptions()
                     .center(cacheLocation)
                     .radius(31)             //0.000279 single lat/longitude difference is equivalent to 31 meters

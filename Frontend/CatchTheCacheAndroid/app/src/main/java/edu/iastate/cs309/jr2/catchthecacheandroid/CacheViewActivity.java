@@ -72,6 +72,7 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("UserObject", usr);
                 intent.putExtra("CacheObject", cache);
                 startActivityForResult(intent, 1);
             }

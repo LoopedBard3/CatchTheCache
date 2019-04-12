@@ -183,4 +183,11 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             }
         }
     }
+
+    public void openChatOptionDialog(){
+        final Dialog dialog = new Dialog(this); // Context, this, etc.
+        dialog.setContentView(R.layout.dialog_successful_find);
+        dialog.setTitle("You found the Cache!");
+        dialog.show();
+    }
 }

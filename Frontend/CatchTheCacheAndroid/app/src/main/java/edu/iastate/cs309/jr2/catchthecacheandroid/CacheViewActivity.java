@@ -81,14 +81,15 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         btn2 = findViewById(R.id.enter_chat_room);
-        btn2.setText("View the chat room!");
+        btn2.setText("Testing Button");
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
-                intent.putExtra("UserObject", usr);
-                intent.putExtra("CacheObject", cache);
-                startActivity(intent);
+                openChatOptionDialog();
+//                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
+//                intent.putExtra("UserObject", usr);
+//                intent.putExtra("CacheObject", cache);
+//                startActivity(intent);
             }
         });
         getSupportActionBar().setTitle(cache.name);
@@ -208,7 +209,7 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
 
                 // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.logo)
                 .show();
     }
 

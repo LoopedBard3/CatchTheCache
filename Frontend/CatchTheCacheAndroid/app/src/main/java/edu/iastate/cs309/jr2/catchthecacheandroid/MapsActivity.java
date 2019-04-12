@@ -57,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback mLocationCallback;
+    private LatLng goal;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -69,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -237,10 +239,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 	
-	public Location getNearLocation(Location location, double radiusInMeters){
+	public LatLng getNearLocation(LatLng location, double radiusInMeters){
 		// Center point for our circle
-		double lat = location.getLatitude();
-        double lon = location.getLongitude();
+		double lat = location.latitude;
+        double lon = location.longitude;
 		double newLat, newLon;
 		
 		Random rand = new Random();
@@ -261,10 +263,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		
 		newLat = lat + y;
 		newLon = lon + x;
-		
-		Location copy = new Location(location);
-		copy.setLatitude(newLat);
-		copy.setLongitude(newLon);
+
+        LatLng copy = new LatLng(newLat, newLon);
 		return copy;
 	}
 }

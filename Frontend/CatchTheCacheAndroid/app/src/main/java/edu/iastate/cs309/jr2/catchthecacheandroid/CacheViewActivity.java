@@ -177,6 +177,7 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 //Ask if the user wants to go to the chat
+                openChatOptionDialog();
             }
             if (resultCode == RESULT_CANCELED) {
                 //Do nothing because the user didn't get the cache.
@@ -187,6 +188,8 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
     public void openChatOptionDialog(){
         final Dialog dialog = new Dialog(this); // Context, this, etc.
         dialog.setContentView(R.layout.dialog_successful_find);
+//        Button btnYes = findViewById(R.id.)
+//        Button btnNo
         dialog.setTitle("You found the Cache!");
         dialog.show();
     }

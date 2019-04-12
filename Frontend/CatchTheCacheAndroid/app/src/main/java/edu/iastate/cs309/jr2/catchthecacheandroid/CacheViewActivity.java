@@ -86,10 +86,6 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View view) {
                 openChatOptionDialog();
-//                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
-//                intent.putExtra("UserObject", usr);
-//                intent.putExtra("CacheObject", cache);
-//                startActivity(intent);
             }
         });
         getSupportActionBar().setTitle(cache.name);
@@ -140,10 +136,7 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         Log.d("MAPS", "Checking Maps");
         if(servicesOK()) {
             Log.d("MAPS", "Initializing Maps");
-            // Add a marker on gerdin and move the camera
             LatLng cacheLocation = new LatLng(cache.getLatitude(), cache.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(cacheLocation).title("Marker for " + cache.getName()));
-            //Log.d("MAPS", "Maps Marker Added");
             float zoomLevel = 17.5f;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cacheLocation, zoomLevel));
             Log.d("MAPS", "Maps Camera Moved");
@@ -212,28 +205,4 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
                 .setIcon(R.drawable.logo)
                 .show();
     }
-
-//        final Dialog dialog = new Dialog(this); // Context, this, etc.
-//        dialog.setContentView(R.layout.dialog_successful_find);
-//        Button btnYes = findViewById(R.id.dialog_enter_cache_chat);
-//        Button btnNo = findViewById(R.id.dialog_ignore_cache_chat);
-//        btnYes.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
-////                intent.putExtra("UserObject", usr);
-////                intent.putExtra("CacheObject", cache);
-////                startActivity(intent);
-//            }
-//        });
-//
-//        btnNo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.setTitle("You found the Cache!");
-//        dialog.show();
-//    }
 }

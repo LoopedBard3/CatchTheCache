@@ -169,7 +169,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
             if(usr.getAuthority() > 1){
-                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location"));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.cache_goal)));
             }
             circle = mMap.addCircle(new CircleOptions()
                     .center(cacheLocation)

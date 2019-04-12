@@ -1,6 +1,8 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -57,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback mLocationCallback;
-    private LatLng goal;
+    private Location goal;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -226,6 +228,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerPlayer.setPosition(latLng);
             markerPlayer.setTitle("I have updated!!");
         }
+        if(insideGoal(location, goal)){
+            Intent intent = new Intent();
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override
@@ -239,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 	
-	public LatLng getNearLocation(LatLng location, double radiusInMeters){
+	public Location getNearLocation(LatLng location, double radiusInMeters){
 		// Center point for our circle
 		double lat = location.latitude;
         double lon = location.longitude;
@@ -264,7 +271,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		newLat = lat + y;
 		newLon = lon + x;
 
-        LatLng copy = new LatLng(newLat, newLon);
+        Location copy = new Location("NewLocation");
+        copy.setLatitude(newLat);
+        copy.setLongitude(newLon);
 		return copy;
 	}
+
+	public boolean insideGoal(Location currLoc, Location goalLoc){
+        if(currLoc.distanceTo(goalLoc) < 5){
+            return true;
+        }
+        return false;
+    }
 }

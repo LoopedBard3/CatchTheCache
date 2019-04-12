@@ -73,7 +73,7 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 intent.putExtra("CacheObject", cache);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -168,5 +168,18 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             Toast.makeText(this, "Error with google play!", Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                //Ask if the user wants to go to the chat
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Do nothing because the user didn't get the cache.
+            }
+        }
     }
 }

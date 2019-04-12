@@ -42,6 +42,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Random;
+
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -234,4 +236,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             finish();
         }
     }
+	
+	public Location getNearLocation(Location location, double radiusInMeters){
+		// Center point for our circle
+		double lat = location.getLatitude();
+        double lon = location.getLongitude();
+		double newLat, newLon;
+		
+		Random rand = new Random();
+		
+		// Convert radius from meters to degrees
+		double radiusInDegrees = radiusInMeters / 111320f;
+		
+		// Get a random distance and a random angle.
+		double angle = radiusInDegrees * Math.sqrt(rand.nextDouble());
+		double dist = 2 * Math.PI * rand.nextDouble();
+		
+		// Get delta values using x as longitude and y as latitude
+		double x = angle * Math.cos(dist);
+		double y = angle * Math.sin(dist);
+		
+		// Compensate the x value
+		x = x / Math.cos(Math.toRadians(lat));
+		
+		newLat = lat + y;
+		newLon = lon + x;
+		
+		Location copy = new Location(location);
+		copy.setLatitude(newLat);
+		copy.setLongitude(newLon);
+		return copy;
+	}
 }

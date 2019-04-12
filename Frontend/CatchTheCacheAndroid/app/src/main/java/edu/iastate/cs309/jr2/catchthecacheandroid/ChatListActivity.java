@@ -31,20 +31,24 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.adapters.CacheListAdapter;
+import edu.iastate.cs309.jr2.catchthecacheandroid.adapters.ChatAdapter;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.WebSocketClient;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.Message;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageListResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
-public class CacheListActivity extends AppCompatActivity {
+public class ChatListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Cache> caches = new ArrayList<>();
+    private ArrayList<Message> chats = new ArrayList<>();
     private RequestQueue queue;
     private Gson gson;
     private User usr;
@@ -61,6 +65,7 @@ public class CacheListActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
         setContentView(R.layout.activity_cache_list);
+        //TODO create inbox xml
         recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
         usr = (User) extras.getSerializable("UserObject");
         pbar = findViewById(R.id.cache_retrieve_progress);
@@ -68,10 +73,10 @@ public class CacheListActivity extends AppCompatActivity {
 
 
         if(extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
-            addTestCaches();
+            addTestChats();
         }else {
             try {
-                getCacheList();
+                getChatList();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -86,7 +91,7 @@ public class CacheListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CacheListAdapter(caches, usr);
+        mAdapter = new ChatAdapter(chats, usr);
         recyclerView.setAdapter(mAdapter);
 
 
@@ -94,17 +99,17 @@ public class CacheListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Caches for you");
+        getSupportActionBar().setTitle("Chats");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //websocket stuff
 
         try {
-            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "caches/websocket")) {
+            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "chats/websocket")) { //TODO url?
 
                 @Override
                 public void onMessage(String message) {
-                    Log.d("WEBSOCKET", "Cache List Socket returned: " + message);
+                    Log.d("WEBSOCKET", "Chat Socket returned: " + message);
                     if (message.equals("refresh")) {
                         try {
                             getCacheListInvisible();
@@ -116,55 +121,39 @@ public class CacheListActivity extends AppCompatActivity {
             };
 
         }catch (Exception e){
-            Log.d("WEBSOCKET", "Cache List Socket Exception: " + e.getMessage());
+            Log.d("WEBSOCKET", "Chat Socket Exception: " + e.getMessage());
         }
         ws.connect();
-        if(ws.isOpen()) Log.d("WEBSOCKET", "Cache List Socket Connected");
+        if(ws.isOpen()) Log.d("WEBSOCKET", "Chat Socket Connected");
     }
 
 
 
-    private void getCacheList() throws JSONException {
-            JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
-            Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
+    private void getChatList() throws JSONException {
+        JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
+        Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         pbar.setVisibility(View.VISIBLE);
-            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches", null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            CacheListResponse cachesList = gson.fromJson(response.toString(), CacheListResponse.class);
-                            caches.clear();
-                            caches.addAll(cachesList.getCacheList());
-                            pbar.setVisibility(View.GONE);
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    pbar.setVisibility(View.GONE);
-                }
-            });
-            queue.add(requestObject);
-        }
+        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches", null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
+                        chats.clear();
+                    //    chats.addAll(chatList.getChatList());
+                        //TODO need models for response and requests
+                        pbar.setVisibility(View.GONE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pbar.setVisibility(View.GONE);
+            }
+        });
+        queue.add(requestObject);
+    }
 
-    private void addTestCaches(){
-        caches.add(new Cache("test1", 123.124, 1241.124));
-        caches.add(new Cache("test2", 123.125, 1241.125));
-        caches.add(new Cache("test3", 123.126, 1241.126));
-        caches.add(new Cache("test4", 123.127, 1241.1278));
-        caches.add(new Cache("test5", 123.128, 1241.128));
-        caches.add(new Cache("test6", 123.129, 1241.129));
-        caches.add(new Cache("test7", 123.1, 1241.12));
-        caches.add(new Cache("test8", 123.16, 1241.13));
-        caches.add(new Cache("test9", 123.17, 1241.14));
-        caches.add(new Cache("test11", 123.124, 1241.124));
-        caches.add(new Cache("test12", 123.125, 1241.125));
-        caches.add(new Cache("test13", 123.126, 1241.126));
-        caches.add(new Cache("test14", 123.127, 1241.1278));
-        caches.add(new Cache("test15", 123.128, 1241.128));
-        caches.add(new Cache("test16", 123.129, 1241.129));
-        caches.add(new Cache("test17", 123.1, 1241.12));
-        caches.add(new Cache("test18", 123.16, 1241.13));
-        caches.add(new Cache("test19", 123.17, 1241.14));
+    private void addTestChats(){
+        //.add(new Message(usr, "Hello"));
     }
 
     @Override
@@ -189,7 +178,7 @@ public class CacheListActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 try {
-                    getCacheList();
+                    getChatList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -237,7 +226,7 @@ public class CacheListActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 try {
-                    getCacheList();
+                    getChatList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -255,9 +244,9 @@ public class CacheListActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        CacheListResponse cachesList = gson.fromJson(response.toString(), CacheListResponse.class);
-                        caches.clear();
-                        caches.addAll(cachesList.getCacheList());
+                        ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
+                        chats.clear();
+                      //  chats.addAll(chatList().getChatList());
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {

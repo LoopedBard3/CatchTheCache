@@ -47,7 +47,7 @@ public class ChatAdapter  extends RecyclerView.Adapter<ChatAdapter.ChatViewHolde
     public void onBindViewHolder(@NonNull ChatAdapter.ChatViewHolder chatViewHolder, int i) {
         Message msg = mChats.get(i);
         TextView name = chatViewHolder.msg_creator;
-        name.setText(msg.getSender());
+        name.setText((CharSequence) msg.getSender()); //TODO come back
 
         TextView text = chatViewHolder.msg;
         text.setText(msg.getText());

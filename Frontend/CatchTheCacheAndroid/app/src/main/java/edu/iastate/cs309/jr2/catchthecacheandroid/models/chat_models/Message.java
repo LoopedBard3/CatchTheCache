@@ -1,7 +1,7 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models;
 
 
-
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class Message {
 
@@ -12,7 +12,7 @@ public class Message {
 	private Integer chatId;
 
 
-	private String sender;
+	private User sender;
 
 
 	private String text;
@@ -20,7 +20,7 @@ public class Message {
 	public Message() {
 	}
 
-	public Message(String sender, String text) {
+	public Message(User sender, String text) {
 		this.sender = sender;
 		this.text = text;
 	}
@@ -37,11 +37,11 @@ public class Message {
 		return chatId;
 	}
 
-	public String getSender() {
+	public User getSender() {
 		return this.sender;
 	}
 
-	public void setSender(String sender) {
+	public void setSender(User sender) {
 		this.sender = sender;
 	}
 

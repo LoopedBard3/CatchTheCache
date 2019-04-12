@@ -54,7 +54,7 @@ public class CacheChatAdapter extends RecyclerView.Adapter<CacheChatAdapter.Cach
     public void onBindViewHolder(@NonNull CacheChatViewHolder cacheChatViewHolder, int i) {
         Message msg = mChats.get(i);
         TextView name = cacheChatViewHolder.msg_creator;
-        name.setText(msg.getSender());
+        name.setText((CharSequence) msg.getSender());//TODO help i might have broken this?
 
         TextView text = cacheChatViewHolder.msg;
         text.setText(msg.getText());

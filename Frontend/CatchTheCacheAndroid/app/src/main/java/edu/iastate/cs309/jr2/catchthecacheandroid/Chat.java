@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
+
 public class Chat extends AppCompatActivity {
 
     ListView listView;
@@ -41,6 +43,8 @@ public class Chat extends AppCompatActivity {
     ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> customList = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

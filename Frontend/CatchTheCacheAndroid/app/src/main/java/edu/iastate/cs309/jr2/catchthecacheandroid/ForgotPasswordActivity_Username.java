@@ -161,7 +161,7 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
                         Log.d("REQUESTRESPONSE", error.networkResponse.toString());
 //                        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Answer.class);
 //                        intent.putExtra("Question", "TEST QUESTION");
-//                        intent.putExtra("Username", "Test USERNAME");
+//                        intent.putExtra("Username", "test_bmp USERNAME");
 //                        startActivity(intent);
                     }
                 });

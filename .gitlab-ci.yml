@@ -20,8 +20,6 @@ maven-build:
     refs:
       - master
       - dev
-    changes:
-      - Backend/CatchTheCacheServer/src/*
   
 # artifacts are created when job executes successfully, and can be manually downloaded from GitLab GUI.
 # artifacts are not mandatory, buts it good practice, in case auto deploy fails, you can manually download the jar.
@@ -36,8 +34,6 @@ maven-test:
     refs:
       - master
       - dev
-    changes:
-      - Backend/CatchTheCacheServer/src/*
   artifacts:
     paths:
       - Backend/CatchTheCacheServer/target/*.jar
@@ -58,8 +54,6 @@ autoDeploy:
     refs:
       - master
       - dev
-    changes:
-      - Backend/CatchTheCacheServer/src/*
 
     
 # To build android projects
@@ -81,8 +75,6 @@ android-build:
     refs:
       - master
       - dev
-    changes:
-      - Frontend/CatchTheCacheAndroid/app/src/*
   artifacts:
     paths:
     - Frontend/CatchTheCacheAndroid/app/build/outputs/
@@ -103,5 +95,3 @@ unitTests:
     refs:
       - master
       - dev
-    changes:
-      - Frontend/CatchTheCacheAndroid/app/src/*

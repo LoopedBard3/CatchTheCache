@@ -186,7 +186,7 @@ public class CacheChatRoom extends AppCompatActivity {
     }
 
     /**
-     * Gets the cache list from the server using http. Also sets the progress bar to visible
+     * Gets the cache chat list from the server using http. Also sets the progress bar to visible
      * while getting the list from the server and adds the messages to the recycler viewer data array.
      * @throws JSONException
      */
@@ -273,7 +273,7 @@ public class CacheChatRoom extends AppCompatActivity {
 
 
     /**
-     * Gets the cache list from the server using http. Also adds the messages to the
+     * Gets the cache chat list from the server using http. Also adds the messages to the
      * recycler viewer data array and notifies the viewer of the update.
      * @throws JSONException
      */

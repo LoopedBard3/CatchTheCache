@@ -40,6 +40,9 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheListR
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageListResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
+/**
+ * Activity for viewing the list of caches
+ */
 public class CacheListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -52,8 +55,11 @@ public class CacheListActivity extends AppCompatActivity {
     private WebSocketClient ws;
 
 
-
-
+    /**
+     * Method called when the activity is created. Sets up the Volley queue,
+     * Gson json translator, websocket connection, and recyclerviewer
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +129,11 @@ public class CacheListActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Gets the cache list from the server using http. Also sets the progress bar to visible
+     * while getting the list from the server and adds the messages to the recycler viewer data array.
+     * @throws JSONException
+     */
     private void getCacheList() throws JSONException {
             JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
             Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
@@ -146,6 +156,11 @@ public class CacheListActivity extends AppCompatActivity {
             queue.add(requestObject);
         }
 
+    /**
+     * Method used to populate the cache list with test data.
+     * Only called when user didn't actually login through a server.
+     * @author Parker Bibus
+     */
     private void addTestCaches(){
         caches.add(new Cache("test1", 123.124, 1241.124));
         caches.add(new Cache("test2", 123.125, 1241.125));
@@ -167,6 +182,12 @@ public class CacheListActivity extends AppCompatActivity {
         caches.add(new Cache("test19", 123.17, 1241.14));
     }
 
+    /**
+     * Method called by android to create the options menu at the top
+     * that pop up when you press the three dots in the upper right.
+     * @param menu menu item that the options get inflated into
+     * @return true on success, false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -205,13 +226,20 @@ public class CacheListActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), CacheAddActivity.class);
                 intent.putExtra("UserObject", usr);
                 startActivityForResult(intent, 1);
-                //startActivity(intent);
                 return true;
             }
         });
         return true;
     }
 
+    /**
+     * Method that gets called when an option on the appbar is selected.
+     * This one sets up the back button to finish the activity.
+     * @author Parker Bibus
+     * @param item menu item clicked
+     * @return true on success, false on fail or unknown item
+     */
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Log.d("OPTIONSSELECT", String.valueOf(item.getItemId()));
         switch(item.getItemId()) {
@@ -224,6 +252,11 @@ public class CacheListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Finish method that closes the websocket and allows for finish
+     * call when not at base level of nesting.
+     * @author Parker Bibus
+     */
     private void finish_local(){
         if(ws != null && !ws.isClosed()){
             ws.close();
@@ -231,6 +264,14 @@ public class CacheListActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Method called when an activity started for a result returns.
+     * This one updates the cache list on success
+     * @author Parker Bibus
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -248,10 +289,12 @@ public class CacheListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets the cache list from the server using http. Also adds the messages to the
+     * recycler viewer data array and notifies the viewer of the update.
+     * @throws JSONException
+     */
     private void getCacheListInvisible() throws JSONException {
-        //TODO: Get caches from server instead
-        //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
-        // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches" , null,
                 new Response.Listener<JSONObject>() {
                     @Override

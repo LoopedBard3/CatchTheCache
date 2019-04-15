@@ -148,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * This includes moving the camera to where the User is and drawing
      * all of the entities on the map.
      */
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("MAPSLOG", "Checking Maps");

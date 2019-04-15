@@ -10,7 +10,7 @@ public class UserChecker {
     /**
      * Checks if the specified username meets the username expectations
      * @param username
-     * @return whether or not a username is valid
+     * @return true if a username is valid, false otherwise
      * @author Parker Bibus
      */
     public boolean isUsernameValid(String username) {
@@ -21,7 +21,7 @@ public class UserChecker {
     /**
      * Checks if the specified password meets the password expectations
      * @param password
-     * @return whether or not a password is valid
+     * @return true if a password is valid, false otherwise
      * @author Parker Bibus
      */
     public boolean isPasswordValid(String password) {

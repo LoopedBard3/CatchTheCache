@@ -25,7 +25,7 @@ public class CacheChatAdapter extends RecyclerView.Adapter<CacheChatAdapter.Cach
 
 
     /**
-     * Class for the RecyclerView ViewHolder
+     * Class for creating the RecyclerView ViewHolder
      * @author Parker Bibus
      */
     // Provide a reference to the views for each data item

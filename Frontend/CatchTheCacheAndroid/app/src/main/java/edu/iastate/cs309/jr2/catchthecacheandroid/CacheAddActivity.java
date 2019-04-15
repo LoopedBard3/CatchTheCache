@@ -84,9 +84,9 @@ public class CacheAddActivity extends AppCompatActivity
 
     /**
      * Checks if a specified set of cache inputs is value
-     * @param mCacheLatS
-     * @param mCacheNameS
-     * @param mCacheLongS
+     * @param mCacheLatS latitude to check
+     * @param mCacheNameS name to check
+     * @param mCacheLongS longitude to check
      * @return  true if the cache is a valid cache and false otherwise
      */
     public boolean cacheValid (String mCacheLatS, String mCacheNameS, String mCacheLongS){
@@ -155,7 +155,8 @@ public class CacheAddActivity extends AppCompatActivity
     /**
      * Method that gets called when an option on the appbar is selected.
      * This one sets up the back button to finish the activity.
-     * @param item
+     * @author Parker Bibus
+     * @param item menu item clicked
      * @return true on success, false on fail or unknown item
      */
     @Override
@@ -174,6 +175,7 @@ public class CacheAddActivity extends AppCompatActivity
     /**
      * Finish method that returns an ok result and allows for finish
      * call when not at base level of nesting.
+     * @author Parker Bibus
      */
     private void finish_local(){
         Intent intent = new Intent();

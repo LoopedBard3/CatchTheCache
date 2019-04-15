@@ -9,7 +9,7 @@ public class UserChecker {
 
     /**
      * Checks if the specified username meets the username expectations
-     * @param username
+     * @param username username to check
      * @return true if a username is valid, false otherwise
      * @author Parker Bibus
      */
@@ -20,7 +20,7 @@ public class UserChecker {
 
     /**
      * Checks if the specified password meets the password expectations
-     * @param password
+     * @param password password to check
      * @return true if a password is valid, false otherwise
      * @author Parker Bibus
      */

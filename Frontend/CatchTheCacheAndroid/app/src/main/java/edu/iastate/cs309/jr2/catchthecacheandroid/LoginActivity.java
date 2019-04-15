@@ -123,39 +123,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void configureNextButton(){
-//        Button nextbutton = (Button) findViewById(R.id.nextbutton);
-//        nextbutton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent (LoginActivity.this, MainActivity.class));
-//            }
-//        });
-//    }
-
-
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
 
     /**
      * Attempts to go through the forgot password control

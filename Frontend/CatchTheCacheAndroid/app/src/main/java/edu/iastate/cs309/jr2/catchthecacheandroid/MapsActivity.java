@@ -1,9 +1,13 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +46,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Random;
+
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -55,6 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback mLocationCallback;
+    private Location goal;
+    private User usr;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -63,6 +72,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         Bundle extras = getIntent().getExtras();
         cache = (Cache) extras.getSerializable("CacheObject");
+        usr = (User) extras.getSerializable("UserObject");
+        goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -158,6 +170,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             });
+            if(usr.getAuthority() > 1){
+                int height = 75;
+                int width = 75;
+                BitmapDrawable bitmapdraw =(BitmapDrawable)getResources().getDrawable(R.drawable.cache_goal);
+                Bitmap b=bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+            }
             circle = mMap.addCircle(new CircleOptions()
                     .center(cacheLocation)
                     .radius(31)             //0.000279 single lat/longitude difference is equivalent to 31 meters
@@ -222,6 +242,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerPlayer.setPosition(latLng);
             markerPlayer.setTitle("I have updated!!");
         }
+        if(insideGoal(location, goal)){
+            Intent intent = new Intent();
+            intent.putExtra("UserObject", usr);
+            intent.putExtra("CacheObject", cache);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override
@@ -233,5 +260,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             finish();
         }
+    }
+	
+	public Location getNearLocation(LatLng location, double radiusInMeters){
+		// Center point for our circle
+		double lat = location.latitude;
+        double lon = location.longitude;
+		double newLat, newLon;
+		
+		Random rand = new Random();
+		
+		// Convert radius from meters to degrees
+		double radiusInDegrees = radiusInMeters / 111320f;
+		
+		// Get a random distance and a random angle.
+		double angle = radiusInDegrees * Math.sqrt(rand.nextDouble());
+		double dist = 2 * Math.PI * rand.nextDouble();
+		
+		// Get delta values using x as longitude and y as latitude
+		double x = angle * Math.cos(dist);
+		double y = angle * Math.sin(dist);
+		
+		// Compensate the x value
+		x = x / Math.cos(Math.toRadians(lat));
+		
+		newLat = lat + y;
+		newLon = lon + x;
+
+        Location copy = new Location("NewLocation");
+        copy.setLatitude(newLat);
+        copy.setLongitude(newLon);
+		return copy;
+	}
+
+	public boolean insideGoal(Location currLoc, Location goalLoc){
+        if(currLoc.distanceTo(goalLoc) < 5){
+            return true;
+        }
+        return false;
     }
 }

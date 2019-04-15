@@ -49,6 +49,10 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 
+/**
+ * Activity for viewing the individual chat room for the chat
+ * @author Parker Bibus
+ */
 public class CacheChatRoom extends AppCompatActivity {
     private User usr;
     private Cache cache;
@@ -64,7 +68,12 @@ public class CacheChatRoom extends AppCompatActivity {
 
 
 
-
+    /**
+     * Default method for starting the activity.
+     * Sets up the Volley Queue, websocket, and add message button
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +153,14 @@ public class CacheChatRoom extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Method that gets called when an option on the appbar is selected.
+     * This one sets up the back button to finish the activity.
+     * @author Parker Bibus
+     * @param item menu item clicked
+     * @return true on success, false on fail or unknown item
+     */
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Log.d("OPTIONSSELECT", String.valueOf(item.getItemId()));
         switch(item.getItemId()) {
@@ -157,6 +173,11 @@ public class CacheChatRoom extends AppCompatActivity {
         }
     }
 
+    /**
+     * Finish method that closes the websocket and allows for finish
+     * call when not at base level of nesting.
+     * @author Parker Bibus
+     */
     private void finish_local(){
         if(ws != null && !ws.isClosed()){
             ws.close();
@@ -164,10 +185,12 @@ public class CacheChatRoom extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Gets the cache list from the server using http. Also sets the progress bar to visible
+     * while getting the list from the server and adds the messages to the recycler viewer data array.
+     * @throws JSONException
+     */
     private void getCacheChatList() throws JSONException {
-        //TODO: Get caches from server instead
-      //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
-       // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         pbar.setVisibility(View.VISIBLE);
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches/m/" + cache.getId(), null,
                 new Response.Listener<JSONObject>() {
@@ -187,6 +210,12 @@ public class CacheChatRoom extends AppCompatActivity {
         queue.add(requestObject);
     }
 
+    /**
+     * Checks the message in the message box and, if it is valid,
+     * it sends the message to the server.
+     * @return true on successful send and false otherwise.
+     * @throws JSONException
+     */
     private boolean addCacheMessage() throws JSONException {
         if(send_text.getText().length() <= 0 || send_text.getText().length() > 50 ) {
             send_text.setError("Please enter message between 1 and 50 letters long.");
@@ -195,19 +224,13 @@ public class CacheChatRoom extends AppCompatActivity {
 
         if(!ws.broadcast(usr.getUsername() + ":" +send_text.getText().toString())) {
             JSONObject cacheChatToSend;
-            //TODO: Add in description adding.
             cacheChatToSend = new JSONObject(gson.toJson(new MessageRequest(usr.getUsername(), send_text.getText().toString())));
             JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches/m/" + cache.getId(), cacheChatToSend,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             MessageResponse respJson = gson.fromJson(response.toString(), MessageResponse.class);
-                            //try {
-                            //getCacheChatList();
                             send_text.setText("");
-                            //} catch (JSONException e) {
-                            //    e.printStackTrace();
-                            //}
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -224,6 +247,12 @@ public class CacheChatRoom extends AppCompatActivity {
     }
 
 
+    /**
+     * Method called by android to create the options menu at the top
+     * that pop up when you press the three dots in the upper right.
+     * @param menu menu item that the options get inflated into
+     * @return true on success, false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -243,10 +272,12 @@ public class CacheChatRoom extends AppCompatActivity {
     }
 
 
+    /**
+     * Gets the cache list from the server using http. Also adds the messages to the
+     * recycler viewer data array and notifies the viewer of the update.
+     * @throws JSONException
+     */
     private void getCacheChatListInvisible() throws JSONException {
-        //TODO: Get caches from server instead
-        //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
-        // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches/m/" + cache.getId(), null,
                 new Response.Listener<JSONObject>() {
                     @Override

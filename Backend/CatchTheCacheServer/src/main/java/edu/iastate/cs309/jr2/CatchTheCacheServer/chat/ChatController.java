@@ -73,13 +73,6 @@ class ChatController {
 	public String getById(@PathVariable("chatId") int id) {
 		return chatService.findChatById(id);
 	}
-
-	@MessageMapping("/chat")
-	@SendTo("/topic/messages")
-	public OutputMessage send(Message message) throws Exception {
-	    String time = new SimpleDateFormat("HH:mm").format(new Date());
-	    return new OutputMessage(message.getSender(), message.getText(), time);
-	}
 	
 	@MessageMapping("/userChat")
 	public void userChat(Message chatMessage) {

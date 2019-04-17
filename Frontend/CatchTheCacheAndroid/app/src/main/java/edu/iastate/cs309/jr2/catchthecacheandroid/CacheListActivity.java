@@ -232,6 +232,7 @@ public class CacheListActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
@@ -247,6 +248,7 @@ public class CacheListActivity extends AppCompatActivity {
             }
         }
     }
+
     private void getCacheListInvisible() throws JSONException {
         //TODO: Get caches from server instead
         //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));

@@ -77,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
     int i;
 
 
-
+    /**
+     * method called when first starting this class
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * method to initialize values within the chatting classes
+     */
     public void init() {
         smsList.clear();
         try {
@@ -123,67 +129,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void Post(String number, String message){
-        try {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("anniede-mbp.student.iastate.edu."); //URL for server
-            JSONObject jsonObject = new JSONObject(); //create new JSON object
-            jsonObject.accumulate("chatID", chatID); //JSON object with ChatID
-            jsonObject.accumulate("message", message); //add mesage
-            StringEntity se = new StringEntity(jsonObject.toString()); //convert to string
-            httpPost.setEntity(se); //post
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
-            httpclient.execute(httpPost);
 
-        } catch (Exception e) {
-        }
-    }
-    private String HttpPost(String myUrl) throws IOException, JSONException {
-        String result = "";
-
-        URL url = new URL(myUrl);
-
-        // 1. create HttpURLConnection
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-
-        // 2. build JSON object
-        JSONObject jsonObject = buildJsonObject();
-
-        // 3. add JSON content to POST request body
-        setPostRequestContent(conn, jsonObject);
-
-        // 4. make POST request to the given URL
-        conn.connect();
-
-        // 5. return response message
-        return conn.getResponseMessage()+"";
-
-    }
-    private JSONObject buildJsonObject() throws JSONException {
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.accumulate("user", username.getText().toString());
-        jsonObject.accumulate("cacheId",  chatID.getText().toString());
-        jsonObject.accumulate("ID",  message.getText().toString());
-
-        return jsonObject;
-    }
-    private void setPostRequestContent(HttpURLConnection conn,
-                                       JSONObject jsonObject) throws IOException {
-        OutputStream os = conn.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-        writer.write(jsonObject.toString());
-        Log.i(MainActivity.class.toString(), jsonObject.toString());
-        writer.flush();
-        writer.close();
-        os.close();
-    }
-
-
-
+    /**
+     * Mini class used in sending chats through sms
+      */
     class LoadSms extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -191,16 +140,13 @@ public class MainActivity extends AppCompatActivity {
             smsList.clear();
         }
 
+        /**
+         * a good ole do in the background method, we are going to be deleting these classes
+         * @param args
+         * @return
+         */
         protected String doInBackground(String... args) {
             String xml = "";
-            try {
-                return HttpPost(urls.get(0));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return "Error!";
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
 
             try {
@@ -277,6 +223,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * when sending a new chat for the first time permissions will be requested first
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -293,7 +245,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * method to check permissions on start up
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -310,11 +264,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * method called to init
+     */
     @Override
     public void onStart() {
         super.onStart();
     }
 
+    /**
+     * adapter class to format the inbox
+     */
     class InboxAdapter extends BaseAdapter {
         private Activity activity;
         private ArrayList<HashMap< String, String >> data;
@@ -322,6 +282,9 @@ public class MainActivity extends AppCompatActivity {
             activity = a;
             data = d;
         }
+
+
+
         public int getCount() {
             return data.size();
         }
@@ -332,6 +295,13 @@ public class MainActivity extends AppCompatActivity {
             return position;
         }
 
+        /**
+         * method used to organize inbox
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return
+         */
         public View getView(int position, View convertView, ViewGroup parent) {
             InboxViewHolder holder = null;
             if (convertView == null) {
@@ -380,7 +350,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-
+    /**
+     * method used to configure button back to login, used for testing
+     */
     private void configureBackButton(){
         Button nextbutton = (Button) findViewById(R.id.back);
         nextbutton.setOnClickListener(new View.OnClickListener() {

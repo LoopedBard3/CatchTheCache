@@ -19,6 +19,12 @@ class MapComparator implements Comparator<HashMap<String, String>>
         this.order = order;
     }
 
+    /**
+     * method to store chat data
+     * @param first
+     * @param second
+     * @return
+     */
     public int compare(HashMap<String, String> first,
                        HashMap<String, String> second)
     {

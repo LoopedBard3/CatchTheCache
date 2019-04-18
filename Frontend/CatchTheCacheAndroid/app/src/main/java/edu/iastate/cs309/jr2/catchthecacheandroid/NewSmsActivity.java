@@ -19,6 +19,11 @@ public class NewSmsActivity extends AppCompatActivity{
 
     EditText address, message, username;
     Button send_btn;
+
+    /**
+     * start up method
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

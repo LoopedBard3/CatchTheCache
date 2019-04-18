@@ -42,6 +42,10 @@ public class Chat extends AppCompatActivity {
     ArrayList<HashMap<String, String>> customList = new ArrayList<HashMap<String, String>>();
     ArrayList<HashMap<String, String>> tmpList = new ArrayList<HashMap<String, String>>();
 
+    /**
+     * method called when class is first instantiated, we will be deleting this later
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +101,9 @@ public class Chat extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * class to start sending chats
+     */
     class LoadChat extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {

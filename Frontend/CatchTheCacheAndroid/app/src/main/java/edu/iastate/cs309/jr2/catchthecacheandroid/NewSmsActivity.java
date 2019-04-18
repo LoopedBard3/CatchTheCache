@@ -12,13 +12,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by acg
+ * Class to creat new SMS chat
  */
 
 public class NewSmsActivity extends AppCompatActivity{
 
     EditText address, message, username;
     Button send_btn;
+
+    /**
+     * Method called upon start up to open and restore activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

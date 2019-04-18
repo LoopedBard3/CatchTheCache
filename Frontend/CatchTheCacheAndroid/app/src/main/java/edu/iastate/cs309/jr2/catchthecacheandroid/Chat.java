@@ -162,8 +162,9 @@ public class Chat extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * starts calling methods to send chat
+     */
     public void startLoadingChat()
     {
         final Runnable r = new Runnable() {
@@ -192,16 +193,40 @@ class ChatAdapter extends BaseAdapter {
         activity = a;
         data = d;
     }
+
+    /**
+     *
+     * @return the number of data objects
+     */
     public int getCount() {
         return data.size();
     }
+
+    /**
+     *
+     * @param position position to check
+     * @return the position of an item
+     */
     public Object getItem(int position) {
         return position;
     }
+
+    /**
+     *
+     * @param position to check item
+     * @return the position of the item
+     */
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * sets up inbox based on the parameters and formats them
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         ChatViewHolder holder = null;
         if (convertView == null) {
@@ -257,7 +282,9 @@ class ChatAdapter extends BaseAdapter {
     }
 }
 
-
+/**
+ * viewholder for chat objects
+ */
 class ChatViewHolder {
     LinearLayout msgFrom, msgYou;
     TextView txtMsgYou, lblMsgYou, timeMsgYou, lblMsgFrom, txtMsgFrom, timeMsgFrom;

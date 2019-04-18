@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by acg
+ * class to help keep track of chat data
  */
 
 public class Function {
@@ -41,7 +41,7 @@ public class Function {
      *checks to see if permissions have been requested and accepted
      * @param context
      * @param permissions
-     * @return
+     * @return true is permissions granted, false if not
      */
     public static  boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
@@ -57,7 +57,7 @@ public class Function {
     /**
      * method sets up time for inbox
      * @param timestamp
-     * @return
+     * @return the time that will be displayed in the inbox
      */
     public static String converToTime(String timestamp)
     {
@@ -70,13 +70,13 @@ public class Function {
     /**
      * method to start mapping inbox
      * @param _id
-     * @param thread_id
-     * @param name
-     * @param phone
-     * @param msg
+     * @param thread_id thread ID assigned to conversation
+     * @param name name of contact that conversation is with
+     * @param phone number that message is sent to
+     * @param msg message to be sent
      * @param type
-     * @param timestamp
-     * @param time
+     * @param timestamp time message was send
+     * @param time newly converted time for display
      * @return
      */
     public static HashMap<String, String> mappingInbox(String _id, String thread_id, String name, String phone, String msg, String type, String timestamp, String time)

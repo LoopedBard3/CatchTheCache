@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by acg
+ * Class for creating new chat objects
  */
 
 public class NewSmsActivity extends AppCompatActivity{

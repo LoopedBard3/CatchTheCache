@@ -56,6 +56,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.function.Function;
 
+/**
+ * main class for sending chats
+ */
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_PERMISSION_KEY = 1;
     ArrayList<HashMap<String, String>> smsList = new ArrayList<HashMap<String, String>>();
@@ -300,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
          * @param position
          * @param convertView
          * @param parent
-         * @return
+         * @return nicely formatted inbox
          */
         public View getView(int position, View convertView, ViewGroup parent) {
             InboxViewHolder holder = null;
@@ -341,6 +344,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * mini inbox organizing class
+     */
     class InboxViewHolder {
         ImageView inbox_thumb;
         TextView inbox_user, inbox_msg, inbox_date;

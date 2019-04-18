@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 /**
- * Created by acg
+ * Class to help organize objects to be stored
  */
 
 class MapComparator implements Comparator<HashMap<String, String>>
@@ -20,10 +20,10 @@ class MapComparator implements Comparator<HashMap<String, String>>
     }
 
     /**
-     * method to store chat data
-     * @param first
-     * @param second
-     * @return
+     * method to  check order store chat data
+     * @param first value to store
+     * @param second value to store
+     * @return which value is greater
      */
     public int compare(HashMap<String, String> first,
                        HashMap<String, String> second)

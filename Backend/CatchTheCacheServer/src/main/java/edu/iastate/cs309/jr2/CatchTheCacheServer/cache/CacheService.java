@@ -42,7 +42,7 @@ public class CacheService {
 		// Check name
 		boolean nameAvailable = !cacheRepo.existsByName(request.getName());
 		// Check location
-		boolean locationAvailable = true;// !cacheRepo.existsByLocation(request.getLatitude(), request.getLongitude());
+		boolean locationAvailable = true;
 		// Check creator authorization
 		boolean authorized = userRepo.findByUsername(request.getCreator()).getAuthority() == 2;
 

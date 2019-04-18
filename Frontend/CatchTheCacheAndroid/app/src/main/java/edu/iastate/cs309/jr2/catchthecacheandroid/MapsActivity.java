@@ -51,6 +51,10 @@ import java.util.Random;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
+/**
+ * Activity for actually going caching. This is made up of a fragment map activity
+ * and implements OnMapReadyCallback
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -66,6 +70,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private User usr;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
+    /**
+     * The default method called when the activity is created.
+     * Sets up the map fragment and connects to the users location services
+     * so we can check if the user found the cache.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,12 +145,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markerLocations or lines, add listeners or move the camera. In this case,
-     * we just add a markerLocation near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * This includes moving the camera to where the User is and drawing
+     * all of the entities on the map.
      */
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("MAPSLOG", "Checking Maps");
@@ -186,6 +194,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Checks if Google Play Services is usable by the application and gives a popup if it is not.
+     * @author Parker Bibus
+     * @return true on connection success and false otherwise.
+     */
     private boolean servicesOK() {
         int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (result == ConnectionResult.SUCCESS) {
@@ -200,12 +213,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+    /**
+     * Method for resuming the application if a user paused the application
+     */
     @Override
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
     }
 
+    /**
+     * Starts getting the location of the user and sets up the
+     * constant updates of the information.
+     */
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
@@ -215,16 +235,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 null /* Looper */);
     }
 
+    /**
+     * Method called when the user pauses the application.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         stopLocationUpdates();
     }
 
+    /**
+     * Stops getting the location updates. Used when finishing the
+     * activity or pausing the application.
+     */
     private void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
+    /**
+     * Used to handle location updates. Sets the map marker to where
+     * the person is and checks if they are inside the goal. If they are
+     * inside the goal, it finishes the activity with a success result.
+     * @author Parker Bibus
+     * @param location
+     */
     private void handleNewLocation(Location location) {
         Log.d("Location", location.toString());
 
@@ -243,6 +277,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             markerPlayer.setTitle("I have updated!!");
         }
         if(insideGoal(location, goal)){
+            stopLocationUpdates();
             Intent intent = new Intent();
             intent.putExtra("UserObject", usr);
             intent.putExtra("CacheObject", cache);
@@ -251,6 +286,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Handles the result of the location permission request
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
@@ -261,7 +302,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             finish();
         }
     }
-	
+
+    /**
+     * Gets a goal location that is inside the specified radius around the location
+     * @param location location to be the center of the radius
+     * @param radiusInMeters radius for which to place the goal in
+     * @return the location of the users goal location
+     * @author Aidan Sherburne
+     */
 	public Location getNearLocation(LatLng location, double radiusInMeters){
 		// Center point for our circle
 		double lat = location.latitude;
@@ -293,6 +341,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		return copy;
 	}
 
+    /**
+     * Checks if the user is inside the passed goal location.
+     * @author Parker Bibus
+     * @param currLoc current location of the user
+     * @param goalLoc goal location of the user
+     * @return true if the user is inside the goal, false if not in the goal
+     */
 	public boolean insideGoal(Location currLoc, Location goalLoc){
         if(currLoc.distanceTo(goalLoc) < 5){
             return true;

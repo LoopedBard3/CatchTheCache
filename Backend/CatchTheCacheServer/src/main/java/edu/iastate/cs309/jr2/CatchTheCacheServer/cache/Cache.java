@@ -43,6 +43,10 @@ public class Cache {
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private double latitude;
 
+	
+	/**
+	 * @param req CacheAddRequest object with the information we need to update the cache
+	 */
 	public void updateCache(CacheAddRequest req) {
 		this.name = req.getName();
 		this.longitude = req.getLongitude();
@@ -50,34 +54,58 @@ public class Cache {
 		this.description = req.getDescription();
 	}
 
+	/**
+	 * @return integer id for this cache
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * @return String name of this cache
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * @return integer id for the chat associated with this cache
+	 */
 	public Integer getChatId() {
 		return this.chatId;
 	}
 
+	/**
+	 * @param chatId integer id for the chat associated with this cache
+	 */
 	public void setChatId(int chatId) {
 		this.chatId = chatId;
 	}
 
+	/**
+	 * @return String description for this cache
+	 */
 	public String getDescription() {
 		return this.description;
 	}
 
+	/**
+	 * @return double longitude value for this cache
+	 */
 	public double getLongitude() {
 		return this.longitude;
 	}
 
+	/**
+	 * @return double latitude value for this cache
+	 */
 	public double getLatitude() {
 		return this.latitude;
 	}
 
+	/**
+	 * @return String representation for this cache object
+	 */
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)

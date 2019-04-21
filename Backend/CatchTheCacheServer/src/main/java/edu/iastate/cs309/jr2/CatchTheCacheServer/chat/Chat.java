@@ -12,6 +12,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.core.style.ToStringCreator;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
+import edu.iastate.cs309.jr2.CatchTheCacheServer.user.User;
 
 @Entity
 @Table(name = "chats")
@@ -62,7 +63,32 @@ public class Chat {
 	public Integer getCacheId() {
 		return this.cacheId;
 	}
+	/**
+	 * Function to add new user to chat
+	 * @param newUser
+	 */
+	 
+	public void addUser(User newUser) {
+		
+		
+	}
 
+	/**
+	 * Function to remove user from chat
+	 * @param user
+	 */
+	public void removeUser(User user) {
+		
+	}
+	
+	/**
+	 * Function tocheck whether user exists in this chat
+	 * @param user
+	 */
+	public void hasUser(User user) {
+		
+	}
+	
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)

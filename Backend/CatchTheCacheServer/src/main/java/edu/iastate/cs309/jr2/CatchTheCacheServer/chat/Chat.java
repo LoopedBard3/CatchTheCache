@@ -64,13 +64,18 @@ public class Chat {
 		return this.cacheId;
 	}
 	/**
-	 * Function to add new user to chat
+	 *  * Function to add new user to chat
 	 * @param newUser
+	 * @return True if success, false if fail
 	 */
 	 
-	public void addUser(User newUser) {
-		
-		
+	public boolean addUser(User newUser) {
+		if(!hasUser(newUser)) {
+			this.user= this.user +", " + newUser.getId();
+			return true;
+		}
+		else
+			return false;
 	}
 
 	/**
@@ -85,7 +90,7 @@ public class Chat {
 	 * Function tocheck whether user exists in this chat
 	 * @param user
 	 */
-	public void hasUser(User user) {
+	public boolean hasUser(User user) {
 		
 	}
 	

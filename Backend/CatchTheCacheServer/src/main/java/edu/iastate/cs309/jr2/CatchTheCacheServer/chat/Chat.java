@@ -81,12 +81,29 @@ public class Chat {
 	}
 
 	/**
-	 * Function to remove user from chat
+	 * Function to remove user from chat (Stupid way to do this, could probably be written better)
 	 * @param user
+	 * @return True if success, false if fail
 	 */
 	public boolean removeUser(User user) {
-		if(!hasUser(user)) {
-			this.user= this.user +", " + user.getId();
+		String replaceText="";
+		if(hasUser(user)) {
+			Scanner s = new Scanner(this.user);
+			int id = user.getId();
+			//Check for first id 
+			while(s.hasNextInt())
+			{
+				int foundId = s.nextInt();
+				if(foundId!=id)
+					{
+						//check whether it is the first id entered
+						if(replaceText.equals(""))
+							replaceText = replaceText+foundId;
+						else
+							replaceText= replaceText + ", "+foundId;
+					}
+			}
+			s.close();
 			return true;
 		}
 		else

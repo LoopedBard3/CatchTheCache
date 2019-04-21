@@ -1,5 +1,7 @@
 package edu.iastate.cs309.jr2.CatchTheCacheServer.chat;
 
+import java.util.Scanner;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -82,16 +84,34 @@ public class Chat {
 	 * Function to remove user from chat
 	 * @param user
 	 */
-	public void removeUser(User user) {
-		
+	public boolean removeUser(User user) {
+		if(!hasUser(user)) {
+			this.user= this.user +", " + user.getId();
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	/**
-	 * Function tocheck whether user exists in this chat
+	 * Function to check whether user exists in this chat
 	 * @param user
+	 * @return true if user is in this chat, false if not
 	 */
 	public boolean hasUser(User user) {
-		
+		Scanner s = new Scanner(this.user);
+		int id = user.getId();
+		while(s.hasNextInt())
+		{
+			int foundId = s.nextInt();
+			if(foundId==id)
+				{
+					s.close();
+					return true;
+				}
+		}
+		s.close();
+		return false;
 	}
 	
 	@Override

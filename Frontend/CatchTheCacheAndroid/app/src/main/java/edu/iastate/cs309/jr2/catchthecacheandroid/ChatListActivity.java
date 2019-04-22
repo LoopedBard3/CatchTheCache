@@ -112,7 +112,7 @@ public class ChatListActivity extends AppCompatActivity {
                     Log.d("WEBSOCKET", "Chat Socket returned: " + message);
                     if (message.equals("refresh")) {
                         try {
-                            getCacheListInvisible();
+                            getChatListInvisible();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -236,7 +236,7 @@ public class ChatListActivity extends AppCompatActivity {
             }
         }
     }
-    private void getCacheListInvisible() throws JSONException {
+    private void getChatListInvisible() throws JSONException {
         //TODO: Get caches from server instead
         //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
         // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
@@ -246,7 +246,7 @@ public class ChatListActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
                         chats.clear();
-                      //  chats.addAll(chatList().getChatList());
+                      //  chats.addAll(chatList().getChatList()); //TODO come back here
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {

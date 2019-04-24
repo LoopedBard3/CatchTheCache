@@ -72,12 +72,23 @@ class ChatController {
 		return chatService.getMessages(id);
 	}
 	
+	/**
+	 * Function to add user to a chat
+	 * @param id Chat id 
+	 * @param request ChatAddUserRequest
+	 * @return ChatAddUserResponse with status
+	 */
 	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
 	public ResponseEntity<ChatAddUserResponse> addUser(@PathVariable int id, @RequestBody ChatAddUserRequest request){
 		
 		return chatService.addUser(id, request);
 	}
-	
+	/**
+	 * Function to remove user from a chat
+	 * @param id Chat id
+	 * @param request ChatRemoveUserRequest
+	 * @return ChatRemoveUserResponse with status
+	 */
 	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
 	public ResponseEntity<ChatRemoveUserResponse> removeUser(@PathVariable int id, @RequestBody ChatRemoveUserRequest request){
 		

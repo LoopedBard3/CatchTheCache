@@ -42,6 +42,7 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateR
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.Message;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageListResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.MessageRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 public class ChatListActivity extends AppCompatActivity {
@@ -54,6 +55,9 @@ public class ChatListActivity extends AppCompatActivity {
     private User usr;
     private ProgressBar pbar;
     private WebSocketClient ws;
+    private Button addBtn;
+    private EditText username;
+    private EditText new_message;
 
 
 
@@ -67,9 +71,21 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
         recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
-//TODO help        usr = (User) extras.getSerializable("UserObject");
+        //TODO help usr = (User) extras.getSerializable("UserObject");
+        username = findViewById(R.id.username);
+        new_message = findViewById(R.id.new_message);
         pbar = findViewById(R.id.chat_retrieve_progress);
-
+        addBtn = findViewById(R.id.add_cache_button);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    addChats();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         if(extras != null && extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
@@ -139,8 +155,8 @@ public class ChatListActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
                         chats.clear();
-                    //    chats.addAll(chatList.getChatList());
-                        //TODO need models for response and requests
+                    //TODO help something with the repsonse
+                        // chats.addAll(chatList);
                         pbar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
@@ -257,6 +273,30 @@ public class ChatListActivity extends AppCompatActivity {
         queue.add(requestObject);
     }
 
+    public void addChats() throws JSONException {
 
 
-}
+            JSONObject cacheToSend;
+            cacheToSend = new JSONObject(gson.toJson(new MessageRequest(username.getText().toString(),new_message.getText().toString())));
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            CacheAddResponse respJson = gson.fromJson(response.toString(), CacheAddResponse.class);
+                            if (respJson.getSuccess()) {
+                                finish_local();
+                            } else {
+                                new_message.setError("Unable to create new message.");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("ERRORRESPONSE", "Error getting responses " + error.toString());
+                }
+            });
+            queue.add(requestObject);
+        }
+    }
+
+

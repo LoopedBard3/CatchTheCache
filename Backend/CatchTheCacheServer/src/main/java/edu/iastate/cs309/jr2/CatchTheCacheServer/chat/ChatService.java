@@ -145,8 +145,6 @@ public class ChatService {
 		
 		if(canAdd)
 			response.setSuccess(true);
-		else 
-			response.setSuccess(false);
 		
 		return new ResponseEntity<ChatAddUserResponse>(response, HttpStatus.OK);
 	}

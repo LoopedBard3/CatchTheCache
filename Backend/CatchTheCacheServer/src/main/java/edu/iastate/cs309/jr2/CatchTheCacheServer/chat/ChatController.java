@@ -77,5 +77,10 @@ class ChatController {
 		
 		return chatService.addUser(id, request);
 	}
-
+	
+	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
+	public ResponseEntity<ChatRemoveUserResponse> removeUser(@PathVariable int id, @RequestBody ChatRemoveUserRequest request){
+		
+		return chatService.removeUser(id, request);
+	}
 }

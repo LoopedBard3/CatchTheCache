@@ -12,7 +12,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -35,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -46,8 +43,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Random;
 
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.WebSocketClient;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
@@ -60,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Cache cache;
     private Marker markerLocation, markerPlayer;
+    private ArrayList<Marker> otherPlayers;
     private Circle circle;
     private Handler handler;
     private GoogleApiClient mGoogleApiClient;
@@ -68,12 +69,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationCallback mLocationCallback;
     private Location goal;
     private User usr;
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private WebSocketClient ws;
 
     /**
      * The default method called when the activity is created.
      * Sets up the map fragment and connects to the users location services
      * so we can check if the user found the cache.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -128,6 +130,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        otherPlayers = new ArrayList<>();
+
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -139,8 +143,74 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         };
+
+        try {
+            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "caches/l/" + cache.getId() + "/websocket")) {
+                @Override
+                public void onMessage(String message) {
+                    Log.d("WEBSOCKET", "Cache Map Socket returned: " + message);
+                    //Add in on Message Logic, mostly updating where other Users are.
+                    String[] split = message.split(":");
+                    if (!split[0].equals(usr.getUsername())) {
+                        if (split[1].equals("found")) {
+                            goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
+                            //Possibly have popup notifying them that their goal has changed
+                        } else {
+                            String[] splitLoc = split[1].split(",");
+                            LatLng loc = new LatLng(Double.valueOf(splitLoc[0]), Double.valueOf(splitLoc[1]));
+                            handleMarkerUpdate(split[0], loc, split[1].equals("quit"));
+                        }
+                    }
+                }
+
+                @Override
+                public void onClose(int code, String reason, boolean remote) {
+                    super.onClose(code, reason, remote);
+                    if (ws.isOpen())
+                        ws.broadcast(usr.getUsername() + ":quit");
+                }
+            };
+
+        } catch (Exception e) {
+            Log.d("WEBSOCKET", "Cache Map Socket Exception: " + e.getMessage());
+        }
+        ws.connect();
+        if (ws.isOpen()) Log.d("WEBSOCKET", "Cache Map Socket Connected");
+
     }
 
+    //Create a method for updating a marker location and adding and deleting them.
+    public void handleMarkerUpdate(String user, LatLng loc, boolean delete) {
+        Log.d("MARKERUPDATE", user + ":" + loc.toString() + ":" + delete);
+        int counter;
+        boolean exists = false;
+        if (!delete) {
+            for (counter = 0; counter < otherPlayers.size(); counter++) {
+                //Update marker in the list
+                if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
+                    otherPlayers.get(counter).setPosition(loc);
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                //Add into the list and map
+                int height = 75;
+                int width = 75;
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.other_marker);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                otherPlayers.add(mMap.addMarker(new MarkerOptions().position(loc).title(user).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))));
+            }
+        } else {
+            for (counter = 0; counter < otherPlayers.size(); counter++) {
+                if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
+                    //Delete the user from the map and the list if they exist
+                    otherPlayers.get(counter).remove();
+                    otherPlayers.remove(counter);
+                }
+            }
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -154,10 +224,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("MAPSLOG", "Checking Maps");
         if (servicesOK()) {
             Log.d("MAPSLOG", "Initializing Maps");
-            // Add a markerLocation on gerdin and move the camera
             final LatLng cacheLocation = new LatLng(cache.getLatitude(), cache.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(cacheLocation).title("Marker for " + cache.getName()));
-            //Log.d("MAPSLOG", "Maps Marker Added");
             float zoomLevel = 17.5f;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cacheLocation, zoomLevel));
             Log.d("MAPSLOG", "Maps Camera Moved");
@@ -178,11 +245,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             });
-            if(usr.getAuthority() > 1){
+            if (usr.getAuthority() > 1) {
                 int height = 75;
                 int width = 75;
-                BitmapDrawable bitmapdraw =(BitmapDrawable)getResources().getDrawable(R.drawable.cache_goal);
-                Bitmap b=bitmapdraw.getBitmap();
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.cache_goal);
+                Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                 mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
             }
@@ -196,8 +263,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Checks if Google Play Services is usable by the application and gives a popup if it is not.
-     * @author Parker Bibus
+     *
      * @return true on connection success and false otherwise.
+     * @author Parker Bibus
      */
     private boolean servicesOK() {
         int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
@@ -250,14 +318,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(mLocationCallback);
+        if (ws.isOpen())
+            ws.broadcast(usr.getUsername() + ":quit");
     }
 
     /**
      * Used to handle location updates. Sets the map marker to where
      * the person is and checks if they are inside the goal. If they are
      * inside the goal, it finishes the activity with a success result.
-     * @author Parker Bibus
+     *
      * @param location
+     * @author Parker Bibus
      */
     private void handleNewLocation(Location location) {
         Log.d("Location", location.toString());
@@ -265,19 +336,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-        if(markerPlayer == null) {
+        if (markerPlayer == null) {
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title("I am here!")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.test_marker));
             markerPlayer = mMap.addMarker(options);
 
-        }else{
+        } else {
             markerPlayer.setPosition(latLng);
             markerPlayer.setTitle("I have updated!!");
+            if (ws.isOpen()) {
+                ws.broadcast(usr.getUsername() + ":" + latLng.latitude + "," + latLng.longitude);
+            }
         }
-        if(insideGoal(location, goal)){
+        if (insideGoal(location, goal)) {
             stopLocationUpdates();
+            ws.broadcast(usr.getUsername() + ":found");
             Intent intent = new Intent();
             intent.putExtra("UserObject", usr);
             intent.putExtra("CacheObject", cache);
@@ -288,6 +363,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Handles the result of the location permission request
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -305,51 +381,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Gets a goal location that is inside the specified radius around the location
-     * @param location location to be the center of the radius
+     *
+     * @param location       location to be the center of the radius
      * @param radiusInMeters radius for which to place the goal in
      * @return the location of the users goal location
      * @author Aidan Sherburne
      */
-	public Location getNearLocation(LatLng location, double radiusInMeters){
-		// Center point for our circle
-		double lat = location.latitude;
+    public Location getNearLocation(LatLng location, double radiusInMeters) {
+        // Center point for our circle
+        double lat = location.latitude;
         double lon = location.longitude;
-		double newLat, newLon;
-		
-		Random rand = new Random();
-		
-		// Convert radius from meters to degrees
-		double radiusInDegrees = radiusInMeters / 111320f;
-		
-		// Get a random distance and a random angle.
-		double angle = radiusInDegrees * Math.sqrt(rand.nextDouble());
-		double dist = 2 * Math.PI * rand.nextDouble();
-		
-		// Get delta values using x as longitude and y as latitude
-		double x = angle * Math.cos(dist);
-		double y = angle * Math.sin(dist);
-		
-		// Compensate the x value
-		x = x / Math.cos(Math.toRadians(lat));
-		
-		newLat = lat + y;
-		newLon = lon + x;
+        double newLat, newLon;
+
+        Random rand = new Random();
+
+        // Convert radius from meters to degrees
+        double radiusInDegrees = radiusInMeters / 111320f;
+
+        // Get a random distance and a random angle.
+        double angle = radiusInDegrees * Math.sqrt(rand.nextDouble());
+        double dist = 2 * Math.PI * rand.nextDouble();
+
+        // Get delta values using x as longitude and y as latitude
+        double x = angle * Math.cos(dist);
+        double y = angle * Math.sin(dist);
+
+        // Compensate the x value
+        x = x / Math.cos(Math.toRadians(lat));
+
+        newLat = lat + y;
+        newLon = lon + x;
 
         Location copy = new Location("NewLocation");
         copy.setLatitude(newLat);
         copy.setLongitude(newLon);
-		return copy;
-	}
+        return copy;
+    }
 
     /**
      * Checks if the user is inside the passed goal location.
-     * @author Parker Bibus
+     *
      * @param currLoc current location of the user
      * @param goalLoc goal location of the user
      * @return true if the user is inside the goal, false if not in the goal
+     * @author Parker Bibus
      */
-	public boolean insideGoal(Location currLoc, Location goalLoc){
-        if(currLoc.distanceTo(goalLoc) < 5){
+    public boolean insideGoal(Location currLoc, Location goalLoc) {
+        if (currLoc.distanceTo(goalLoc) < 5) {
             return true;
         }
         return false;

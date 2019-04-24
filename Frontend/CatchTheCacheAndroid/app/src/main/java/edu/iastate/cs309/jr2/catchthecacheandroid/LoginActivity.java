@@ -276,6 +276,8 @@ public class LoginActivity extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        mPasswordView.setError("Error connecting to server");
+                        mPasswordView.requestFocus();
                         Log.d("ERROR", "onErrorResponse: " + error.toString());
                         showProgress(false);
                     }

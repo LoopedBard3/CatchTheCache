@@ -153,7 +153,7 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void addTestChats(){
-        //.add(new Message(usr, "Hello"));
+        chats.add(new Message(usr, "Hello"));
     }
 
     @Override

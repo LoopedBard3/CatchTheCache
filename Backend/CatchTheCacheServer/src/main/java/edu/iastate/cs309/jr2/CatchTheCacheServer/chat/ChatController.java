@@ -71,5 +71,10 @@ class ChatController {
 	public ResponseEntity<MessageListResponse> getMessages(@PathVariable int id) {
 		return chatService.getMessages(id);
 	}
+	
+	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
+	public ResponseEntity<ChatAddUserResponse> addUser(@PathVariable int id){
+		return new ChatAddUserResponse();
+	}
 
 }

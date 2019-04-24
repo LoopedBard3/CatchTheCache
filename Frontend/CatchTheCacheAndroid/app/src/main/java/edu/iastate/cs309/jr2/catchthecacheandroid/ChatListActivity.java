@@ -64,9 +64,9 @@ public class ChatListActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
-        setContentView(R.layout.activity_cache_list);
+        setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
-        recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
+        recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
         usr = (User) extras.getSerializable("UserObject");
         pbar = findViewById(R.id.cache_retrieve_progress);
 

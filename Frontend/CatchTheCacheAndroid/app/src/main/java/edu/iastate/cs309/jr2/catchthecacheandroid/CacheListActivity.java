@@ -176,7 +176,7 @@ public class CacheListActivity extends AppCompatActivity {
         to_chat_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
                 startActivity(intent);
                 return true;
             }

@@ -9,12 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
+import edu.iastate.cs309.jr2.CatchTheCacheServer.user.*;
 
 @Service
 public class ChatService {
 
 	@Autowired
 	ChatRepository chatRepo;
+	@Autowired
+	UserRepository userRepo;
 	@Autowired
 	MessageRepository messageRepo;
 
@@ -114,10 +117,36 @@ public class ChatService {
 		Optional<Chat> results = chatRepo.findById(id);
 		return results.get();
 	}
+	/**
+	 * Check whether user exists from UserReopsitory and not already in chat, then add to the specified chat
+	 * @param id The chat id to remove user from
+	 * @param request
+	 * @return ChatAddUserResponse with success or not
+	 */
 	
 	public ResponseEntity<ChatAddUserResponse> addUser(int id, ChatAddUserRequest request){
+		//Boolean value to check whether the user can be added to chat
+		boolean canAdd= true;
+		
+		//Find the User by username
+		User user = userRepo.findByUsername(request.getUsername());
+		Chat chat = chatRepo.findById(id).get();
+		
+		//If user or chat does not exist in repository, the user is not able to added to chat
+		if(user == null || chat == null )
+			canAdd= false;
+			
+		//Check whether user already exists in chat
+		
+		if(chat.hasUser(user))
+			canAdd=false;
 		
 		ChatAddUserResponse response = new ChatAddUserResponse();
+		
+		if(canAdd)
+			response.setSuccess(true);
+		else 
+			response.setSuccess(false);
 		
 		return new ResponseEntity<ChatAddUserResponse>(response, HttpStatus.OK);
 	}

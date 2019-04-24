@@ -73,8 +73,9 @@ class ChatController {
 	}
 	
 	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
-	public ResponseEntity<ChatAddUserResponse> addUser(@PathVariable int id){
-		return new ChatAddUserResponse();
+	public ResponseEntity<ChatAddUserResponse> addUser(@PathVariable int id, @RequestBody ChatAddUserRequest request){
+		
+		return chatService.addUser(id, request);
 	}
 
 }

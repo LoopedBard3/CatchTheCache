@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.iastate.cs309.jr2.CatchTheCacheServer.cache.CustomConfigurator;
 /**
- * This class does the operations of initiating and closing chats through websockets.
+ * This class does the operations of initiating and closing chats through web sockets.
  * @author Annie (Yung-Hsueh) Lee
  *
  */

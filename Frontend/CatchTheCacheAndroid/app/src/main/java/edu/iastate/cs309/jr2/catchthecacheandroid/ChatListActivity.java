@@ -67,8 +67,8 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
         recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
-        usr = (User) extras.getSerializable("UserObject");
-        pbar = findViewById(R.id.cache_retrieve_progress);
+//TODO help        usr = (User) extras.getSerializable("UserObject");
+        pbar = findViewById(R.id.chat_retrieve_progress);
 
 
 

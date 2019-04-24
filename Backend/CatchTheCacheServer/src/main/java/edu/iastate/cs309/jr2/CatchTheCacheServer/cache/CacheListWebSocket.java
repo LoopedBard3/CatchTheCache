@@ -24,17 +24,36 @@ public class CacheListWebSocket {
 
 	private static final Logger logger = LoggerFactory.getLogger(CacheWebSocket.class);
 
+	/**
+	 * Runs on socket open
+	 * 
+	 * @param session WebSocket Session to perform these actions on
+	 * @throws IOException
+	 */
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
 		logger.info("Connection Opened: " + session.getId());
 		sessionList.add(session);
 	}
 
+	/**
+	 * Runs when the socket receives a message
+	 * 
+	 * @param session WebSocket Session to perform these actions on
+	 * @param message String message that was received
+	 * @throws IOException
+	 */
 	@OnMessage
 	public void onMessage(Session session, String message) throws IOException {
 		logger.info("Entered into Message: Got Message: " + message);
 	}
 
+	/**
+	 * Runs on socket close
+	 * 
+	 * @param session WebSocket Session to perform these actions on
+	 * @throws IOException
+	 */
 	@OnClose
 	public void onClose(Session session) throws IOException {
 		logger.info("Connection Closed: " + session.getId());
@@ -42,12 +61,23 @@ public class CacheListWebSocket {
 
 	}
 
+	/**
+	 * Runs on error
+	 * 
+	 * @param session   WebSocket Session to perform these actions on
+	 * @param throwable Throwable exception that occurred
+	 */
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		// logger.info("Error: " + throwable.getMessage());
 		throwable.printStackTrace();
 	}
 
+	/**
+	 * Broadcast message to all sessions
+	 * 
+	 * @param message String message to broadcast
+	 * @throws IOException
+	 */
 	public static void broadcast(String message) throws IOException {
 		for (Session session : sessionList) {
 			logger.info("Broadcasting for cache list to session: " + session.getId());

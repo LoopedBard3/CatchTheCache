@@ -10,6 +10,4 @@ public interface CacheRepository extends JpaRepository<Cache, Integer> {
 
 	Cache findByName(String name);
 
-	// boolean existsByLocation(double latitude, double longitude);
-
 }

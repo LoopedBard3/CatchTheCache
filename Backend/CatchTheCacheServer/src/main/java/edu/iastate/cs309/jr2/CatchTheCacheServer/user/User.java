@@ -43,6 +43,11 @@ public class User {
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private String securityAnswer;
 
+	/**
+	 * Initialize user object based on creation request
+	 * 
+	 * @param req UserCreateRequest object to be used to initialize this user object
+	 */
 	public void updateUser(UserCreateRequest req) {
 		this.username = req.getUsername();
 		this.password = req.getPassword();
@@ -51,50 +56,86 @@ public class User {
 		this.authority = req.getAuthority();
 	}
 
+	/**
+	 * @return integer id for this user object
+	 */
 	public Integer getId() {
 		return this.id;
 	}
 
+	/**
+	 * @return String username for this user
+	 */
 	public String getUsername() {
 		return this.username;
 	}
 
+	/**
+	 * @param username String username for this user
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	/**
+	 * @return String password for this user
+	 */
 	public String getPassword() {
 		return this.password;
 	}
 
+	/**
+	 * @param password String password for this user
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * @return integer authority level for this user
+	 */
 	public int getAuthority() {
 		return this.authority;
 	}
 
+	/**
+	 * @param authority integer authority level for this user
+	 */
 	public void setAuthority(int authority) {
 		this.authority = authority;
 	}
 
+	/**
+	 * @return String security question for this user
+	 */
 	public String getSecurityQuestion() {
 		return this.securityQuestion;
 	}
 
+	/**
+	 * @param question String security question for this user
+	 */
 	public void setSecurityQuestion(String question) {
 		this.securityQuestion = question;
 	}
 
+	/**
+	 * @return String security answer for this user
+	 */
 	public String getSecurityAnswer() {
 		return this.securityAnswer;
 	}
 
+	/**
+	 * @param answer String security answer for this user
+	 */
 	public void setSecurityAnswer(String answer) {
 		this.securityAnswer = answer;
 	}
 
+	/**
+	 * @return String representation for this user object
+	 */
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)

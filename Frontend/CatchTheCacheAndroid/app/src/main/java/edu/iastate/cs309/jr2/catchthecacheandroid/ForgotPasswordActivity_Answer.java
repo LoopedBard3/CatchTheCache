@@ -28,6 +28,10 @@ import org.json.JSONObject;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserResetPassRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserResetPassResponse;
 
+/**
+ * Activity for getting the security question answer from the user
+ * so they can reset their password.
+ */
 public class ForgotPasswordActivity_Answer extends AppCompatActivity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -46,6 +50,13 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
     private String user;
     private String question;
 
+    /**
+     * Default method for starting the activity.
+     * Sets up the Volley queue, Gson json translator, and
+     * the recover account buttons.
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,15 +111,20 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the password is valid.
+     * @param password
+     * @return true if the password is valid and false otherwise
+     */
     private boolean isPasswordValid(String password) {
         //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
     }
 
 
-
     /**
      * Shows the progress UI and hides the login form.
+     * @param show true to show the progress bar, false to hid it.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -151,18 +167,29 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
         String ans;
         String username;
         String newPass;
+
+        /**
+         * Constructor for this task
+         * @param user the username changing their password
+         * @param answer users security question answer
+         * @param newPass the new password
+         */
         submitNewPassTask(String user, String answer, String newPass) {
             ans = answer;
             username = user;
             this.newPass = newPass;
         }
 
+        /**
+         * The background task to perform of resetting the password.
+         * @param params
+         * @return true if successful, false otherwise
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(gson.toJson(new UserResetPassRequest(username, newPass, ans)));
-                //TODO: Change the request location
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login/reset", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -191,11 +218,13 @@ public class ForgotPasswordActivity_Answer extends AppCompatActivity {
             } catch (JSONException e) {
                 return false;
             }
-
             return true;
         }
 
 
+        /**
+         * Method called when task is cancelled.
+         */
         @Override
         protected void onCancelled() {
             mForgotTask = null;

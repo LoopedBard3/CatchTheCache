@@ -268,6 +268,9 @@ cmake-build-*/
 .idea/sonarlint
 
 ### Java ###
+# Javadoc Files
+javadoc/
+
 # Compiled class file
 
 # Log file

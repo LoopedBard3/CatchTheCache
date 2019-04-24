@@ -32,6 +32,9 @@ import org.json.JSONObject;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserCreateRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserCreateResponse;
 
+/**
+ * Activity for users to signup
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     /**
@@ -52,6 +55,13 @@ public class SignUpActivity extends AppCompatActivity {
     private RequestQueue queue;
     private Gson gson;
 
+    /**
+     * Default method for starting the activity.
+     * Sets up the Gson json translator, Volley queue,
+     * and the user buttons for registering.
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,22 +181,39 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to check if a specific username is valid.
+     * @param username the username to check
+     * @return true if the username is valid, false otherwise
+     */
     private boolean isUsernameValid(String username) {
         //https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
         return username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
     }
 
+    /**
+     * Method to check if a specific password is valid.
+     * @param password the password to check
+     * @return true if the username is valid, false otherwise
+     */
     private boolean isPasswordValid(String password) {
         //https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$");
     }
 
+    /**
+     * Method to make sure that two strings are the same.
+     * @param passwordMain Password to match against
+     * @param passwordMatch Password to check
+     * @return true if the username is valid, false otherwise
+     */
     private boolean doPasswordsMatch(String passwordMain, String passwordMatch){
         return passwordMain.equals(passwordMatch);
     }
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show true to show the progress bar, false to hid it.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -232,6 +259,13 @@ public class SignUpActivity extends AppCompatActivity {
         private final String mSecQuestion;
         private final String mSecAnswer;
 
+        /**
+         * Constructor for the task.
+         * @param username the username to register
+         * @param passwordMain the password to register
+         * @param securityQuestion the security question to register
+         * @param securityAnswer the security answer to register
+         */
         UserRegisterTask(String username, String passwordMain, String securityQuestion, String securityAnswer) {
             mUsername = username;
             mPassword = passwordMain;
@@ -239,6 +273,13 @@ public class SignUpActivity extends AppCompatActivity {
             mSecAnswer = securityAnswer;
         }
 
+        /**
+         * The process that happens when the task gets called.
+         * This consists of sending the data to be used to register
+         * a new user.
+         * @param params
+         * @return true on success and false one everything else
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
             final JSONObject jsonData;
@@ -255,9 +296,6 @@ public class SignUpActivity extends AppCompatActivity {
                                 UserCreateResponse respJson = gson.fromJson(response.toString(), UserCreateResponse.class);
                                 Log.d("RESPONSE", String.valueOf(response.toString()));
                                 if (respJson.getSuccess()) {
-                                    //mUsernameView.setText(String.format("Successfully registered %s", mUsername));
-                                    //mUsernameView.requestFocus();
-                                    //TODO:Logic for if the user already existed or not and opening next activity
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         startActivity(intent);
                                 } else if(!respJson.getValidPass()){
@@ -289,6 +327,9 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
 
+        /**
+         * The method that gets called when the task gets cancelled.
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;

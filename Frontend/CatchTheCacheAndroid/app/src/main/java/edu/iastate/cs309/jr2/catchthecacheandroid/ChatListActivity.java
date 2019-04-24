@@ -64,15 +64,15 @@ public class ChatListActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
-        setContentView(R.layout.activity_cache_list);
+        setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
-        recyclerView = (RecyclerView) findViewById(R.id.rvCacheList);
-        usr = (User) extras.getSerializable("UserObject");
-        pbar = findViewById(R.id.cache_retrieve_progress);
+        recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
+//TODO help        usr = (User) extras.getSerializable("UserObject");
+        pbar = findViewById(R.id.chat_retrieve_progress);
 
 
 
-        if(extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
+        if(extras != null && extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
             addTestChats();
         }else {
             try {
@@ -153,7 +153,7 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void addTestChats(){
-        //.add(new Message(usr, "Hello"));
+        chats.add(new Message(usr, "Hello"));
     }
 
     @Override

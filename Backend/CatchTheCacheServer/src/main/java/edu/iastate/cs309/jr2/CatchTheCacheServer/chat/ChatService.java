@@ -114,4 +114,11 @@ public class ChatService {
 		Optional<Chat> results = chatRepo.findById(id);
 		return results.get();
 	}
+	
+	public ResponseEntity<ChatAddUserResponse> addUser(int id, ChatAddUserRequest request){
+		
+		ChatAddUserResponse response = new ChatAddUserResponse();
+		
+		return new ResponseEntity<ChatAddUserResponse>(response, HttpStatus.OK);
+	}
 }

@@ -81,6 +81,7 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show true to show the progress bar, false to hid it.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -115,6 +116,11 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the username is valid.
+     * @param username username to be checked
+     * @return true if username is valid and false if it is not
+     */
     private boolean isUsernameValid(String username) {
         //https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
         return username.matches("^(?=.{3,}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$");
@@ -127,16 +133,24 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
     public class getQuestionTask extends AsyncTask<Void, Void, Boolean> {
         private String username;
 
+        /**
+         * Constructor for security question retrieval task.
+         * @param name username to get the question for
+         */
         getQuestionTask(String name) {
             username = name;
         }
 
+        /**
+         * The background task to perform the obtainment of the security question.
+         * @param params
+         * @return true if successful, false otherwise
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(gson.toJson(new UserQuestionRequest(username)));
-                //TODO: Change the request location
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getString(R.string.access_url) + "login/forgot", jsonData,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -159,10 +173,6 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
                         showProgress(false);
                         mUsernameText.setError("An problem arose while getting question");
                         Log.d("REQUESTRESPONSE", error.networkResponse.toString());
-//                        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity_Answer.class);
-//                        intent.putExtra("Question", "TEST QUESTION");
-//                        intent.putExtra("Username", "Test USERNAME");
-//                        startActivity(intent);
                     }
                 });
 
@@ -173,7 +183,9 @@ public class ForgotPasswordActivity_Username extends AppCompatActivity {
             return true;
         }
 
-
+        /**
+         * Method called when task is cancelled.
+         */
         @Override
         protected void onCancelled() {
             mForgotTask = null;

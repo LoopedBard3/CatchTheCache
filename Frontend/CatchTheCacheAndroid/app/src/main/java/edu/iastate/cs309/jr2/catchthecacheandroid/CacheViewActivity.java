@@ -1,13 +1,11 @@
 package edu.iastate.cs309.jr2.catchthecacheandroid;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -19,25 +17,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONException;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
+/**
+ * Activity for displaying information about an individual cache
+ */
 public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCallback{
     private User usr;
     private Cache cache;
@@ -46,6 +42,12 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
     private Button btn2;
     private GoogleMap mMap;
 
+    /**
+     * Default method for starting the activity.
+     * Sets up the button for starting going caching.
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
 
@@ -72,22 +74,22 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("UserObject", usr);
                 intent.putExtra("CacheObject", cache);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
         btn2 = findViewById(R.id.enter_chat_room);
-        btn2.setText("View the chat room!");
+        btn2.setText("Testing Button");
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
-                intent.putExtra("UserObject", usr);
-                intent.putExtra("CacheObject", cache);
-                startActivity(intent);
+                openChatOptionDialog();
             }
         });
+        if(usr.getAuthority() > 0) btn2.setVisibility(View.VISIBLE);
+        else btn2.setVisibility(View.GONE);
         getSupportActionBar().setTitle(cache.name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -96,6 +98,14 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Method that gets called when an option on the appbar is selected.
+     * This one sets up the back button to finish the activity.
+     * @author Parker Bibus
+     * @param item menu item clicked
+     * @return true on success, false on fail or unknown item
+     */
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Log.d("OPTIONSSELECT", String.valueOf(item.getItemId()));
         switch(item.getItemId()) {
@@ -108,10 +118,22 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Finish method that returns an ok result and allows for finish
+     * call when not at base level of nesting.
+     * @author Parker Bibus
+     */
     private void finish_local(){
         finish();
     }
 
+
+    /**
+     * Method called by android to create the options menu at the top
+     * that pop up when you press the three dots in the upper right.
+     * @param menu menu item that the options get inflated into
+     * @return true on success, false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -130,16 +152,19 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This includes moving the camera to where the cache is and drawing
+     * all of the entities on the map.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("MAPS", "Checking Maps");
         if(servicesOK()) {
             Log.d("MAPS", "Initializing Maps");
-            // Add a marker on gerdin and move the camera
             LatLng cacheLocation = new LatLng(cache.getLatitude(), cache.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(cacheLocation).title("Marker for " + cache.getName()));
-            //Log.d("MAPS", "Maps Marker Added");
             float zoomLevel = 17.5f;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cacheLocation, zoomLevel));
             Log.d("MAPS", "Maps Camera Moved");
@@ -156,6 +181,11 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Checks if Google Play Services is usable by the application and gives a popup if it is not.
+     * @author Parker Bibus
+     * @return true on connection success and false otherwise.
+     */
     private boolean servicesOK() {
         int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if(result == ConnectionResult.SUCCESS){
@@ -168,5 +198,59 @@ public class CacheViewActivity extends AppCompatActivity implements OnMapReadyCa
             Toast.makeText(this, "Error with google play!", Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+
+    /**
+     * Method called when an activity started for a result returns.
+     * This one opens the chat option dialog.
+     * @author Parker Bibus
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                //Ask if the user wants to go to the chat
+                Bundle extras = getIntent().getExtras();
+                usr = (User) extras.getSerializable("UserObject");
+                cache = (Cache) extras.getSerializable("CacheObject");
+                openChatOptionDialog();
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Do nothing because the user didn't get the cache.
+            }
+        }
+    }
+
+
+    /**
+     * Opens the dialog that starts the cache chat activity allowing users
+     * that found the cache to leave a chat.
+     * @author Parker Bibus
+     */
+    public void openChatOptionDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle("You found the Cache!!")
+                .setMessage("Do you want to leave a message at the Cache?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), CacheChatRoom.class);
+                        intent.putExtra("UserObject", usr);
+                        intent.putExtra("CacheObject", cache);
+                        startActivity(intent);
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(R.drawable.logo)
+                .show();
     }
 }

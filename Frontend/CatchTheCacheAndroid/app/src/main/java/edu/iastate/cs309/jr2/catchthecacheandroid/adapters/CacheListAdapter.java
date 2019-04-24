@@ -16,10 +16,17 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.R;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.Cache;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
+/**
+ * The adapter for listing the list of caches
+ */
 public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.CacheListViewHolder> {
     private ArrayList<Cache> mCaches;
     private User user;
 
+    /**
+     * Class for creating the RecyclerView ViewHolder
+     * @author Parker Bibus
+     */
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -32,13 +39,26 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
         }
     }
 
+    /**
+     * Constructor for the adapter. Loads in the list for the viewer.
+     * @author Parker Bibus
+     * @param myDataset ArrayList of type Cache that contains the caches to display
+     * @param usr the current user
+     */
     // Provide a suitable constructor (depends on the kind of dataset)
     public CacheListAdapter(ArrayList<Cache> myDataset, User usr) {
         mCaches = myDataset;
         user = usr;
     }
 
-    // Create new views (invoked by the layout manager)
+    /**
+     * Creator for the individual cache views. Inflates the input according
+     * to the cache view list layout.
+     * @authro Parker Bibus
+     * @param parent
+     * @param viewType
+     * @return the created CacheViewHolder
+     */
     @Override
     public CacheListViewHolder onCreateViewHolder(final ViewGroup parent,
                                                   int viewType) {
@@ -59,6 +79,12 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
         return vh;
     }
 
+    /**
+     * Method that binds the information into the View Holder.
+     * @author Parker Bibus
+     * @param CacheListViewHolder the View Holder that will be populated
+     * @param i the message's array location to access the message data
+     */
     @Override
     public void onBindViewHolder(@NonNull CacheListViewHolder CacheListViewHolder, int i) {
         Cache cache = mCaches.get(i);
@@ -79,6 +105,10 @@ public class CacheListAdapter extends RecyclerView.Adapter<CacheListAdapter.Cach
 
 
     // Return the size of your dataset (invoked by the layout manager)
+    /**
+     * Gets the number of items in apart of the cache array.
+     * @return the size of the array
+     */
     @Override
     public int getItemCount() {
         return mCaches.size();

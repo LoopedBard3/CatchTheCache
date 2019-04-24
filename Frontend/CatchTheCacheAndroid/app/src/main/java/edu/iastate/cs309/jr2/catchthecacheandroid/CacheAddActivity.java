@@ -26,6 +26,10 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRe
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
+/**
+ * Activity that allows moderators to add a cache to the cache list
+ * @author Parker Bibus
+ */
 public class CacheAddActivity extends AppCompatActivity
 {
     private RequestQueue queue;
@@ -41,6 +45,12 @@ public class CacheAddActivity extends AppCompatActivity
     String mCacheLatS;
     String mCacheNameS;
 
+    /**
+     * Default method for starting the activity.
+     * Sets up the Volley Queue, Gson json converter, and the add cache button
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +82,13 @@ public class CacheAddActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Checks if a specified set of cache inputs is value
+     * @param mCacheLatS latitude to check
+     * @param mCacheNameS name to check
+     * @param mCacheLongS longitude to check
+     * @return  true if the cache is a valid cache and false otherwise
+     */
     public boolean cacheValid (String mCacheLatS, String mCacheNameS, String mCacheLongS){
         if(mCacheLatS.length() == 0 || mCacheNameS.length() == 0 || mCacheLongS.length() == 0) {
             return false;
@@ -100,6 +117,11 @@ public class CacheAddActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Sends the cache information to the server using Volley.
+     * @author Parker Bibus
+     * @throws JSONException
+     */
     public void addCache() throws JSONException {
         mCacheLatS = mCacheLat.getText().toString();
         mCacheLongS = mCacheLong.getText().toString();
@@ -130,6 +152,14 @@ public class CacheAddActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method that gets called when an option on the appbar is selected.
+     * This one sets up the back button to finish the activity.
+     * @author Parker Bibus
+     * @param item menu item clicked
+     * @return true on success, false on fail or unknown item
+     */
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Log.d("OPTIONSSELECT", String.valueOf(item.getItemId()));
         switch(item.getItemId()) {
@@ -141,6 +171,12 @@ public class CacheAddActivity extends AppCompatActivity
                 return false;
         }
     }
+
+    /**
+     * Finish method that returns an ok result and allows for finish
+     * call when not at base level of nesting.
+     * @author Parker Bibus
+     */
     private void finish_local(){
         Intent intent = new Intent();
         setResult(Activity.RESULT_OK, intent);

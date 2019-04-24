@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/app_bar">
 
         <ProgressBar
-            android:id="@+id/cache_retrieve_progress"
+            android:id="@+id/chat_retrieve_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -72,7 +72,7 @@ public class ChatListActivity extends AppCompatActivity {
 
 
 
-        if(extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
+        if(extras != null && extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
             addTestChats();
         }else {
             try {

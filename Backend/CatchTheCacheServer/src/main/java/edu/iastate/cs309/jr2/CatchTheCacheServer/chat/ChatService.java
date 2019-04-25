@@ -128,13 +128,13 @@ public class ChatService {
 		//Boolean value to check whether the user can be added to chat
 		boolean canAdd= true;
 		
+		//If user or chat does not exist in repository, the user is not able to added to chat
+		if(!userRepo.existsByUsername(request.getUsername())|| !chatRepo.existsById(id) )
+			canAdd= false;
+				
 		//Find the User by username
 		User user = userRepo.findByUsername(request.getUsername());
 		Chat chat = chatRepo.findById(id).get();
-		
-		//If user or chat does not exist in repository, the user is not able to added to chat
-		if(user == null || chat == null )
-			canAdd= false;
 			
 		//Check whether user already exists in chat
 		
@@ -144,8 +144,33 @@ public class ChatService {
 		ChatAddUserResponse response = new ChatAddUserResponse();
 		
 		if(canAdd)
-			response.setSuccess(true);
+			response.setSuccess(chat.addUser(user));
 		
 		return new ResponseEntity<ChatAddUserResponse>(response, HttpStatus.OK);
+	}
+	
+	public ResponseEntity<ChatRemoveUserResponse> removeUser(int id, ChatRemoveUserRequest request){
+		//Boolean value to check whether the user can be removed from chat
+		boolean canRemove= true;
+		
+		//If user or chat does not exist in repository, the user is not able to added to chat
+		if(!userRepo.existsByUsername(request.getUsername())|| !chatRepo.existsById(id) )
+			canRemove= false;
+		
+		//Find the User by username and find chat from corresponding repositories.
+		User user = userRepo.findByUsername(request.getUsername());
+		Chat chat = chatRepo.findById(id).get();
+			
+		//Check whether user already exists in chat
+		if(!chat.hasUser(user))
+			canRemove=false;
+		
+		ChatRemoveUserResponse response = new ChatRemoveUserResponse();
+		
+		if(canRemove)
+			response.setSuccess(chat.removeUser(user));
+			
+		
+		return new ResponseEntity<ChatRemoveUserResponse>(response, HttpStatus.OK);
 	}
 }

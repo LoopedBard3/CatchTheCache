@@ -71,21 +71,21 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
         recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
-        //TODO help usr = (User) extras.getSerializable("UserObject");
+       //TODO help usr = (User) extras.getSerializable("UserObject");
         username = findViewById(R.id.username);
         new_message = findViewById(R.id.new_message);
         pbar = findViewById(R.id.chat_retrieve_progress);
-        addBtn = findViewById(R.id.add_cache_button);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    addChats();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        addBtn = findViewById(R.id.new_chat_button);
+//        addBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    addChats();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
 
         if(extras != null && extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
@@ -170,6 +170,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void addTestChats(){
         chats.add(new Message(usr, "Hello"));
+        chats.add(new Message(usr, "Test"));
     }
 
     @Override

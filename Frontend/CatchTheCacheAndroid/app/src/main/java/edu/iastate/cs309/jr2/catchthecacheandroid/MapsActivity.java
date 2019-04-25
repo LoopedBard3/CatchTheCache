@@ -2,6 +2,8 @@ package edu.iastate.cs309.jr2.catchthecacheandroid;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -59,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private Cache cache;
-    private Marker markerLocation, markerPlayer;
+    private Marker markerLocation, markerPlayer, goalMarker;
     private ArrayList<Marker> otherPlayers;
     private Circle circle;
     private Handler handler;
@@ -152,16 +154,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //Add in on Message Logic, mostly updating where other Users are.
                     String[] split = message.split(":");
                     if (!split[0].equals(usr.getUsername())) {
-                        if (split[1].equals("found")) {
-                            goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
-                            //Possibly have popup notifying them that their goal has changed
+                        if (split[1].contains("found")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    goal = getNearLocation(new LatLng(cache.getLatitude(), cache.getLongitude()), 31.0);
+                                    goalMarker.setPosition(new LatLng(goal.getLatitude(), goal.getLongitude()));
+                                    //Possibly have popup notifying them that their goal has changed.
+                                    openCacheMovedDialog();
+                                }
+                            });
+                        } else if(split[1].contains("quit")) {
+                            LatLng loc = new LatLng(0, 0);
+                            handleMarkerUpdate(split[0], loc, true);
                         } else {
-                            String[] splitLoc = split[1].split(",");
-                            LatLng loc = new LatLng(Double.valueOf(splitLoc[0]), Double.valueOf(splitLoc[1]));
-                            handleMarkerUpdate(split[0], loc, split[1].equals("quit"));
+                                String[] splitLoc = split[1].split(",");
+                                LatLng loc = new LatLng(Double.valueOf(splitLoc[0]), Double.valueOf(splitLoc[1]));
+                                handleMarkerUpdate(split[0], loc, false);
+                            }
                         }
                     }
-                }
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
@@ -180,36 +192,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Create a method for updating a marker location and adding and deleting them.
-    public void handleMarkerUpdate(String user, LatLng loc, boolean delete) {
+    public void handleMarkerUpdate(final String user, final LatLng loc, final boolean delete) {
         Log.d("MARKERUPDATE", user + ":" + loc.toString() + ":" + delete);
-        int counter;
-        boolean exists = false;
-        if (!delete) {
-            for (counter = 0; counter < otherPlayers.size(); counter++) {
-                //Update marker in the list
-                if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
-                    otherPlayers.get(counter).setPosition(loc);
-                    exists = true;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int counter;
+                boolean exists = false;
+                if (!delete) {
+                    for (counter = 0; counter < otherPlayers.size(); counter++) {
+                        //Update marker in the list
+                        if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
+                            otherPlayers.get(counter).setPosition(loc);
+                            exists = true;
+                        }
+                    }
+                    if (!exists) {
+                        //Add into the list and map
+                        int height = 75;
+                        int width = 75;
+                        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.other_marker);
+                        Bitmap b = bitmapdraw.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                        otherPlayers.add(mMap.addMarker(new MarkerOptions().position(loc).title(user).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))));
+                    }
+                } else {
+                    for (counter = 0; counter < otherPlayers.size(); counter++) {
+                        if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
+                            //Delete the user from the map and the list if they exist
+                            otherPlayers.get(counter).remove();
+                            otherPlayers.remove(counter);
+                        }
+                    }
                 }
             }
-            if (!exists) {
-                //Add into the list and map
-                int height = 75;
-                int width = 75;
-                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.other_marker);
-                Bitmap b = bitmapdraw.getBitmap();
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                otherPlayers.add(mMap.addMarker(new MarkerOptions().position(loc).title(user).icon(BitmapDescriptorFactory.fromBitmap(smallMarker))));
-            }
-        } else {
-            for (counter = 0; counter < otherPlayers.size(); counter++) {
-                if (otherPlayers.get(counter).getTitle().compareTo(user) == 0) {
-                    //Delete the user from the map and the list if they exist
-                    otherPlayers.get(counter).remove();
-                    otherPlayers.remove(counter);
-                }
-            }
-        }
+        });
     }
 
     /**
@@ -251,7 +268,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.cache_goal);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                goalMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(goal.getLatitude(), goal.getLongitude())).title("Goal Location").anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
             }
             circle = mMap.addCircle(new CircleOptions()
                     .center(cacheLocation)
@@ -431,5 +448,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return true;
         }
         return false;
+    }
+
+    /**
+     * Opens the dialog that starts the cache chat activity allowing users
+     * that found the cache to leave a chat.
+     * @author Parker Bibus
+     */
+    public void openCacheMovedDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle("Someone has found the cache!!")
+                .setMessage("This means your cache location has been moved! Find it before someone else finds theirs!")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(R.drawable.logo)
+                .show();
     }
 }

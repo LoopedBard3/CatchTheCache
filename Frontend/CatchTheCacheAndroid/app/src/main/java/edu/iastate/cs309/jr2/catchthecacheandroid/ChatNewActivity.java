@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateRequest;
+import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 /**
@@ -32,17 +34,12 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 public class ChatNewActivity extends AppCompatActivity
 {
     private RequestQueue queue;
-    private EditText mCacheName;
-    private EditText mCacheLat;
-    private EditText mCacheLong;
-    private EditText mCacheDesc;
+    private EditText username;
+    private EditText message;
     private Button addBtn;
-    private Button getCurrLocationBtn;
     private Gson gson;
     private User usr;
-    String mCacheLongS;
-    String mCacheLatS;
-    String mCacheNameS;
+    int chat_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,78 +47,50 @@ public class ChatNewActivity extends AppCompatActivity
         Bundle extras = getIntent().getExtras();
         queue = Volley.newRequestQueue(getApplicationContext());
         gson = new Gson();
-        setContentView(R.layout.activity_cache_add);
+        setContentView(R.layout.activity_chat_add);
         //TODO create new XML File
-        usr = (User) extras.getSerializable("UserObject");
+       // usr = (User) extras.getSerializable("UserObject");
+        username = findViewById(R.id.username);
+        message = findViewById(R.id.new_message);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Add Cache");
+       // getSupportActionBar().setTitle("Add Chat");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        chat_Id = 1;
 
-        mCacheName = findViewById(R.id.add_cache_name);
-        mCacheLat = findViewById(R.id.add_cache_latitude);
-        mCacheLong = findViewById(R.id.add_cache_longitude);
-        mCacheDesc = findViewById(R.id.add_cache_description);
-        addBtn = findViewById(R.id.add_cache_button);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    addCache();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        addBtn = findViewById(R.id.new_chat_button);
+//        addBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    addChat();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
     }
-
-    public boolean cacheValid (String mCacheLatS, String mCacheNameS, String mCacheLongS){
-        if(mCacheLatS.length() == 0 || mCacheNameS.length() == 0 || mCacheLongS.length() == 0) {
-            return false;
-        }
-        //This is checking the bounds of the Latitude
-        String Latitude = mCacheLatS;
-        try {
-            int num = Integer.parseInt(Latitude);
-            if (num > 180 || num < -180){
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            Log.i("", Latitude + " is not within the bounds");
-        }
-
-        //This is checking the bounds of the Longitude
-        String Longitude = mCacheLatS;
-        try {
-            int num = Integer.parseInt(Longitude);
-            if (num > 180 || num < -180){
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            Log.i("", Longitude + " is not within the bounds");
-        }
-        return true;
+    //TODO change to chat stuff
+    public boolean cacheValid (EditText username, EditText message){
+        return username.length() != 0 && message.length() != 0;
     }
 
-    public void addCache() throws JSONException {
-        mCacheLatS = mCacheLat.getText().toString();
-        mCacheLongS = mCacheLong.getText().toString();
-        mCacheNameS = mCacheName.getText().toString();
-        if (cacheValid(mCacheLatS, mCacheNameS, mCacheLongS)) { //I put the null checkers and stuff up in a different method. I dont think  broke anything
+    public void addChat() throws JSONException {
+        if (cacheValid(username, message)) { //I put the null checkers and stuff up in a different method. I dont think  broke anything
 
 
-            JSONObject cacheToSend;
-            cacheToSend = new JSONObject(gson.toJson(new CacheAddRequest(mCacheName.getText().toString(), Double.parseDouble(mCacheLong.getText().toString()), Double.parseDouble(mCacheLat.getText().toString()), usr.getUsername(), mCacheDesc.getText().toString())));
-            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", cacheToSend,
+            JSONObject chatToSend;
+           chatToSend = new JSONObject(gson.toJson(new ChatCreateRequest( username.getText().toString(), chat_Id)));
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", chatToSend,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            CacheAddResponse respJson = gson.fromJson(response.toString(), CacheAddResponse.class);
+                            ChatCreateResponse respJson = gson.fromJson(response.toString(), ChatCreateResponse.class);
                             if (respJson.getSuccess()) {
                                 finish_local();
                             } else {
-                                mCacheName.setError("Unable to add cache.");
+                                message.setError("Unable to send message.");
                             }
                         }
                     }, new Response.ErrorListener() {

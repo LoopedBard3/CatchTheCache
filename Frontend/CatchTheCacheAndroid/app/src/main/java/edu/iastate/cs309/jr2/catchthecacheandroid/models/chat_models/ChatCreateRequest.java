@@ -8,6 +8,10 @@ public class ChatCreateRequest {
 		this.user = u;
 		this.cacheId = c;
 	}
+	public ChatCreateRequest(String u, int c) {
+		this.user = u;
+		this.cacheId = c;
+	}
 
 	public String getUser() {
 		return this.user;

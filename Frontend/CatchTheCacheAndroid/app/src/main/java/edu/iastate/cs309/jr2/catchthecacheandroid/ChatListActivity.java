@@ -115,8 +115,6 @@ public class ChatListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Chats");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //websocket stuff
 
@@ -177,12 +175,13 @@ public class ChatListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_cache, menu);
+        //TODO figure out
         MenuItem to_chat_item = menu.findItem(R.id.action_to_chat);
         to_chat_item.setVisible(true);
         to_chat_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ChatNewActivity.class);
                 startActivity(intent);
                 return true;
             }

@@ -59,25 +59,25 @@ public class ChatNewActivity extends AppCompatActivity
         chat_Id = 1;
 
         addBtn = findViewById(R.id.new_chat_button);
-//        addBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    addChat();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    addChat();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
     //TODO change to chat stuff
-    public boolean cacheValid (EditText username, EditText message){
+    public boolean chatValid (EditText username, EditText message){
         return username.length() != 0 && message.length() != 0;
     }
 
     public void addChat() throws JSONException {
-        if (cacheValid(username, message)) { //I put the null checkers and stuff up in a different method. I dont think  broke anything
+        if (chatValid(username, message)) { //I put the null checkers and stuff up in a different method. I dont think  broke anything
 
 
             JSONObject chatToSend;

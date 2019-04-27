@@ -22,7 +22,7 @@ public class CacheListWebSocket {
 	// Store all socket session and their corresponding id
 	private static List<Session> sessionList = new ArrayList<>();
 
-	private static final Logger logger = LoggerFactory.getLogger(CacheWebSocket.class);
+	private static final Logger logger = LoggerFactory.getLogger(CacheListWebSocket.class);
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {

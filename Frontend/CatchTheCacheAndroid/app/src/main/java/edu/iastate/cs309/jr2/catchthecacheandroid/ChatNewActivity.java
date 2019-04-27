@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddResponse;
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.chat_models.ChatCreateRequest;
@@ -30,6 +32,7 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.User;
 
 /**
  * this is how a user will create a new chat
+ * im not sure this class is needed
  */
 public class ChatNewActivity extends AppCompatActivity
 {
@@ -38,7 +41,6 @@ public class ChatNewActivity extends AppCompatActivity
     private EditText message;
     private Button addBtn;
     private Gson gson;
-    private User usr;
     int chat_Id;
 
     @Override
@@ -49,12 +51,11 @@ public class ChatNewActivity extends AppCompatActivity
         gson = new Gson();
         setContentView(R.layout.activity_chat_add);
         //TODO create new XML File
-       // usr = (User) extras.getSerializable("UserObject");
         username = findViewById(R.id.username);
         message = findViewById(R.id.new_message);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // getSupportActionBar().setTitle("Add Chat");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Add Chat");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         chat_Id = 1;
 
@@ -82,7 +83,7 @@ public class ChatNewActivity extends AppCompatActivity
 
             JSONObject chatToSend;
            chatToSend = new JSONObject(gson.toJson(new ChatCreateRequest( username.getText().toString(), chat_Id)));
-            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "caches", chatToSend,
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "chats/websocket", chatToSend,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

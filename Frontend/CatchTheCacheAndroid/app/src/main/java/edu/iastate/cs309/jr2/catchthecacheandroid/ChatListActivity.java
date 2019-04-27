@@ -70,22 +70,22 @@ public class ChatListActivity extends AppCompatActivity {
         gson = new Gson();
         setContentView(R.layout.activity_chat_list);
         //TODO create inbox xml
-        recyclerView = (RecyclerView) findViewById(R.id.rvChatList);
+        recyclerView =  findViewById(R.id.rvChatList);
        //TODO help usr = (User) extras.getSerializable("UserObject");
         username = findViewById(R.id.username);
         new_message = findViewById(R.id.new_message);
         pbar = findViewById(R.id.chat_retrieve_progress);
         addBtn = findViewById(R.id.new_chat_button);
-//        addBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    addChats();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    addChats();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         if(extras != null && extras.containsKey("ThroughServer") && !extras.getBoolean("ThroughServer")){
@@ -154,7 +154,7 @@ public class ChatListActivity extends AppCompatActivity {
                         ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
                         chats.clear();
                     //TODO help something with the repsonse
-                        // chats.addAll(chatList);
+                       // chats.addAll(chatList.getChats());
                         pbar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
@@ -174,8 +174,8 @@ public class ChatListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        //TODO change menu
         inflater.inflate(R.menu.menu_cache, menu);
-        //TODO figure out
         MenuItem to_chat_item = menu.findItem(R.id.action_to_chat);
         to_chat_item.setVisible(true);
         to_chat_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -202,19 +202,6 @@ public class ChatListActivity extends AppCompatActivity {
             }
         });
 
-//        MenuItem open_admin_add_cache = menu.findItem(R.id.action_admin_add_cache);
-//        open_admin_add_cache.setVisible(usr.getAuthority() >= 2);
-//        open_admin_add_cache.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Intent intent = new Intent(getApplicationContext(), CacheAddActivity.class);
-//                intent.putExtra("UserObject", usr);
-//                startActivityForResult(intent, 1);
-//                //startActivity(intent);
-//                return true;
-//            }
-//        });
-//        return true;
         return true;
     }
 
@@ -253,7 +240,6 @@ public class ChatListActivity extends AppCompatActivity {
         }
     }
     private void getChatListInvisible() throws JSONException {
-        //TODO: Get caches from server instead
         //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
         // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches" , null,
@@ -262,7 +248,8 @@ public class ChatListActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
                         chats.clear();
-                      //  chats.addAll(chatList().getChatList()); //TODO come back here
+                        //TODO figure out response
+                       // chats.addAll(chatList.getChatList()); //TODO come back here
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
@@ -282,7 +269,7 @@ public class ChatListActivity extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            CacheAddResponse respJson = gson.fromJson(response.toString(), CacheAddResponse.class);
+                            ChatCreateResponse respJson = gson.fromJson(response.toString(), ChatCreateResponse.class);
                             if (respJson.getSuccess()) {
                                 finish_local();
                             } else {

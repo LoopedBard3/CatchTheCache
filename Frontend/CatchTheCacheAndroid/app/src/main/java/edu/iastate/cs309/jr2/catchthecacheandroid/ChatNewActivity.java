@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.Objects;
 
 import edu.iastate.cs309.jr2.catchthecacheandroid.models.cache_models.CacheAddRequest;
@@ -83,7 +84,7 @@ public class ChatNewActivity extends AppCompatActivity
 
             JSONObject chatToSend;
            chatToSend = new JSONObject(gson.toJson(new ChatCreateRequest( username.getText().toString(), chat_Id)));
-            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, getString(R.string.access_url) + "chats/websocket", chatToSend,
+            JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.POST, R.string.access_socket_annie + "", chatToSend,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

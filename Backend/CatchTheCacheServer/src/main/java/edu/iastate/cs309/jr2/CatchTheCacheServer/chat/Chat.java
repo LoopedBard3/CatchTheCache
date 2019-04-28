@@ -65,29 +65,7 @@ public class Chat {
 	public Integer getCacheId() {
 		return this.cacheId;
 	}
-	/**
-	 *  * Function to add new user to chat
-	 * @param newUser
-	 * @return True if success, false if fail
-	 */
-	 
-	public boolean addUser(User newUser) {
-		
-		if(!hasUser(newUser)) {
-			if(this.user == null)
-				{
-					setUser(newUser.getId().toString());
-					
-				}
-			else
-				this.user= this.user +", " + newUser.getId();
-			System.out.println("user set to "+ getUser());
-			return true;
-			
-		}
-		else
-			return false;
-	}
+	
 
 	/**
 	 * Function to remove user from chat (Stupid way to do this, could probably be written better)

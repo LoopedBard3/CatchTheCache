@@ -150,7 +150,17 @@ public class ChatService {
 		ChatAddUserResponse response = new ChatAddUserResponse();
 		
 		if(canAdd)
-			response.setSuccess(chat.addUser(user));
+			{
+				if(chat.getUser() == null)
+					chat.setUser(user.getId().toString());
+							
+				else
+					chat.setUser(chat.getUser() +", " + user.getId());
+				System.out.println("user set to "+ chat.getUser());
+				chatRepo.saveAndFlush(chat);
+				response.setSuccess(true);
+				
+			}
 		
 		return new ResponseEntity<ChatAddUserResponse>(response, HttpStatus.OK);
 	}

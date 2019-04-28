@@ -77,11 +77,11 @@ public class Chat {
 			if(this.user == null)
 				{
 					setUser(newUser.getId().toString());
-					System.out.println(getUser());
+					
 				}
 			else
-				this.user= this.user +" " + newUser.getId();
-			
+				this.user= this.user +", " + newUser.getId();
+			System.out.println("user set to "+ getUser());
 			return true;
 			
 		}

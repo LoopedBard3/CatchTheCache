@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import edu.iastate.cs309.jr2.CatchTheCacheServer.cache.CacheWebSocket;
 import edu.iastate.cs309.jr2.CatchTheCacheServer.models.*;
 import edu.iastate.cs309.jr2.CatchTheCacheServer.user.*;
 
@@ -91,6 +92,11 @@ public class ChatService {
 		if (m.getChatId() != null) {
 			response.setSuccess(true);
 			messageRepo.saveAndFlush(m);
+			try {
+				ChatWebSocket.broadcast(id, "refresh");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<MessageResponse>(response, HttpStatus.OK);
 	}

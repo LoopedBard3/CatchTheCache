@@ -41,7 +41,7 @@ public class ChatWebSocket {
         idSessionMap.put(id, session);
         
         String message="Chat id:" + id + " has been initiated";
-        	broadcast(message);
+        	broadcast(id, message);
 		
     }
  
@@ -52,7 +52,7 @@ public class ChatWebSocket {
     	logger.info("Entered into Message: Got Message:"+message);
     	int id = sessionIdMap.get(session);
     	
-	    	broadcast(id + ": " + message);
+	    	broadcast(id ,  message);
     }
  
     @OnClose
@@ -66,7 +66,7 @@ public class ChatWebSocket {
     	idSessionMap.remove(id);
         
     	String message= id + " disconnected";
-        broadcast(message);
+        broadcast(id, message);
     }
  
     @OnError
@@ -76,7 +76,7 @@ public class ChatWebSocket {
     	logger.info("Entered into Error");
     }
     
-    private static void broadcast(String message) 
+    public static void broadcast(Integer chatId, String message) 
     	      throws IOException 
     {	  
     	sessionIdMap.forEach((session, id) -> {

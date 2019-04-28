@@ -119,9 +119,9 @@ public class ChatListActivity extends AppCompatActivity {
         //websocket stuff
 
         try {
-            ws = new WebSocketClient(new URI(getString(R.string.access_socket) + "chats/websocket")) { //TODO url?
+            ws = new WebSocketClient(new URI(getString(R.string.access_socket_annie))) { //TODO url?
 
-                @Override
+
                 public void onMessage(String message) {
                     Log.d("WEBSOCKET", "Chat Socket returned: " + message);
                     if (message.equals("refresh")) {
@@ -154,7 +154,7 @@ public class ChatListActivity extends AppCompatActivity {
                         ChatCreateResponse chatList = gson.fromJson(response.toString(), ChatCreateResponse.class);
                         chats.clear();
                     //TODO help something with the repsonse
-                       // chats.addAll(chatList.getChats());
+                       //chats.addAll(chatList.getChats());
                         pbar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {

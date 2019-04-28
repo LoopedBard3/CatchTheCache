@@ -72,9 +72,18 @@ public class Chat {
 	 */
 	 
 	public boolean addUser(User newUser) {
+		
 		if(!hasUser(newUser)) {
-			this.user= this.user +", " + newUser.getId();
+			if(this.user == null)
+				{
+					setUser(newUser.getId().toString());
+					System.out.println(getUser());
+				}
+			else
+				this.user= this.user +" " + newUser.getId();
+			
 			return true;
+			
 		}
 		else
 			return false;
@@ -104,6 +113,7 @@ public class Chat {
 					}
 			}
 			s.close();
+			setUser(replaceText);
 			return true;
 		}
 		else
@@ -116,7 +126,7 @@ public class Chat {
 	 * @return true if user is in this chat, false if not
 	 */
 	public boolean hasUser(User user) {
-		if(this.user== null)
+		if(this.user == null)
 			return false;
 		Scanner s = new Scanner(this.user);
 		int id = user.getId();

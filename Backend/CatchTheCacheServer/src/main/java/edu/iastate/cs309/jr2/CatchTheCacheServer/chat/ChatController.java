@@ -78,7 +78,7 @@ class ChatController {
 	 * @param request ChatAddUserRequest
 	 * @return ChatAddUserResponse with status
 	 */
-	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
+	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/add")
 	public ResponseEntity<ChatAddUserResponse> addUser(@PathVariable int id, @RequestBody ChatAddUserRequest request){
 		
 		return chatService.addUser(id, request);
@@ -89,7 +89,7 @@ class ChatController {
 	 * @param request ChatRemoveUserRequest
 	 * @return ChatRemoveUserResponse with status
 	 */
-	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/")
+	@RequestMapping (method = RequestMethod.POST, path = "/chats/{id}/remove")
 	public ResponseEntity<ChatRemoveUserResponse> removeUser(@PathVariable int id, @RequestBody ChatRemoveUserRequest request){
 		
 		return chatService.removeUser(id, request);

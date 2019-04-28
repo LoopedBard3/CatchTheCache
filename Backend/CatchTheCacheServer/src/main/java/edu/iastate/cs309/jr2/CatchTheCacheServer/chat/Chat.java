@@ -116,6 +116,8 @@ public class Chat {
 	 * @return true if user is in this chat, false if not
 	 */
 	public boolean hasUser(User user) {
+		if(this.user== null)
+			return false;
 		Scanner s = new Scanner(this.user);
 		int id = user.getId();
 		while(s.hasNextInt())

@@ -106,11 +106,13 @@ public class Chat {
 	public boolean hasUser(User user) {
 		if(this.user == null)
 			return false;
-		Scanner s = new Scanner(this.user);
+		Scanner s = new Scanner(getUser());
+		
 		int id = user.getId();
 		while(s.hasNextInt())
 		{
 			int foundId = s.nextInt();
+			System.out.println("Id is: "+foundId);
 			if(foundId==id)
 				{
 					s.close();

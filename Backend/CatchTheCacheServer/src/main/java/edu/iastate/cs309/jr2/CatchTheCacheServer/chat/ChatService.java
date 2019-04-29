@@ -163,11 +163,11 @@ public class ChatService {
 		ChatAddUserResponse response = new ChatAddUserResponse();
 
 		if (canAdd) {
-			if (chat.getUser() == null)
+			if (chat.getUser() == null|| chat.getUser().equals(""))
 				chat.setUser(user.getId().toString());
 
 			else
-				chat.setUser(chat.getUser() + ", " + user.getId());
+				chat.setUser(chat.getUser() + " " + user.getId());
 			System.out.println("user set to " + chat.getUser());
 			chatRepo.saveAndFlush(chat);
 			response.setSuccess(true);
@@ -191,28 +191,32 @@ public class ChatService {
 		Chat chat = chatRepo.findById(chatId).get();
 
 		// Check whether user already exists in chat
-		if (!chat.hasUser(user))
-			{
-				System.out.println("User does not exist");
-				canRemove = false;
-			}
+		if (!chat.hasUser(user)) {
+			System.out.println("User does not exist");
+			canRemove = false;
+		}
 
 		ChatRemoveUserResponse response = new ChatRemoveUserResponse();
 
 		if (canRemove) {
 			String replaceText = "";
-			Scanner s = new Scanner(chat.getUser());
+			String toScan = chat.getUser();
+			Scanner s = new Scanner(toScan);
 			int id = user.getId();
-			// Check for first id
-			while (s.hasNextInt()) {
-				int foundId = s.nextInt();
-				if (foundId != id) {
-					// check whether it is the first id entered
-					if (replaceText.equals(""))
-						replaceText = replaceText + foundId;
-					else
-						replaceText = replaceText + ", " + foundId;
-				}
+			while (s.hasNext()) {
+				if (s.hasNextInt()) {
+					int foundId = s.nextInt();
+					System.out.println("Found id = "+ foundId);
+					if (foundId != id) {
+						// check whether it is the first id entered
+						if (replaceText.equals(""))
+							replaceText = replaceText + foundId;
+						else
+							replaceText = replaceText + " " + foundId;
+					}
+				} 
+				else
+					s.next();
 			}
 			s.close();
 			chat.setUser(replaceText);

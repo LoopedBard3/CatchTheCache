@@ -164,7 +164,7 @@ public class ChatIndividualActivity extends AppCompatActivity {
         //  JSONObject requestJSON = new JSONObject(gson.toJson(new CacheListRequest()));
         // Log.d("REQUESTJSON", gson.toJson(new CacheListRequest()).toString());
         pbar.setVisibility(View.VISIBLE);
-        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, getString(R.string.access_url) + "caches/m/" + cache.getId(), null,
+        JsonObjectRequest requestObject = new JsonObjectRequest(Request.Method.GET, "ws://10.26.44.107:8080/chats/m/1/websocket", null,
           //TODO check url again
                 new Response.Listener<JSONObject>() {
                     @Override

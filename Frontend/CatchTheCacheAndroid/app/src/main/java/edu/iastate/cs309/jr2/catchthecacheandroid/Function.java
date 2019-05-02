@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by acg
+ * class to help keep track of chat data
  */
 
 public class Function {
@@ -37,7 +37,12 @@ public class Function {
     static final String KEY_TIMESTAMP = "timestamp";
     static final String KEY_TIME = "time";
 
-
+    /**
+     *checks to see if permissions have been requested and accepted
+     * @param context
+     * @param permissions
+     * @return true is permissions granted, false if not
+     */
     public static  boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -49,6 +54,11 @@ public class Function {
         return true;
     }
 
+    /**
+     * method sets up time for inbox
+     * @param timestamp
+     * @return the time that will be displayed in the inbox
+     */
     public static String converToTime(String timestamp)
     {
         long datetime = Long.parseLong(timestamp);
@@ -57,7 +67,18 @@ public class Function {
         return formatter.format(date);
     }
 
-
+    /**
+     * method to start mapping inbox
+     * @param _id
+     * @param thread_id thread ID assigned to conversation
+     * @param name name of contact that conversation is with
+     * @param phone number that message is sent to
+     * @param msg message to be sent
+     * @param type
+     * @param timestamp time message was send
+     * @param time newly converted time for display
+     * @return
+     */
     public static HashMap<String, String> mappingInbox(String _id, String thread_id, String name, String phone, String msg, String type, String timestamp, String time)
     {
         HashMap<String, String> map = new HashMap<String, String>();
@@ -72,7 +93,11 @@ public class Function {
         return map;
     }
 
-
+    /**
+     * method to remove duplicate messages
+     * @param smsList
+     * @return
+     */
     public static  ArrayList<HashMap<String, String>> removeDuplicates( ArrayList<HashMap<String, String>> smsList)
     {
         ArrayList<HashMap<String, String>> gpList = new ArrayList<HashMap<String, String>>();
@@ -102,6 +127,12 @@ public class Function {
 
 //TODO change from SMS to chat ID
 
+    /**
+     * method to sed the message
+     * @param toPhoneNumber
+     * @param smsMessage
+     * @return
+     */
     public static boolean sendSMS(String toPhoneNumber, String smsMessage) {
         try {
             SmsManager smsManager = SmsManager.getDefault();

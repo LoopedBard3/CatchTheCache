@@ -39,9 +39,7 @@ import edu.iastate.cs309.jr2.catchthecacheandroid.models.user_models.UserLoginRe
 
 
 /**
-
  * A login screen that offers login via username/password.
-
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -53,13 +51,20 @@ public class LoginActivity extends AppCompatActivity {
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
-    private TextView debugText;
     private View mProgressView;
     private View mLoginFormView;
     private RequestQueue queue;
     private Gson gson;
     private UserChecker userChecker;
 
+    /**
+     * Default method for starting the activity.
+     * Sets up the Gson json translator, Volley queue,
+     * and the user buttons for signing in, registering
+     * and resetting their password.
+     * @author Parker Bibus
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mUsernameView = findViewById(R.id.username);
         queue = Volley.newRequestQueue(getApplicationContext());
-        //TODO: Remove debugText and Text Box
-        debugText = findViewById(R.id.debugText);
         gson = new Gson();
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -123,39 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void configureNextButton(){
-//        Button nextbutton = (Button) findViewById(R.id.nextbutton);
-//        nextbutton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent (LoginActivity.this, MainActivity.class));
-//            }
-//        });
-//    }
-
-
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
 
     /**
      * Attempts to go through the forgot password control
@@ -167,11 +137,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
+     * @param username username to attempt login with
+     * @param password password of the user to attempt login with
+     * @param view the textview to put the error messaage on
+     * @return true if successful login and false otherwise
      */
     public boolean attemptLogin(String username, String password, TextView view) {
 
@@ -218,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show true to show the progress bar, false to hid it.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
@@ -261,14 +235,25 @@ public class LoginActivity extends AppCompatActivity {
         private final String mUsername;
         private final String mPassword;
 
+        /**
+         * Constructor for this task.
+         * @param username username to login with
+         * @param password passord to login with
+         */
         UserLoginTask(String username, String password) {
             mUsername = username;
             mPassword = password;
         }
 
+        /**
+         * The background stuff that this method does.
+         * Mostly sending out Auth request and getting back whether or not
+         * the login is valid.
+         * @param params
+         * @return true if the login is successful and false otherwise
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             JSONObject jsonData;
             try {
                 jsonData = new JSONObject(gson.toJson(new UserLoginRequest(mUsername, mPassword)));
@@ -280,8 +265,6 @@ public class LoginActivity extends AppCompatActivity {
                                 showProgress(false);
                                 UserLoginResponse respJson = gson.fromJson(response.toString(), UserLoginResponse.class);
                                 if (respJson.getSuccess()) {
-                                    debugText.setText(String.format("Successfully Logged in %s", mUsername));
-                                    //TODO:Logic for if the user already existed or not and opening next activity
                                         Intent intent = new Intent(getApplicationContext(), CacheListActivity.class);
                                         intent.putExtra("UserObject", new User(mUsername, respJson.getAuthority()));
                                         startActivity(intent);
@@ -293,8 +276,8 @@ public class LoginActivity extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        debugText.setText("Problem getting response");
-                        debugText.requestFocus();
+                        mPasswordView.setError("Error connecting to server");
+                        mPasswordView.requestFocus();
                         Log.d("ERROR", "onErrorResponse: " + error.toString());
                         showProgress(false);
                     }
@@ -302,7 +285,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 queue.add(jsonObjectRequest);
             } catch (JSONException e) {
-                debugText.setText(e.toString());
                 return false;
             }
 
@@ -310,6 +292,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
+        /**
+         * The method that gets called when this task gets cancelled.
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;

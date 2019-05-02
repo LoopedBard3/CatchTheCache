@@ -16,6 +16,10 @@ maven-build:
   script:
     - cd Backend/CatchTheCacheServer
     - mvn package -B
+  only:
+    refs:
+      - master
+      - dev
   
 # artifacts are created when job executes successfully, and can be manually downloaded from GitLab GUI.
 # artifacts are not mandatory, buts it good practice, in case auto deploy fails, you can manually download the jar.
@@ -26,6 +30,10 @@ maven-test:
   script:
     - cd Backend/CatchTheCacheServer
     - mvn test
+  only:
+    refs:
+      - master
+      - dev
   artifacts:
     paths:
       - Backend/CatchTheCacheServer/target/*.jar
@@ -42,6 +50,10 @@ autoDeploy:
     - sudo mv target/*.jar /target/web-demo.jar 
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo
+  only:
+    refs:
+      - master
+      - dev
 
     
 # To build android projects
@@ -59,6 +71,10 @@ android-build:
   script:
     - cd Frontend/CatchTheCacheAndroid
     - ./gradlew assemble
+  only:
+    refs:
+      - master
+      - dev
   artifacts:
     paths:
     - Frontend/CatchTheCacheAndroid/app/build/outputs/
@@ -75,3 +91,7 @@ unitTests:
   script:
     - cd Frontend/CatchTheCacheAndroid
     - ./gradlew test
+  only:
+    refs:
+      - master
+      - dev
